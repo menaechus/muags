@@ -5,4 +5,5 @@
 this is the list of the authcodes used in the MUAGS
 
 * 00001 is used for account creation (like: "00001 account passwd")
+
 * 00002 is used for logging in (Like: "00002 account passwd")

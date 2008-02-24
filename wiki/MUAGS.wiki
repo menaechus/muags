@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary MultiUserAdvancedGameSystem
 
 = Introduction =
 
@@ -12,7 +12,6 @@ database with the server.
 
 = Details =
 
-Add your content here.  Format your content with:
-  * Text in *bold* or _italic_
-  * Headings, paragraphs, and lists
-  * Automatic links to other wiki pages
+  * Opensource
+  * Based on Libertybasic, one of the easiest prgramming languages
+  * Sql database

@@ -50,6 +50,11 @@
 [accountcreate]   'this should check the passwords first, and then send them to the server software
                   'that will do some checks and then generate the accound,
                   'returning OK or Error
+    if connect = 1 then
+        func = TCPClose(handle)
+        let connect = 0
+    end if
+    print #starter.account, "!contest? account$"
     print #starter.pwd, "!contents? pwd$"
     print #starter.pwdagain, "!contents? pwda$"
     if pwd$ = pwda$ then
@@ -59,6 +64,15 @@
         errori = 1
     end if
     if ok = 0 goto [error]
+    let handle = TCPOpen(address$,port)
+    let connect = 1
+    if connect = 1 then
+        text$ = "00001 " + account$ + " " + pwd$
+        let func = TCPSend(handle,text$)
+    end if
+    let func = TCPClose(handle)
+    
+    
     wait
 
 
@@ -70,6 +84,7 @@
     wait
 
 [quit.starter] 'End the program
+    if connect = 1 then let func = TCPClose(handle)
     close #starter
     close #me
     end

@@ -5,7 +5,7 @@
 [setup.starter.Window]
 
     '-----Begin code for #starter
-    PORT = 1568 'we could read this from a config file?
+    port = 1568 'we could read this from a config file?
     address$ = "127.0.0.1" 'we should read this from a config too
     nomainwin
     WindowWidth = 350
@@ -54,7 +54,7 @@
         func = TCPClose(handle)
         let connect = 0
     end if
-    print #starter.account, "!contest? account$"
+    print #starter.account, "!contents? account$"
     print #starter.pwd, "!contents? pwd$"
     print #starter.pwdagain, "!contents? pwda$"
     if pwd$ = pwda$ then
@@ -71,8 +71,8 @@
         let func = TCPSend(handle,text$)
     end if
     let func = TCPClose(handle)
-    
-    
+
+
     wait
 
 

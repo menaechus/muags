@@ -5,13 +5,14 @@
 [setup.starter.Window]
 
     '-----Begin code for #starter
-
+    PORT = 1568 'we could read this from a config file?
+    address$ = "127.0.0.1" 'we should read this from a config too
     nomainwin
     WindowWidth = 350
     WindowHeight = 270
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
     UpperLeftY=int((DisplayHeight-WindowHeight)/2)
-
+    open "mesock32.dll" for dll as #me
 
     '-----Begin GUI objects code
 
@@ -39,20 +40,71 @@
 
 
 
-[Start]   'Perform action for the button named 'button10'
+[Start]   'This will just start the game
 
     'Insert your own code here
 
     wait
 
 
-[accountcreate]   'Perform action for the button named 'button18'
+[accountcreate]   'this should check the passwords first, and then send them to the server software
+                  'that will do some checks and then generate the accound,
+                  'returning OK or Error
+    print #starter.pwd, "!contents? pwd$"
+    print #starter.pwdagain, "!contents? pwda$"
+    if pwd$ = pwda$ then
+        ok = 1
+    else
+        ok = 0
+        errori = 1
+    end if
+    if ok = 0 goto [error]
+    wait
 
-    'Insert your own code here
 
+[error]
+    if errori = 1 then
+        notice "Error, the passwords don't match!"
+    end if
+    goto [starter.inputLoop]
     wait
 
 [quit.starter] 'End the program
     close #starter
+    close #me
     end
+
+
+
+''''Function TCPOpen()''''''''''
+Function TCPOpen(address$,Port)
+Timeout=1000
+calldll #me, "Open", address$ As ptr,_
+Port As Long,_
+Timeout As Long, re As Long
+TCPOpen=re
+End Function
+
+''''Function TCPReceive$()''''''''''
+Function TCPReceive$(handle)
+buffer=4096
+all=0
+calldll #me, "ReceiveA" ,handle As Long,_
+buffer As Long,_
+all As Long, re As long
+if re<>0 then TCPReceive$ = winstring(re)
+End Function
+
+''''Function TCPPrint()''''''''''
+Function TCPSend(handle,text$)
+calldll #me, "PrintA", handle As Long,_
+text$ As ptr,re As Long
+TCPPrint=re
+End Function
+
+''''Function TCPClose()''''''''''
+Function TCPClose(handle)
+calldll #me, "CloseA",handle As Long,_
+TCPClose As Long
+End Function
 

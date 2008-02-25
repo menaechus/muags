@@ -7,7 +7,7 @@
     '-----Begin code for #starter
     port = 1568 'we could read this from a config file?
     address$ = "127.0.0.1" 'we should read this from a config too
-    nomainwin
+    'nomainwin
     WindowWidth = 350
     WindowHeight = 270
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -64,15 +64,23 @@
         errori = 1
     end if
     if ok = 0 goto [error]
-    let handle = TCPOpen(address$,port)
-    let connect = 1
-    if connect = 1 then
-        text$ = "00001 " + account$ + " " + pwd$
-        let func = TCPSend(handle,text$)
-    end if
+        let handle = TCPOpen(address$,port)
+        let rec$ = TCPReceive$(handle)
+        if word$(rec$, 1) = "SERVER:" then
+            CallDLL #kernel32, "Sleep", _
+            10 As Long, _
+            rc As Void
+            text$ = "00001 " + account$ + " " + pwd$
+            let func = TCPSend(handle,text$)
+        end if
+        let rec$ = TCPReceive$(handle)
+        print rec$
+        if word$(rec$, 2) = "00001" then
+            if word$(rec$, 3) = "ok" then
+                notice "Account created"
+            end if
+        end if
     let func = TCPClose(handle)
-
-
     wait
 
 

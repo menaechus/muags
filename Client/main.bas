@@ -3,7 +3,7 @@
     port = 1568 'we could read this from a config file?
     address$ = "127.0.0.1" 'we should read this from a config too
     open "mesock32.dll" for dll as #me
-
+    global handle
 
 [setup.main.Window]
 
@@ -210,24 +210,23 @@
             let func = TCPSend(handle,text$)
     end if
     let rec$ = TCPReceive$(handle)
-    if connect = 1 then
-        func = TCPClose(handle)
-        let connect = 0
-    end if
     if word$(rec$, 2) = "00002" then
             if word$(rec$, 3) = "ok" then
                 notice "Logged in"
             end if
         end if
-    let func = TCPClose(handle)
+    'let func = TCPClose(handle) 'this will be removed later on
+    'let connect = 0
     close #Login
+    login = 0
+    goto [GameLoop]
     wait
 
 
 [Logout]   'Perform action for menu File, item Logout
-
-    'Insert your own code here
-
+    let func = TCPClose(handle) 'this will be removed later on
+    let connect = 0
+    #main.gameview "Logged Out"
     wait
 
 
@@ -258,8 +257,16 @@
     end
 
 [GameLoop]
+    scan
+    if connect = 1 then
 
-wait
+        let rec$ = ""
+        let rec$ = TCPReceive$(handle)
+        if rec$ <> "" then print #main.gameview, rec$
+        scan
+    end if
+    wait
+
 
 
 ''''Function TCPOpen()''''''''''

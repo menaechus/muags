@@ -216,7 +216,7 @@ function broadcast(from,buf$) ' this will become the channel system some day
     If from = admin then
         buf$ = "SERVER: " + buf$  'If message is from Server, Add SERVER].
     else
-        buf$ = "User";from;"] "+buf$  'If not, add which user it's from.
+        buf$ = "User";from;": "+buf$  'If not, add which user it's from.
     End If
     for i=1 to MAXPLAYERS
         If player.sock(i) <> -1 and i <> from Then
@@ -234,11 +234,11 @@ end function
 
 function pbroadcast(user, from, buf$)' this will be used for client-server messaging
     If from = admin then
-        buf$ = "SERVER: " + buf$  'If message is from Server, Add SERVER].
+        buf$ = "SERVER: " + buf$  'If message is from Server, Add SERVER:.
     else
-        buf$ = "User";from;"] PRIVATE: " + buf$  'If not, add which user it's from.
+        buf$ = "User";from;": PRIVATE: " + buf$  'If not, add which user it's from.
     End If
-    obuf$ = player.outbuf$(user) + buf$' + chr$(7) + chr$(13) + chr$(10)
+    obuf$ = player.outbuf$(user) + buf$ + chr$(7) + chr$(13) + chr$(10)
     player.outbuf$(user) = Send$(player.sock(user), obuf$, Len(obuf$), 0)
     #main.log "Sent to Client ";user
 End Function

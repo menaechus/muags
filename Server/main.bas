@@ -128,6 +128,14 @@
             plr = 101
             a = pbroadcast(Player, plr, output$)
         end if
+        if word$(buf$, 1) = "00002" then
+            account$ = word$(buf$, 2)
+            passwd$ = word$(buf$, 3)
+            ad = Loginauth(account$,passwd$)
+            output$ = "00002 ok"
+            plr = 101
+            a = pbroadcast(Player, plr, output$)
+        end if
         If Len(buf$) > 0 Then
             if left$(buf$,14)="ÿûÿýÿûÿýÿû" then buf$=right$(buf$,len(buf$)-15) : player.inbuf$(Player)=buf$
             I = InStr(buf$, Chr$(13))
@@ -187,6 +195,13 @@
 '*** SUBS/Funcs for the engine ***
 function CreateAccount(Account$,Passwd$) ' used for the acc creation
 ' need to do the code for sql system here
+
+
+end function
+
+function Loginauth(Account$,Passwd$)
+
+
 
 
 end function

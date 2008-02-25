@@ -195,16 +195,32 @@
     wait
 
 [Login2]
+    let handle = TCPOpen(address$,port)
+    let rec$ = TCPReceive$(handle)
     print #Login.account, "!contents? account$"
     print #Login.passwd, "!contents? pwd$"
 
     logincode$ = "00002 "; account$; " "; pwd$
 
+    if word$(rec$, 1) = "SERVER:" then
+            CallDLL #kernel32, "Sleep", _
+            10 As Long, _
+            rc As Void
+            text$ = "00002 " + account$ + " " + pwd$
+            let func = TCPSend(handle,text$)
+    end if
+    let rec$ = TCPReceive$(handle)
     if connect = 1 then
         func = TCPClose(handle)
         let connect = 0
     end if
-
+    if word$(rec$, 2) = "00002" then
+            if word$(rec$, 3) = "ok" then
+                notice "Logged in"
+            end if
+        end if
+    let func = TCPClose(handle)
+    close #Login
     wait
 
 
@@ -229,12 +245,51 @@
     wait
 
 [quit.main] 'End the program
-    if login = 1 then 
+    if connect = 1 then
+        func = TCPClose(handle)
+        let connect = 0
+    end if
+
+    if login = 1 then
         close #Login
     end if
+    close #me
     close #main
     end
 
 [GameLoop]
 
 wait
+
+
+''''Function TCPOpen()''''''''''
+Function TCPOpen(address$,Port)
+Timeout=1000
+calldll #me, "Open", address$ As ptr,_
+Port As Long,_
+Timeout As Long, re As Long
+TCPOpen=re
+End Function
+
+''''Function TCPReceive$()''''''''''
+Function TCPReceive$(handle)
+buffer=4096
+all=0
+calldll #me, "ReceiveA" ,handle As Long,_
+buffer As Long,_
+all As Long, re As long
+if re<>0 then TCPReceive$ = winstring(re)
+End Function
+
+''''Function TCPPrint()''''''''''
+Function TCPSend(handle,text$)
+calldll #me, "PrintA", handle As Long,_
+text$ As ptr,re As Long
+TCPPrint=re
+End Function
+
+''''Function TCPClose()''''''''''
+Function TCPClose(handle)
+calldll #me, "CloseA",handle As Long,_
+TCPClose As Long
+End Function

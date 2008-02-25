@@ -1,5 +1,7 @@
 'Form created with the help of Freeform 3 v03-27-03
 'Generated on Feb 25, 2008 at 14:09:45
+    GLOBAL accountc$
+    GLOBAL passwordc$
     GLOBAL MAXPLAYERS
     MAXPLAYERS = 100  'Change to set the max number of clients that can connect. and we should get this one from a conf too
     PORT = 1568 'we should read this from a conf file later on
@@ -21,7 +23,7 @@
     '-----Begin code for #main
     Open "wsock32" For DLL As #wsock32
     Open "WMLiberty" For DLL As #wmlib
-    'nomainwin
+    nomainwin
     WindowWidth = 550
     WindowHeight = 410
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -119,7 +121,9 @@
     If player.sock(Player) <> -1 Then
         buf$ = player.inbuf$(Player)
         if word$(buf$, 1) = "00001" then
-            print buf$
+            accountc$ = word$(buf$, 2)
+            passwordc$ = word$(buf$, 3)
+            ad = CreateAccount(accountc$,passwordc$)
             output$ = "00001 ok"
             plr = 101
             a = pbroadcast(Player, plr, output$)
@@ -177,6 +181,16 @@
     Close #wsock32
     close #main
     end
+
+
+
+'*** SUBS/Funcs for the engine ***
+function CreateAccount(Account$,Passwd$) ' used for the acc creation
+' need to do the code for sql system here
+
+
+end function
+
 
 '*** Application Procedures ***
 function broadcast(from,buf$) ' this will become the channel system some day

@@ -7,7 +7,7 @@
     '-----Begin code for #starter
     port = 1568 'we could read this from a config file?
     address$ = "127.0.0.1" 'we should read this from a config too
-    'nomainwin
+    nomainwin
     WindowWidth = 350
     WindowHeight = 270
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)

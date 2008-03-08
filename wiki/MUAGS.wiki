@@ -13,5 +13,5 @@ database with the server.
 = Details =
 
   * Opensource
-  * Based on Libertybasic, one of the easiest prgramming languages
+  * Based on Libertybasic, one of the easiest programming languages
   * Sql database

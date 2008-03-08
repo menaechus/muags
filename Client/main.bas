@@ -4,12 +4,12 @@
     address$ = "127.0.0.1" 'we should read this from a config too
     open "mesock32.dll" for dll as #me
     global handle
-
+    logged = 0
 [setup.main.Window]
 
     '-----Begin code for #main
 
-    nomainwin
+    'nomainwin
     WindowWidth = 1027
     WindowHeight = 768
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -61,14 +61,20 @@
 
 
 [main.inputLoop]   'wait here for input event
+   ' if logged = 0 then
+    '    #main.send "!Disable"
+    'end if
     wait
 
 
 
 [send]   'Perform action for the button named 'send'
-
-    'Insert your own code here
-
+    outgoing$ = ""
+    print #main.textbox1, "!contents? outgoing$"
+    print #main.textbox1, ""
+    text$ = "00100 " + outgoing$
+    let func = TCPSend(handle,text$)
+    goto [GameLoop]
     wait
 
 
@@ -213,12 +219,12 @@
     if word$(rec$, 2) = "00002" then
             if word$(rec$, 3) = "ok" then
                 notice "Logged in"
+                logged = 1
             end if
         end if
-    'let func = TCPClose(handle) 'this will be removed later on
-    'let connect = 0
     close #Login
     login = 0
+    let connect = 1
     goto [GameLoop]
     wait
 
@@ -258,13 +264,20 @@
 
 [GameLoop]
     scan
-    if connect = 1 then
+    'CallDLL #kernel32, "Sleep", _
+    '    10 As Long, _
+    '    rc As Void
 
+    'if logged = 1 then
+    '    #main.send "!Enable"
+    'end if
+    if connect = 1 then
         let rec$ = ""
         let rec$ = TCPReceive$(handle)
+        print rec$
         if rec$ <> "" then print #main.gameview, rec$
-        scan
     end if
+    goto [GameLoop]
     wait
 
 

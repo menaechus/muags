@@ -23,7 +23,7 @@
     '-----Begin code for #main
     Open "wsock32" For DLL As #wsock32
     Open "WMLiberty" For DLL As #wmlib
-    nomainwin
+    'nomainwin
     WindowWidth = 550
     WindowHeight = 410
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -120,6 +120,9 @@
 
     If player.sock(Player) <> -1 Then
         buf$ = player.inbuf$(Player)
+        if buf$ <> "" then
+            print buf$
+        end if
         if word$(buf$, 1) = "00001" then
             accountc$ = word$(buf$, 2)
             passwordc$ = word$(buf$, 3)
@@ -136,25 +139,11 @@
             plr = 101
             a = pbroadcast(Player, plr, output$)
         end if
-        If Len(buf$) > 0 Then
-            if left$(buf$,14)="ÿûÿýÿûÿýÿû" then buf$=right$(buf$,len(buf$)-15) : player.inbuf$(Player)=buf$
-            I = InStr(buf$, Chr$(13))
-            If I <> 0 Then
-                buf$ = Left$(buf$, I - 1)
-                #main.log "User ";Player;" Input Complete: "+buf$
-                If Len(buf$) > 0 Then
-                    If word$(buf$, 1) = "/p" then
-                        plr$ = word$(buf$, 2)
-                        plr = val(plr$)
-                        buf$ = right$(buf$, len(buf$)-(len(plr$) + 4))
-                        a = pbroadcast(plr, Player, buf$)
-                    Else
-                        null=broadcast(Player,buf$)
-                    End If
-                End If
-                player.inbuf$(Player) = Mid$(player.inbuf$(Player), I + 1)
-            End If
-        End If
+        if word$(buf$, 1) = "00100" then
+            output$ = buf$
+            a = broadcast(Player,output$)
+            buf$ = ""
+        end if
     End If
 
     Player = Player + 1
@@ -209,20 +198,20 @@ end function
 
 '*** Application Procedures ***
 function broadcast(from,buf$) ' this will become the channel system some day
-    If word$(buf$, 1) = "/d" then
-        a = closesocket(player.sock(from))
-        a = SockProc(hwnd(#main), uMsg, player.sock(from), 32)
-    End if
-    If from = admin then
-        buf$ = "SERVER: " + buf$  'If message is from Server, Add SERVER].
-    else
-        buf$ = "User";from;": "+buf$  'If not, add which user it's from.
-    End If
-    for i=1 to MAXPLAYERS
+    'If word$(buf$, 1) = "/d" then
+    '    a = closesocket(player.sock(from))
+    '    a = SockProc(hwnd(#main), uMsg, player.sock(from), 32)
+    'End if
+    'If from = admin then
+    '    buf$ = "SERVER: " + buf$  'If message is from Server, Add SERVER.
+    'else
+        buf$ = "00100 ";from;": "+buf$  'If not, add which user it's from.
+    'End If
+    for i = 1 to MAXPLAYERS
         If player.sock(i) <> -1 and i <> from Then
             obuf$ = player.outbuf$(i) + buf$ + chr$(7) + chr$(13) + chr$(10)
             player.outbuf$(i) = Send$(player.sock(i), obuf$, Len(obuf$), 0)
-        #main.log "Sent to Client ";i
+        #main.log "Sent "; buf$ ;" to Client ";i
         end if
     next i
 end function
@@ -240,7 +229,7 @@ function pbroadcast(user, from, buf$)' this will be used for client-server messa
     End If
     obuf$ = player.outbuf$(user) + buf$ + chr$(7) + chr$(13) + chr$(10)
     player.outbuf$(user) = Send$(player.sock(user), obuf$, Len(obuf$), 0)
-    #main.log "Sent to Client ";user
+    '#main.log "Sent to Client ";user
 End Function
 
 Function SockProc( hWnd, uMsg, sock, lParam )

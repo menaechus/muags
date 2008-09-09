@@ -184,13 +184,12 @@
 '*** SUBS/Funcs for the engine ***
 function CreateAccount(Account$,Passwd$) ' used for the acc creation
 ' need to do the code for sql system here
-
+    #main.log "Create Acc: " + Account$ + " : " + Passwd$
 
 end function
 
 function Loginauth(Account$,Passwd$)
-
-
+    #main.log "LOG Auth"
 
 
 end function
@@ -222,7 +221,7 @@ function whisper(user, from$, buf$) 'whisper system
 end function
 
 function pbroadcast(user, from, buf$)' this will be used for client-server messaging
-    If from = admin then
+    If from = 101 then
         buf$ = "SERVER: " + buf$  'If message is from Server, Add SERVER:.
     else
         buf$ = "User";from;": PRIVATE: " + buf$  'If not, add which user it's from.

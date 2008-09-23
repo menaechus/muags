@@ -1,0 +1,12 @@
+#summary One-sentence summary of this page.
+
+= Introduction =
+
+The main conf file for the game
+
+
+= Details =
+
+Version Number
+
+Server address

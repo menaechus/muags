@@ -1,10 +1,37 @@
 'Form created with the help of Freeform 3 v03-27-03
 'Generated on Feb 25, 2008 at 14:09:45
+dim info$(10, 10)
+GLOBAL MAXPLAYERS
+GLOBAL PORT
+conffile$ = DefaultDir$ + "\data\"
+conff$ = conffile$ + "config.conf"
+if fileExists(conffile$, "config.conf") then
+    goto [conf.read]
+  else
+    notice "Error!" + chr$(13) + "\data\config.conf is missing, server cannot be started!"
+    goto [quit.main2]
+  end if
+
+[conf.read]
+
+    open conff$ for input as #conf
+        line input #conf, maxplayers$
+        line input #conf, port$
+    close #conf
+    MAXPLAYERS = val(maxplayers$)
+    PORT = val(port$)
+    'noticeline$ = "MAX: " + maxplayers$ + " PORT: " + port$ + "."
+    'notice noticeline$
+
+
+
+[start]
+
     GLOBAL accountc$
     GLOBAL passwordc$
-    GLOBAL MAXPLAYERS
-    MAXPLAYERS = 100  'Change to set the max number of clients that can connect. and we should get this one from a conf too
-    PORT = 1568 'we should read this from a conf file later on
+
+    'MAXPLAYERS = 100  'Change to set the max number of clients that can connect. and we should get this one from a conf too
+    'PORT = 1568 'we should read this from a conf file later on
     GLOBAL admin 'we will remove this later on
     admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.
     Dim player.sock(MAXPLAYERS)    ' Socket descriptor
@@ -177,6 +204,9 @@
     Close #wmlib
     Close #wsock32
     close #main
+    end
+
+[quit.main2]
     end
 
 
@@ -635,3 +665,13 @@ Function SetWMHandler( hWnd, uMsg, lpfnCB, lSuccess )
         SetWMHandler As Long
 End Function
 
+'*** File check ***
+function fileExists(path$, filename$)
+
+  'dimension the array info$( at the beginning of your program
+
+  files path$, filename$, info$()
+
+  fileExists = val(info$(0, 0))  'non zero is true
+
+end function

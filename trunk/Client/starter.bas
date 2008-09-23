@@ -1,12 +1,34 @@
 'Form created with the help of Freeform 3 v03-27-03
 'Generated on Feb 24, 2008 at 20:08:20
+dim info$(10, 10)
+
+conff$ =  "starter.conf"
+if fileExists(DefaultDir$, "starter.conf") then
+    goto [conf.read]
+  else
+    notice "Error!" + chr$(13) + "starter.conf is missing, server cannot be started!"
+    goto [quit.main2]
+  end if
+
+[conf.read]
+
+    open conff$ for input as #conf
+        line input #conf, version$
+        line input #conf, address$
+        line input #conf, port$
+    close #conf
+    VERSION = val(maxplayers$)
+    port = val(port$)
+    'noticeline$ = "MAX: " + maxplayers$ + " PORT: " + port$ + "."
+    'notice noticeline$
+
 
 
 [setup.starter.Window]
 
     '-----Begin code for #starter
-    port = 1568 'we could read this from a config file?
-    address$ = "127.0.0.1" 'we should read this from a config too
+    'port = 1568 'we could read this from a config file?
+    'address$ = "127.0.0.1" 'we should read this from a config too
     'nomainwin
     WindowWidth = 350
     WindowHeight = 270
@@ -33,8 +55,7 @@
     open "MUAGS Starter" for window_nf as #starter
     print #starter, "font ms_sans_serif 10"
     print #starter, "trapclose [quit.starter]"
-
-
+    
 [starter.inputLoop]   'wait here for input event
     wait
 
@@ -99,7 +120,8 @@
     close #starter
     close #me
     end
-
+[quit.main2]
+    end
 
 
 ''''Function TCPOpen()''''''''''
@@ -134,3 +156,13 @@ calldll #me, "CloseA",handle As Long,_
 TCPClose As Long
 End Function
 
+'*** File check ***
+function fileExists(path$, filename$)
+
+  'dimension the array info$( at the beginning of your program
+
+  files path$, filename$, info$()
+
+  fileExists = val(info$(0, 0))  'non zero is true
+
+end function

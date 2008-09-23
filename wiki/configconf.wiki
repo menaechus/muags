@@ -1,4 +1,4 @@
-#summary One-sentence summary of this page.
+#summary The main conf file for the game.
 
 = Introduction =
 

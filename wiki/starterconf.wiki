@@ -6,6 +6,8 @@ Configuration file for the starter/updater
 
 
 = Details =
-`version number`
+version number
 
-`server address`
+server address
+
+server port

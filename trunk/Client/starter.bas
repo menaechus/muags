@@ -17,7 +17,7 @@ if fileExists(DefaultDir$, "starter.conf") then
         line input #conf, address$
         line input #conf, port$
     close #conf
-    VERSION = val(maxplayers$)
+    VERSION = val(version$)
     port = val(port$)
     'noticeline$ = "MAX: " + maxplayers$ + " PORT: " + port$ + "."
     'notice noticeline$

@@ -215,11 +215,26 @@ if fileExists(conffile$, "config.conf") then
 function CreateAccount(Account$,Passwd$) ' used for the acc creation
 ' need to do the code for sql system here
     #main.log "Create Acc: " + Account$ + " : " + Passwd$
+    Acc$ = DefaultDir$ + "/data/accounts/" + Account$
+    Pass$ = DefaultDir$ + "/data/accounts/" + Account$ + "/" + Account$ + ".o"
+    result = mkdir(Acc$)
+    if result <> 0 then ErrorLog = 0001
+    open Pass$ for output as #acccreate
+        print #acccreate, Passwd$
+    close #acccreate
 
 end function
 
 function Loginauth(Account$,Passwd$)
-    #main.log "LOG Auth"
+    #main.log "LOG Auth: " + Account$ + " : " + Passwd$
+    Acc$ = DefaultDir$ + "/data/accounts/" + Account$
+    Acc1$ = Account$ + ".o"
+    Pass$ = DefaultDir$ + "/data/accounts/" + Account$ + "/" + Account$ + ".o"
+    if fileExists(Acc$, Acc1$) then
+        notice "It's alive!"
+    else
+        ErrorLog = 0002
+    end if
 
 
 end function

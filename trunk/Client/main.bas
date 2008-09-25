@@ -45,7 +45,7 @@
     menu #main, "File",_
                 "Login" , [Login],_
                 "Logout", [Logout],_
-                "Quit"  , [Quit]
+                "Quit"  , [quit.main]
 
     menu #main, "Help",_
                 "About", [help.about]
@@ -233,13 +233,6 @@
     let func = TCPClose(handle) 'this will be removed later on
     let connect = 0
     #main.gameview "Logged Out"
-    wait
-
-
-[Quit]   'Perform action for menu File, item Quit
-
-    'Insert your own code here
-
     wait
 
 

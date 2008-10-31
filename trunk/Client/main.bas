@@ -11,7 +11,7 @@
 
     'nomainwin
     WindowWidth = 1027
-    WindowHeight = 768
+    WindowHeight = 760
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
     UpperLeftY=int((DisplayHeight-WindowHeight)/2)
 
@@ -19,24 +19,11 @@
     '-----Begin GUI objects code
 
     TexteditorColor$ = "white"
-    texteditor #main.gameview,   0,   2, 905, 650
+    texteditor #main.gameview,   0,   2, 1020, 680
     TextboxColor$ = "white"
     textbox #main.textbox1,   0, 687, 900,  25
     button #main.send,"Send",[send], UL, 905, 687, 105,  25
-    button #main.button1,"1",[button1Click], UL,   0, 657,  25,  25
-    button #main.button2,"2",[button2Click], UL,  30, 657,  25,  25
-    button #main.button3,"3",[button3Click], UL,  60, 657,  25,  25
-    button #main.button4,"4",[button4Click], UL,  90, 657,  25,  25
-    button #main.button5,"5",[button5Click], UL, 120, 657,  25,  25
-    button #main.button6,"6",[button6Click], UL, 150, 657,  25,  25
-    button #main.button7,"7",[button7Click], UL, 180, 657,  25,  25
-    button #main.button8,"8",[button8Click], UL, 210, 657,  25,  25
-    button #main.button9,"9",[button9Click], UL, 240, 657,  25,  25
-    button #main.button0,"0",[button0Click], UL, 270, 657,  25,  25
-    bmpbutton #main.bmpbuttonup, "data\images\arrowup.bmp", [bmpbuttonUPClick], UL, 945, 582
-    bmpbutton #main.bmpbuttonleft, "data\images\arrowleft.bmp", [bmpbuttonLEFTClick], UL, 920, 607
-    bmpbutton #main.bmpbuttonright, "data\images\arrowright.bmp", [bmpbuttonRIGHTClick], UL, 970, 607
-    bmpbutton #main.bmpbuttondown, "data\images\arrowdown.bmp", [bmpbuttonDOWNClick], UL, 945, 632
+
 
     '-----End GUI objects code
 
@@ -78,102 +65,7 @@
     wait
 
 
-[button1Click]   'Perform action for the button named 'button1'
 
-    'Insert your own code here
-
-    wait
-
-
-[button2Click]   'Perform action for the button named 'button2'
-
-    'Insert your own code here
-
-    wait
-
-
-[button3Click]   'Perform action for the button named 'button3'
-
-    'Insert your own code here
-
-    wait
-
-
-[button4Click]   'Perform action for the button named 'button4'
-
-    'Insert your own code here
-
-    wait
-
-
-[button5Click]   'Perform action for the button named 'button5'
-
-    'Insert your own code here
-
-    wait
-
-
-[button6Click]   'Perform action for the button named 'button6'
-
-    'Insert your own code here
-
-    wait
-
-
-[button7Click]   'Perform action for the button named 'button7'
-
-    'Insert your own code here
-
-    wait
-
-
-[button8Click]   'Perform action for the button named 'button8'
-
-    'Insert your own code here
-
-    wait
-
-
-[button9Click]   'Perform action for the button named 'button9'
-
-    'Insert your own code here
-
-    wait
-
-
-[button0Click]   'Perform action for the button named 'button0'
-
-    'Insert your own code here
-
-    wait
-
-
-[bmpbuttonUPClick]   'Perform action for the bmpbutton named 'bmpbuttonup'
-
-    'Insert your own code here
-
-    wait
-
-
-[bmpbuttonLEFTClick]   'Perform action for the bmpbutton named 'bmpbuttonleft'
-
-    'Insert your own code here
-
-    wait
-
-
-[bmpbuttonRIGHTClick]   'Perform action for the bmpbutton named 'bmpbuttonright'
-
-    'Insert your own code here
-
-    wait
-
-
-[bmpbuttonDOWNClick]   'Perform action for the bmpbutton named 'bmpbuttondown'
-
-    'Insert your own code here
-
-    wait
 
 
 [Login]   'Perform action for menu File, item Login

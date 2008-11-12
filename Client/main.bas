@@ -162,7 +162,7 @@
         print rec$
         if rec$ <> "" then print #main.gameview, rec$
     end if
-    goto [GameLoop]
+   ' goto [GameLoop]
     wait
 
 

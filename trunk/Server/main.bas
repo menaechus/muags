@@ -146,6 +146,7 @@ if fileExists(conffile$, "config.conf") then
         rc As Void
 
     If player.sock(Player) <> -1 Then
+        buf$ = ""
         buf$ = player.inbuf$(Player)
         if buf$ <> "" then
             print buf$
@@ -165,12 +166,14 @@ if fileExists(conffile$, "config.conf") then
             output$ = "00002 ok"
             plr = 101
             a = pbroadcast(Player, plr, output$)
+            buf$ = ""
         end if
         if word$(buf$, 1) = "00100" then
             output$ = buf$
             a = broadcast(Player,output$)
             buf$ = ""
         end if
+        buf$ = ""
     End If
 
     Player = Player + 1

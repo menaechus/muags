@@ -19,11 +19,19 @@
 
 
 [start]
+
+
+[main]
 input test$
-let func = TCPSend(handle,test$)
+if test$ = "quit" then 
+    goto [quit]
+else 
+    let func = TCPSend(handle,test$)
             CallDLL #kernel32, "Sleep", _
             10 As Long, _
             rc As Void
+end if
+wait
 
 [quit]
 if connect = 1 then

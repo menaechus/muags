@@ -34,7 +34,7 @@ yy = 0
 
     for xx = 0 to x
         for yy = 0 to 1000
-        map1$(xx,yy) = mid$(dummy$(xx), yy, 1)
+        map1$(yy,xx) = mid$(dummy$(xx), yy, 1)
         'if map1$(xx,yy) = "" then yy = 1000
         next yy
     next xx
@@ -122,8 +122,8 @@ function drawMap(PlayerLocX, PlayerLocY)
     twentythree$ = ""
     twentyfour$ = ""
     twentyfive$ = ""
-    
-    
+
+
 
     oneX = PlayerLocX - 1
     oneY = PlayerLocY - 1
@@ -225,42 +225,42 @@ function drawMap(PlayerLocX, PlayerLocY)
     eighteen$ = map1$(eighteenX, eighteenY)
 
     nineteenX = PlayerLocX - 2
-    nineteenY = PlayerLocY - 1
+    nineteenY = PlayerLocY + 1
     if nineteenX < 0 then nineteenX = 0
     if nineteenY < 0 then nineteenY = 0
     nineteen$ = map1$(nineteenX, nineteenY)
 
     twentyX = PlayerLocX + 2
-    twentyY = PlayerLocY - 1
+    twentyY = PlayerLocY + 1
     if twentyX < 0 then twentyX = 0
     if twentyY < 0 then twentyY = 0
     twenty$ = map1$(twentyX, twentyY)
 
     twentyoneX = PlayerLocX - 2
-    twentyoneY = PlayerLocY - 2
+    twentyoneY = PlayerLocY + 2
     if twentyoneX < 0 then twentyoneX = 0
     if twentyoneY < 0 then twentyoneY = 0
     twentyone$ = map1$(twentyoneX, twentyoneY)
 
     twentytwoX = PlayerLocX - 1
-    twentytwoY = PlayerLocY - 2
+    twentytwoY = PlayerLocY + 2
     if twentytwoX < 0 then twentytwoX = 0
     if twentytwoY < 0 then twentytwoY = 0
     twentytwo$ = map1$(twentytwoX, twentytwoY)
 
     twentythreeX = PlayerLocX
-    twentythreeY = PlayerLocY - 2
+    twentythreeY = PlayerLocY + 2
     if twentythreeY < 0 then twentythreeY = 0
     twentythree$ = map1$(twentythreeX, twentythreeY)
 
     twentyfourX = PlayerLocX + 1
-    twentyfourY = PlayerLocY - 2
+    twentyfourY = PlayerLocY + 2
     if twentyfourX < 0 then twentyfourX = 0
     if twentyfourY < 0 then twentyfourY = 0
     twentyfour$ = map1$(twentyfourX, twentyfourY)
 
     twentyfiveX = PlayerLocX + 2
-    twentyfiveY = PlayerLocY - 2
+    twentyfiveY = PlayerLocY + 2
     if twentyfiveX < 0 then twentyfiveX = 0
     if twentyfiveY < 0 then twentyfiveY = 0
     twentyfive$ = map1$(twentyfiveX, twentyfiveY)

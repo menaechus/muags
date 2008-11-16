@@ -5,7 +5,9 @@
     open "mesock32.dll" for dll as #me
     global handle
     logged = 0
-    
+    mapfilee$ = DefaultDir$ + "\data\maps\"
+    mapfile$ = mapfilee$ + "map.1"
+
     global PlayerLocX
     global PlayerLocY
     global cmd
@@ -199,7 +201,6 @@ yy = 0
 
 
 '---Subs---
-
 sub CheckCmd command$
     cmd = 0
     if command$ = "n" then cmd = 1
@@ -225,7 +226,7 @@ if map1$(PlayerLocX, PlayerLocY) = "#" then
     PlayerLocY = OldY
 end if
 
-
+'and in here we should inform the server of the new coordinates of the player
 
 end function
 
@@ -408,7 +409,7 @@ function drawMap(PlayerLocX, PlayerLocY)
 '    if eight$ = "" then eight$ = "#"
 '    if nine$ = "" then nine$ = "#"
 
-
+'these should not be print's :D
     print
     print ten$ + eleven$ + twelve$ + thirteen$ + fourteen$
     print fifteen$ + one$ + two$ + three$ + sixteen$
@@ -451,3 +452,4 @@ Function TCPClose(handle)
 calldll #me, "CloseA",handle As Long,_
 TCPClose As Long
 End Function
+

@@ -140,40 +140,21 @@ if fileExists(conffile$, "config.conf") then
     Player = 1
 
 [s_Loop]
+    buf$ = ""
     Scan
     CallDLL #kernel32, "Sleep", _
         10 As Long, _
         rc As Void
-
-    If player.sock(Player) <> -1 Then
-        buf$ = ""
+    
+    If player.sock(Player) <> -1 Then    
         buf$ = player.inbuf$(Player)
-        if buf$ <> "" then
-            print buf$
+        If Len(buf$) > 0 Then
+            I = InStr(buf$, Chr$(13))
+                If I <> 0 Then
+                    print buf$
+                    ad = CheckCommand(Player, buf$)
+                end if
         end if
-        if word$(buf$, 1) = "00001" then
-            accountc$ = word$(buf$, 2)
-            passwordc$ = word$(buf$, 3)
-            ad = CreateAccount(accountc$,passwordc$)
-            output$ = "00001 ok"
-            plr = 101
-            a = pbroadcast(Player, plr, output$)
-        end if
-        if word$(buf$, 1) = "00002" then
-            account$ = word$(buf$, 2)
-            passwd$ = word$(buf$, 3)
-            ad = Loginauth(account$,passwd$)
-            output$ = "00002 ok"
-            plr = 101
-            a = pbroadcast(Player, plr, output$)
-            buf$ = ""
-        end if
-        if word$(buf$, 1) = "00100" then
-            output$ = buf$
-            a = broadcast(Player,output$)
-            buf$ = ""
-        end if
-        buf$ = ""
     End If
 
     Player = Player + 1
@@ -215,6 +196,34 @@ if fileExists(conffile$, "config.conf") then
 
 
 '*** SUBS/Funcs for the engine ***
+function CheckCommand(Player, buf$)
+        if word$(buf$, 1) = "00001" then
+            accountc$ = word$(buf$, 2)
+            passwordc$ = word$(buf$, 3)
+            ad = CreateAccount(accountc$,passwordc$)
+            output$ = "00001 ok"
+            plr = 101
+            a = pbroadcast(Player, plr, output$)
+        end if
+        if word$(buf$, 1) = "00002" then
+            account$ = word$(buf$, 2)
+            passwd$ = word$(buf$, 3)
+            ad = Loginauth(account$,passwd$)
+            output$ = "00002 ok"
+            plr = 101
+            a = pbroadcast(Player, plr, output$)
+        end if
+        if word$(buf$, 1) = "00100" then
+            output$ = buf$
+            a = broadcast(Player,output$)
+        end if
+
+
+
+end function
+
+
+
 function CreateAccount(Account$,Passwd$) ' used for the acc creation
 ' need to do the code for sql system here
     #main.log "Create Acc: " + Account$ + " : " + Passwd$
@@ -256,6 +265,7 @@ function broadcast(from,buf$) ' this will become the channel system some day
     'End If
     for i = 1 to MAXPLAYERS
         If player.sock(i) <> -1 and i <> from Then
+'        If player.sock(i) <> -1 Then
             obuf$ = player.outbuf$(i) + buf$ + chr$(7) + chr$(13) + chr$(10)
             player.outbuf$(i) = Send$(player.sock(i), obuf$, Len(obuf$), 0)
         #main.log "Sent "; buf$ ;" to Client ";i

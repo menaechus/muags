@@ -94,6 +94,7 @@ yy = 0
     print #main.textbox1, ""
     text$ = "00100 " + outgoing$
     let func = TCPSend(handle,text$)
+    text$ = ""
     goto [GameLoop]
     wait
 
@@ -137,6 +138,7 @@ yy = 0
             CallDLL #kernel32, "Sleep", _
             10 As Long, _
             rc As Void
+            
             text$ = "00002 " + account$ + " " + pwd$
             let func = TCPSend(handle,text$)
     end if
@@ -442,6 +444,7 @@ End Function
 
 ''''Function TCPPrint()''''''''''
 Function TCPSend(handle,text$)
+text$ = text$ + Chr$(13)
 calldll #me, "PrintA", handle As Long,_
 text$ As ptr,re As Long
 TCPPrint=re

@@ -138,7 +138,7 @@ yy = 0
             CallDLL #kernel32, "Sleep", _
             10 As Long, _
             rc As Void
-            
+
             text$ = "00002 " + account$ + " " + pwd$
             let func = TCPSend(handle,text$)
     end if
@@ -442,12 +442,13 @@ all As Long, re As long
 if re<>0 then TCPReceive$ = winstring(re)
 End Function
 
-''''Function TCPPrint()''''''''''
+''''Function TCPSend()''''''''''
 Function TCPSend(handle,text$)
 text$ = text$ + Chr$(13)
 calldll #me, "PrintA", handle As Long,_
 text$ As ptr,re As Long
-TCPPrint=re
+TCPSend=re
+text$ = ""
 End Function
 
 ''''Function TCPClose()''''''''''

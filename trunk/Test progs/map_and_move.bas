@@ -7,8 +7,8 @@ global PlayerLocY
 global cmd
 dim dummy$(1000)
 dim map1$(1000,1000)
-PlayerLocX = 2
-PlayerLocY = 2
+PlayerLocX = 30
+PlayerLocY = 30
 x = 0
 open mapfile$ for input as #1
 [loop]
@@ -88,6 +88,10 @@ if cmd = 4 then PlayerLocY = PlayerLocY + 1
 if PlayerLocX < 0 then PlayerLocX = 0
 if PlayerLocY < 0 then PlayerLocY = 0
 if map1$(PlayerLocX, PlayerLocY) = "#" then
+    PlayerLocX = OldX
+    PlayerLocY = OldY
+end if
+if map1$(PlayerLocX, PlayerLocY) = "w" then
     PlayerLocX = OldX
     PlayerLocY = OldY
 end if

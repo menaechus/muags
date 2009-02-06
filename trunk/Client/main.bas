@@ -4,6 +4,7 @@
     address$ = "127.0.0.1" 'we should read this from a config too
     open "mesock32.dll" for dll as #me
     global handle
+    global text$
     logged = 0
     mapfilee$ = DefaultDir$ + "\data\maps\"
     mapfile$ = mapfilee$ + "map.1"
@@ -93,6 +94,7 @@ yy = 0
     print #main.textbox1, "!contents? outgoing$"
     print #main.textbox1, ""
     text$ = "00100 " + outgoing$
+    print "Send: " + text$
     let func = TCPSend(handle,text$)
     text$ = ""
     goto [GameLoop]
@@ -184,6 +186,8 @@ yy = 0
 
 [GameLoop]
     scan
+    print "Gameloop: " + text$
+    text$ = ""
     'CallDLL #kernel32, "Sleep", _
     '    10 As Long, _
     '    rc As Void
@@ -443,12 +447,12 @@ if re<>0 then TCPReceive$ = winstring(re)
 End Function
 
 ''''Function TCPSend()''''''''''
-Function TCPSend(handle,text$)
-text$ = text$ + Chr$(13)
+Function TCPSend(handle,text1$)
+text1$ = text1$ + Chr$(13)
 calldll #me, "PrintA", handle As Long,_
-text$ As ptr,re As Long
+text1$ As ptr,re As Long
 TCPSend=re
-text$ = ""
+text1$ = ""
 End Function
 
 ''''Function TCPClose()''''''''''

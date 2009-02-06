@@ -140,19 +140,20 @@ if fileExists(conffile$, "config.conf") then
     Player = 1
 
 [s_Loop]
-    buf$ = ""
+    let buf$ = ""
     Scan
     CallDLL #kernel32, "Sleep", _
         10 As Long, _
         rc As Void
-    
-    If player.sock(Player) <> -1 Then    
+
+    If player.sock(Player) <> -1 Then
         buf$ = player.inbuf$(Player)
+        print "s_Loop: " + buf$
         If Len(buf$) > 0 Then
             I = InStr(buf$, Chr$(13))
                 If I <> 0 Then
-                    print buf$
                     ad = CheckCommand(Player, buf$)
+                    I = 0
                 end if
         end if
     End If
@@ -197,6 +198,7 @@ if fileExists(conffile$, "config.conf") then
 
 '*** SUBS/Funcs for the engine ***
 function CheckCommand(Player, buf$)
+        print "Incoming: " + buf$
         if word$(buf$, 1) = "00001" then
             accountc$ = word$(buf$, 2)
             passwordc$ = word$(buf$, 3)

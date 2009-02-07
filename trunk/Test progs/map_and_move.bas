@@ -60,7 +60,6 @@ rc = drawMap(PlayerLocX, PlayerLocY)
 
 goto [MoveTest]
 
-
 [end]
 end
 
@@ -69,11 +68,14 @@ end
 
 sub CheckCmd command$
     cmd = 0
-    if command$ = "n" then cmd = 1
-    if command$ = "e" then cmd = 2
-    if command$ = "w" then cmd = 3
-    if command$ = "s" then cmd = 4
-
+    if command$ = "7" then cmd = 1
+    if command$ = "8" then cmd = 2
+    if command$ = "9" then cmd = 3
+    if command$ = "4" then cmd = 4
+    if command$ = "6" then cmd = 5
+    if command$ = "1" then cmd = 6
+    if command$ = "2" then cmd = 7
+    if command$ = "3" then cmd = 8
 end sub
 
 
@@ -82,9 +84,17 @@ function MovePlayer(cmd)
 OldX = PlayerLocX
 OldY = PlayerLocY
 if cmd = 1 then PlayerLocY = PlayerLocY - 1
-if cmd = 2 then PlayerLocX = PlayerLocX + 1
-if cmd = 3 then PlayerLocX = PlayerLocX - 1
-if cmd = 4 then PlayerLocY = PlayerLocY + 1
+if cmd = 1 then PlayerLocX = PlayerLocX - 1
+if cmd = 2 then PlayerLocY = PlayerLocY - 1
+if cmd = 3 then PlayerLocY = PlayerLocY - 1
+if cmd = 3 then PlayerLocX = PlayerLocX + 1
+if cmd = 4 then PlayerLocX = PlayerLocX - 1
+if cmd = 5 then PlayerLocX = PlayerLocX + 1
+if cmd = 6 then PlayerLocY = PlayerLocY + 1
+if cmd = 6 then PlayerLocX = PlayerLocX - 1
+if cmd = 7 then PlayerLocY = PlayerLocY + 1
+if cmd = 8 then PlayerLocY = PlayerLocY + 1
+if cmd = 8 then PlayerLocX = PlayerLocX + 1
 if PlayerLocX < 0 then PlayerLocX = 0
 if PlayerLocY < 0 then PlayerLocY = 0
 if map1$(PlayerLocX, PlayerLocY) = "#" then
@@ -126,7 +136,30 @@ function drawMap(PlayerLocX, PlayerLocY)
     twentythree$ = ""
     twentyfour$ = ""
     twentyfive$ = ""
-
+    twentysix$ = ""
+    twentyseven$ = ""
+    twentyeight$ = ""
+    twentynine$ = ""
+    thirty$ = ""
+    thirtyone$ = ""
+    thirtytwo$ = ""
+    thirtythree$ = ""
+    thirtyfour$ = ""
+    thirtyfive$ = ""
+    thirtysix$ = ""
+    thirtyseven$ = ""
+    thirtyeight$ = ""
+    thirtynine$ = ""
+    fourty$ = ""
+    fourtyone$ = ""
+    fourtytwo$ = ""
+    fourtythree$ = ""
+    fourtyfour$ = ""
+    fourtyfive$ = ""
+    fourtysix$ = ""
+    fourtyseven$ = ""
+    fourtyeight$ = ""
+    fourtynine$ = ""
 
 
     oneX = PlayerLocX - 1
@@ -269,6 +302,145 @@ function drawMap(PlayerLocX, PlayerLocY)
     if twentyfiveY < 0 then twentyfiveY = 0
     twentyfive$ = map1$(twentyfiveX, twentyfiveY)
 
+    twentysixX = PlayerLocX - 3
+    twentysixY = PlayerLocY - 3
+    if twentysixX < 0 then twentysixX = 0
+    if twentysixY < 0 then twentysixY = 0
+    twentysix$ = map1$(twentysixX, twentysixY)
+
+    twentysevenX = PlayerLocX - 2
+    twentysevenY = PlayerLocY - 3
+    if twentysevenX < 0 then twentysevenX = 0
+    if twentysevenY < 0 then twentysevenY = 0
+    twentyseven$ = map1$(twentysevenX, twentysevenY)
+
+    twentyeightX = PlayerLocX - 1
+    twentyeightY = PlayerLocY - 3
+    if twentyeightX < 0 then twentyeightX = 0
+    if twentyeightY < 0 then twentyeightY = 0
+    twentyeight$ = map1$(twentyeightX, twentyeightY)
+
+    twentynineX = PlayerLocX
+    twentynineY = PlayerLocY - 3
+    if twentynineY < 0 then twentynineY = 0
+    twentynine$ = map1$(twentynineX, twentynineY)
+
+    thirtyX = PlayerLocX + 1
+    thirtyY = PlayerLocY - 3
+    if thirtyX < 0 then thirtyX = 0
+    if thirtyY < 0 then thirtyY = 0
+    thirty$ = map1$(thirtyX, thirtyY)
+
+    thirtyoneX = PlayerLocX + 2
+    thirtyoneY = PlayerLocY - 3
+    if thirtyoneX < 0 then thirtyoneX = 0
+    if thirtyoneY < 0 then thirtyoneY = 0
+    thirtyone$ = map1$(thirtyoneX, thirtyoneY)
+
+    thirtytwoX = PlayerLocX + 3
+    thirtytwoY = PlayerLocY - 3
+    if thirtytwoX < 0 then thirtytwoX = 0
+    if thirtytwoY < 0 then thirtytwoY = 0
+    thirtytwo$ = map1$(thirtytwoX, thirtytwoY)
+
+    thirtythreeX = PlayerLocX - 3
+    thirtythreeY = PlayerLocY - 2
+    if thirtythreeX < 0 then thirtythreeX = 0
+    if thirtythreeY < 0 then thirtythreeY = 0
+    thirtythree$ = map1$(thirtythreeX, thirtythreeY)
+
+    thirtyfourX = PlayerLocX + 3
+    thirtyfourY = PlayerLocY - 2
+    if thirtyfourX < 0 then thirtyfourX = 0
+    if thirtyfourY < 0 then thirtyfourY = 0
+    thirtyfour$ = map1$(thirtyfourX, thirtyfourY)
+
+    thirtyfiveX = PlayerLocX - 3
+    thirtyfiveY = PlayerLocY - 1
+    if thirtyfiveX < 0 then thirtyfiveX = 0
+    if thirtyfiveY < 0 then thirtyfiveY = 0
+    thirtyfive$ = map1$(thirtyfiveX, thirtyfiveY)
+
+    thirtysixX = PlayerLocX + 3
+    thirtysixY = PlayerLocY - 1
+    if thirtysixX < 0 then thirtysixX = 0
+    if thirtysixY < 0 then thirtysixY = 0
+    thirtysix$ = map1$(thirtysixX, thirtysixY)
+
+    thirtysevenX = PlayerLocX - 3
+    thirtysevenY = PlayerLocY
+    if thirtysevenX < 0 then thirtysevenX = 0
+    thirtyseven$ = map1$(thirtysevenX, thirtysevenY)
+
+    thirtyeightX = PlayerLocX + 3
+    thirtyeightY = PlayerLocY
+    if thirtyeightX < 0 then thirtyeightX = 0
+    thirtyeight$ = map1$(thirtyeightX, thirtyeightY)
+
+    thirtynineX = PlayerLocX - 3
+    thirtynineY = PlayerLocY + 1
+    if thirtynineX < 0 then thirtynineX = 0
+    if thirtynineY < 0 then thirtynineY = 0
+    thirtynine$ = map1$(thirtynineX, thirtynineY)
+
+    fourtyX = PlayerLocX + 3
+    fourtyY = PlayerLocY + 1
+    if fourtyX < 0 then fourtyX = 0
+    if fourtyY < 0 then fourtyY = 0
+    fourty$ = map1$(fourtyX, fourtyY)
+
+    fourtyoneX = PlayerLocX - 3
+    fourtyoneY = PlayerLocY + 2
+    if fourtyoneX < 0 then fourtyoneX = 0
+    if fourtyoneY < 0 then fourtyoneY = 0
+    fourtyone$ = map1$(fourtyoneX, fourtyoneY)
+
+    fourtytwoX = PlayerLocX + 3
+    fourtytwoY = PlayerLocY + 2
+    if fourtytwoX < 0 then fourtytwoX = 0
+    if fourtytwoY < 0 then fourtytwoY = 0
+    fourtytwo$ = map1$(fourtytwoX, fourtytwoY)
+
+    fourtythreeX = PlayerLocX - 3
+    fourtythreeY = PlayerLocY + 3
+    if fourtythreeX < 0 then fourtythreeX = 0
+    if fourtythreeY < 0 then fourtythreeY = 0
+    fourtythree$ = map1$(fourtythreeX, fourtythreeY)
+
+    fourtyfourX = PlayerLocX - 2
+    fourtyfourY = PlayerLocY + 3
+    if fourtyfourX < 0 then fourtyfourX = 0
+    if fourtyfourY < 0 then fourtyfourY = 0
+    fourtyfour$ = map1$(fourtyfourX, fourtyfourY)
+
+    fourtyfiveX = PlayerLocX - 1
+    fourtyfiveY = PlayerLocY + 3
+    if fourtyfiveX < 0 then fourtyfiveX = 0
+    if fourtyfiveY < 0 then fourtyfiveY = 0
+    fourtyfive$ = map1$(fourtyfiveX, fourtyfiveY)
+
+    fourtysixX = PlayerLocX
+    fourtysixY = PlayerLocY + 3
+    if fourtysixY < 0 then fourtysixY = 0
+    fourtysix$ = map1$(fourtysixX, fourtysixY)
+
+    fourtysevenX = PlayerLocX + 1
+    fourtysevenY = PlayerLocY + 3
+    if fourtysevenX < 0 then fourtysevenX = 0
+    if fourtysevenY < 0 then fourtysevenY = 0
+    fourtyseven$ = map1$(fourtysevenX, fourtysevenY)
+
+    fourtyeightX = PlayerLocX + 2
+    fourtyeightY = PlayerLocY + 3
+    if fourtyeightX < 0 then fourtyeightX = 0
+    if fourtyeightY < 0 then fourtyeightY = 0
+    fourtyeight$ = map1$(fourtyeightX, fourtyeightY)
+
+    fourtynineX = PlayerLocX + 3
+    fourtynineY = PlayerLocY + 3
+    if fourtynineX < 0 then fourtynineX = 0
+    if fourtynineY < 0 then fourtynineY = 0
+    fourtynine$ = map1$(fourtynineX, fourtynineY)
 
 '    if one$ = "" then one$ = "#"
 '    if two$ = "" then two$ = "#"
@@ -280,12 +452,14 @@ function drawMap(PlayerLocX, PlayerLocY)
 '    if nine$ = "" then nine$ = "#"
 
 
-    print
-    print ten$ + eleven$ + twelve$ + thirteen$ + fourteen$
-    print fifteen$ + one$ + two$ + three$ + sixteen$
-    print seventeen$ + four$ + "@" + six$ + eighteen$
-    print nineteen$ + seven$ + eight$ + nine$ + twenty$
-    print twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$
-    print
+    print twentysix$ + twentyseven$ + twentyeight$ + twentynine$ + thirty$ + thirtyone$ + thirtytwo$
+    print thirtythree$ + ten$ + eleven$ + twelve$ + thirteen$ + fourteen$ + thirtyfour$
+    print thirtyfive$ + fifteen$ + one$ + two$ + three$ + sixteen$ + thirtysix$
+    print thirtyseven$ + seventeen$ + four$ + "@" + six$ + eighteen$ + thirtyeight$
+    print thirtynine$ + nineteen$ + seven$ + eight$ + nine$ + twenty$ + fourty$
+    print fourtyone$ + twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$ + fourtytwo$
+    print fourtythree$ + fourtyfour$ + fourtyfive$ + fourtysix$ + fourtyseven$ + fourtyeight$ + fourtynine$
 
 end function
+
+

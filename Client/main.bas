@@ -146,7 +146,7 @@ yy = 0
             if word$(rec$, 3) = "ok" then
                 notice "Logged in"
                 logged = 1
-                
+
             else
                 notice "Log in failed"
                 logged = 0

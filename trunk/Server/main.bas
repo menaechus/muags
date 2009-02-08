@@ -151,7 +151,7 @@ if fileExists(conffile$, "config.conf") then
 
     If player.sock(Player) <> -1 Then
         buf$ = player.inbuf$(Player)
-        print "s_Loop: " + buf$
+        print "s_Loop - player: "; Player; " buf: " + buf$
         If Len(buf$) > 0 Then
             I = InStr(buf$, Chr$(13))
                 If I <> 0 Then
@@ -201,7 +201,7 @@ if fileExists(conffile$, "config.conf") then
 
 '*** SUBS/Funcs for the engine ***
 function CheckCommand(Player, buf$)
-        print "Incoming: " + buf$
+        print "Player: " ; Player; " Incoming: " + buf$
         if word$(buf$, 1) = "00001" then
             accountc$ = word$(buf$, 2)
             passwordc$ = word$(buf$, 3)
@@ -286,12 +286,20 @@ function broadcast(from,buf$) ' this will become the channel system some day
     next i
 end function
 
+
+
+
 function whisper(user, from$, buf$) 'whisper system
     buf$ = "01000 " ; from$ ; " " ; buf
     player.outbuf$(user) = Send$(player.sock(user), buf$, Len(buf$), 0)
 end function
 
+
+
+
+
 function pbroadcast(user, from, buf$)' this will be used for client-server messaging
+' needs a lot of changes!
     If from = 101 then
         buf$ = "SERVER: " + buf$  'If message is from Server, Add SERVER:.
     else
@@ -595,6 +603,7 @@ Function Recv$( s, buflen, flags )
         flags As Long, _
         buflen As Long
     Recv$ = Left$(Recv$, buflen)
+    print "RECEIVE: " + Recv$
 End Function
 
 Function Send$( s, buf$, buflen, flags )

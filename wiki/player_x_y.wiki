@@ -10,3 +10,7 @@ reserved numbers
    *  x = player socket
    *  player$(x, 0) = account name
    *  player$(x, 1) = account level
+   *  player$(x, 2) = race
+   *  player$(x, 3) = gender
+   *  player$(x, 10) = x coord
+   *  player$(x, 11) = y coord

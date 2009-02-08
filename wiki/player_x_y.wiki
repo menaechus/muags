@@ -1,0 +1,11 @@
+#summary Definations for player$(x,y)
+
+= Introduction =
+
+reserved numbers
+
+
+= Details =
+x = player socket
+player$(x, 0) = account name
+player$(x, 1) = account level

@@ -1,7 +1,9 @@
+'Form created with the help of Freeform 3 v03-27-03
+'Generated on Feb 08, 2009 at 12:41:33
+
 mapfilee$ = DefaultDir$ + "\maps\"
 mapfile$ = mapfilee$ + "map.1"
 
-'dim PlayerLoc(5,5)
 global PlayerLocX
 global PlayerLocY
 global cmd
@@ -20,15 +22,6 @@ close #1
 x = x - 1
 y = 0
 
-'This is here just so you can print the map from the dummy and see if it works
-'[printloop]
-'
-'    for y = 0 to x
-'    print dummy$(y)
-'    next y
-
-[dummyTOmap]
-
 xx = 0
 yy = 0
 
@@ -38,32 +31,83 @@ yy = 0
         'if map1$(xx,yy) = "" then yy = 1000
         next yy
     next xx
-rc = drawMap(PlayerLocX, PlayerLocY)
-[MoveTest]
-'scan
-print "Coordinates: " ; PlayerLocX; " : "; PlayerLocY
-input command$
 
-if command$ = "quit" then
-        goto [end]
-else
-        call CheckCmd command$
-end if
+[setup.main.Window]
 
-if cmd <> 0 then a = MovePlayer(cmd)
+    '-----Begin code for #main
 
-[DrawTest]
-cls
-rc = drawMap(PlayerLocX, PlayerLocY)
+    'nomainwin
+    ctrl$ = chr$(_VK_CONTROL)
+    print "Keys pressed:"
+    WindowWidth = 550
+    WindowHeight = 410
+    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
+    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
 
 
+    '-----Begin GUI objects code
+
+    TexteditorColor$ = "white"
+    texteditor #main.screen,   5,   5, 535, 325
+    button #main.quit,"Quit",[quit.main], UL,   5, 335,  85,  25
+
+    '-----End GUI objects code
+
+    '-----Begin menu code
+
+    menu #main, "Edit"  ' <-- Texteditor menu.
 
 
-goto [MoveTest]
+    '-----End menu code
 
-[end]
-end
+    open "Movement test" for graphics_nf_nsb as #main
+    print #main, "font Courier_New 12"
+    print #main, "when characterInput [keyPressed]"
+    print #main.screen, "!font Courier_New 12"
+    print #main, "trapclose [quit.main]"
 
+
+[main.inputLoop]   'wait here for input event
+    print #main.screen, "!cls" ;
+    rc = drawMap(PlayerLocX, PlayerLocY)
+    print #main.screen, "Coordinates: " ; PlayerLocX; " : "; PlayerLocY
+    print #main, "setfocus"
+    scan
+    wait
+
+[keyPressed]
+    key$ = left$(Inkey$, 2)
+    print key$
+    select case key$
+        case "1"
+            command$ = key$
+        case "2"
+            command$ = key$ 
+        case "3"
+            command$ = key$
+        case "4"
+            command$ = key$
+        case "6"
+            command$ = key$
+        case "7"
+            command$ = key$
+        case "8"
+            command$ = key$
+        case "9"
+            command$ = key$
+        case else
+            goto [main.inputLoop]
+    end select
+    call CheckCmd command$ 
+    if cmd <> 0 then a = MovePlayer(cmd)
+    goto [main.inputLoop]
+
+
+
+
+[quit.main] 'End the program
+    close #main
+    end
 
 '---Subs---
 
@@ -453,14 +497,12 @@ function drawMap(PlayerLocX, PlayerLocY)
 '    if nine$ = "" then nine$ = "#"
 
 
-    print twentysix$ + twentyseven$ + twentyeight$ + twentynine$ + thirty$ + thirtyone$ + thirtytwo$
-    print thirtythree$ + ten$ + eleven$ + twelve$ + thirteen$ + fourteen$ + thirtyfour$
-    print thirtyfive$ + fifteen$ + one$ + two$ + three$ + sixteen$ + thirtysix$
-    print thirtyseven$ + seventeen$ + four$ + "@" + six$ + eighteen$ + thirtyeight$
-    print thirtynine$ + nineteen$ + seven$ + eight$ + nine$ + twenty$ + fourty$
-    print fourtyone$ + twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$ + fourtytwo$
-    print fourtythree$ + fourtyfour$ + fourtyfive$ + fourtysix$ + fourtyseven$ + fourtyeight$ + fourtynine$
+    print #main.screen, twentysix$ + twentyseven$ + twentyeight$ + twentynine$ + thirty$ + thirtyone$ + thirtytwo$
+    print #main.screen, thirtythree$ + ten$ + eleven$ + twelve$ + thirteen$ + fourteen$ + thirtyfour$
+    print #main.screen, thirtyfive$ + fifteen$ + one$ + two$ + three$ + sixteen$ + thirtysix$
+    print #main.screen, thirtyseven$ + seventeen$ + four$ + "@" + six$ + eighteen$ + thirtyeight$
+    print #main.screen, thirtynine$ + nineteen$ + seven$ + eight$ + nine$ + twenty$ + fourty$
+    print #main.screen, fourtyone$ + twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$ + fourtytwo$
+    print #main.screen, fourtythree$ + fourtyfour$ + fourtyfive$ + fourtysix$ + fourtyseven$ + fourtyeight$ + fourtynine$
 
 end function
-
-

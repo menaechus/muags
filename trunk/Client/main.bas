@@ -107,7 +107,7 @@ yy = 0
 [Login]   'Perform action for menu File, item Login
     login = 1
     WindowWidth = 200
-    WindowHeight = 130
+    WindowHeight = 160
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
     UpperLeftY=int((DisplayHeight-WindowHeight)/2)
 
@@ -120,11 +120,14 @@ yy = 0
     textbox #Login.account,  85,  17, 100,  25
     textbox #Login.passwd,  85,  42, 100,  25
     button #Login.button5,"Login",[Login2], UL,   5,  67, 180,  25
+    button #Login.button6,"Cancel",[Logincancel], UL, 5, 97, 180, 25
 
     '-----End GUI objects code
 
     open "Login" for window as #Login
     print #Login, "font ms_sans_serif 10"
+
+[LoginLoop]
 
     wait
 
@@ -135,22 +138,22 @@ yy = 0
     print #Login.passwd, "!contents? pwd$"
 
     logincode$ = "00002 "; account$; " "; pwd$
-
-    if word$(rec$, 1) = "SERVER:" then
-            CallDLL #kernel32, "Sleep", _
-            10 As Long, _
-            rc As Void
-
-            text$ = "00002 " + account$ + " " + pwd$
-            let func = TCPSend(handle,text$)
-    end if
+    text$ = "00002 " + account$ + " " + pwd$
+    let func = TCPSend(handle,text$)
     let rec$ = TCPReceive$(handle)
+    print "login: " + rec$
     if word$(rec$, 2) = "00002" then
             if word$(rec$, 3) = "ok" then
                 notice "Logged in"
                 logged = 1
+                
+            else
+                notice "Log in failed"
+                logged = 0
+                goto [LoginLoop]
             end if
         end if
+[Logincancel]
     close #Login
     login = 0
     let connect = 1
@@ -448,7 +451,8 @@ End Function
 
 ''''Function TCPSend()''''''''''
 Function TCPSend(handle,text1$)
-text1$ = text1$ + Chr$(13)
+text1$ = text1$ + chr$(7) + chr$(13) + chr$(10)
+print text1$
 calldll #me, "PrintA", handle As Long,_
 text1$ As ptr,re As Long
 TCPSend=re

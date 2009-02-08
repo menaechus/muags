@@ -1,6 +1,7 @@
 'Form created with the help of Freeform 3 v03-27-03
 'Generated on Feb 25, 2008 at 14:09:45
 dim info$(10, 10)
+
 GLOBAL MAXPLAYERS
 GLOBAL PORT
 conffile$ = DefaultDir$ + "\data\"
@@ -29,7 +30,8 @@ if fileExists(conffile$, "config.conf") then
 
     GLOBAL accountc$
     GLOBAL passwordc$
-
+    GLOBAL player$
+    GLOBAL logok
     'MAXPLAYERS = 100  'Change to set the max number of clients that can connect. and we should get this one from a conf too
     'PORT = 1568 'we should read this from a conf file later on
     GLOBAL admin 'we will remove this later on
@@ -38,6 +40,7 @@ if fileExists(conffile$, "config.conf") then
     Dim player.inbuf$(MAXPLAYERS)  ' Input buffer
     Dim player.outbuf$(MAXPLAYERS) ' Output buffer
     Dim player.match(MAXPLAYERS)   ' The number to match
+    dim player$(MAXPLAYERS, 1000)
     ' Initialize client data.
     For plr = 1 To MAXPLAYERS
         player.sock(plr) = -1 ' Invalidate sockets.
@@ -208,12 +211,19 @@ function CheckCommand(Player, buf$)
             a = pbroadcast(Player, plr, output$)
         end if
         if word$(buf$, 1) = "00002" then
+            logok = 0
             account$ = word$(buf$, 2)
             passwd$ = word$(buf$, 3)
-            ad = Loginauth(account$,passwd$)
-            output$ = "00002 ok"
-            plr = 101
-            a = pbroadcast(Player, plr, output$)
+            ad = Loginauth(account$,passwd$, Player)
+            if logok = 1 then
+                output$ = "00002 ok"
+                plr = 101
+                a = pbroadcast(Player, plr, output$)
+            else
+                output$ = "00002 failed"
+                plr = 101
+                a = pbroadcast(Player, plr, output$)
+            end if
         end if
         if word$(buf$, 1) = "00100" then
             output$ = buf$
@@ -239,13 +249,14 @@ function CreateAccount(Account$,Passwd$) ' used for the acc creation
 
 end function
 
-function Loginauth(Account$,Passwd$)
+function Loginauth(Account$,Passwd$,Player)
     #main.log "LOG Auth: " + Account$ + " : " + Passwd$
     Acc$ = DefaultDir$ + "/data/accounts/" + Account$
     Acc1$ = Account$ + ".o"
     Pass$ = DefaultDir$ + "/data/accounts/" + Account$ + "/" + Account$ + ".o"
     if fileExists(Acc$, Acc1$) then
-        notice "It's alive!"
+        player$(Player, 1) = Account$
+        logok = 1
     else
         ErrorLog = 0002
     end if

@@ -143,20 +143,20 @@ if fileExists(conffile$, "config.conf") then
     Player = 1
 
 [s_Loop]
-    let buf$ = ""
+'    let buf$ = ""
     Scan
     CallDLL #kernel32, "Sleep", _
         10 As Long, _
         rc As Void
 
     If player.sock(Player) <> -1 Then
+'        let buf$ = ""
         buf$ = player.inbuf$(Player)
-        print "s_Loop - player: "; Player; " buf: " + buf$
+'        print "s_Loop - player: "; Player; " buf: " + buf$
         If Len(buf$) > 0 Then
             I = InStr(buf$, Chr$(13))
                 If I <> 0 Then
                     ad = CheckCommand(Player, buf$)
-                    I = 0
                 end if
         end if
     End If
@@ -201,7 +201,7 @@ if fileExists(conffile$, "config.conf") then
 
 '*** SUBS/Funcs for the engine ***
 function CheckCommand(Player, buf$)
-        print "Player: " ; Player; " Incoming: " + buf$
+'        print "Player: " ; Player; " Incoming: " + buf$
         if word$(buf$, 1) = "00001" then
             accountc$ = word$(buf$, 2)
             passwordc$ = word$(buf$, 3)
@@ -210,6 +210,7 @@ function CheckCommand(Player, buf$)
             plr = 101
             a = pbroadcast(Player, plr, output$)
         end if
+
         if word$(buf$, 1) = "00002" then
             logok = 0
             account$ = word$(buf$, 2)
@@ -225,6 +226,7 @@ function CheckCommand(Player, buf$)
                 a = pbroadcast(Player, plr, output$)
             end if
         end if
+
         if word$(buf$, 1) = "00100" then
             output$ = buf$
             a = broadcast(Player,output$)
@@ -246,7 +248,6 @@ function CreateAccount(Account$,Passwd$) ' used for the acc creation
     open Pass$ for output as #acccreate
         print #acccreate, Passwd$
     close #acccreate
-
 end function
 
 function Loginauth(Account$,Passwd$,Player)
@@ -260,8 +261,6 @@ function Loginauth(Account$,Passwd$,Player)
     else
         ErrorLog = 0002
     end if
-
-
 end function
 
 
@@ -310,6 +309,9 @@ function pbroadcast(user, from, buf$)' this will be used for client-server messa
     '#main.log "Sent to Client ";user
 End Function
 
+
+
+
 Function SockProc( hWnd, uMsg, sock, lParam )
 ' Callback function to handle a Windows message
 ' forwarded by WMLiberty. Called when a relevant
@@ -323,6 +325,7 @@ Function SockProc( hWnd, uMsg, sock, lParam )
                 b$ = Recv$(sock, 256, 0)
             Wend
             plr = GetPlayer(sock)
+            print "FD_READ: " + buf$
             player.inbuf$(plr) = player.inbuf$(plr) + buf$
         Case 2 'FD_WRITE
             plr = GetPlayer(sock)
@@ -717,11 +720,7 @@ End Function
 
 '*** File check ***
 function fileExists(path$, filename$)
-
   'dimension the array info$( at the beginning of your program
-
   files path$, filename$, info$()
-
   fileExists = val(info$(0, 0))  'non zero is true
-
 end function

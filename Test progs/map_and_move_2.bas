@@ -1,3 +1,12 @@
+
+    'WindowWidth = 1024
+    'WindowHeight = 768
+    'UpperLeftX=int((DisplayWidth-WindowWidth)/2)
+    'UpperLeftY=int((DisplayHeight-WindowHeight)/2)
+    ' Yritin saada sen toisen screenin tollaseks, mut ei onnaa.
+
+'let inventory$ = "kiinni"
+
 'Form created with the help of Freeform 3 v03-27-03
 'Generated on Feb 08, 2009 at 12:41:33
 
@@ -35,8 +44,10 @@ yy = 0
 [setup.main.Window]
 
     '-----Begin code for #main
+    'Map
 
     'nomainwin
+
     ctrl$ = chr$(_VK_CONTROL)
     print "Keys pressed:"
     WindowWidth = 550
@@ -60,7 +71,7 @@ yy = 0
 
     '-----End menu code
 
-    open "Movement test" for graphics_nf_nsb as #main
+    open "Main Map" for graphics_nf_nsb as #main
     print #main, "font Courier_New 12"
     print #main, "when characterInput [keyPressed]"
     print #main.screen, "!font Courier_New 12"
@@ -103,6 +114,8 @@ yy = 0
             command$ = key$
         case "d"
             command$ = key$
+        'case "i"
+            'command$ = key$
         case else
             goto [main.inputLoop]
     end select
@@ -133,6 +146,7 @@ sub CheckCmd command$
     if command$ = "a" then cmd = 10
     if command$ = "s" then cmd = 12
     if command$ = "d" then cmd = 11
+    'if command$ = "i" then cmd = 20
 end sub
 
 
@@ -156,6 +170,7 @@ if cmd = 9 then PlayerLocY = PlayerLocY - 1
 if cmd = 10 then PlayerLocX = PlayerLocX - 1
 if cmd = 11 then PlayerLocX = PlayerLocX + 1
 if cmd = 12 then PlayerLocY = PlayerLocY + 1
+'if cmd = 20 goto [inventory]
 if PlayerLocX < 0 then PlayerLocX = 0
 if PlayerLocY < 0 then PlayerLocY = 0
 if map1$(PlayerLocX, PlayerLocY) = "#" then
@@ -746,3 +761,30 @@ function drawMap(PlayerLocX, PlayerLocY)
     print #main.screen, seventythree$ + seventyfour$ + seventyfive$ + seventysix$ + seventyseven$ + seventyeight$ + seventynine$ + eighty$ + eightyone$
 
 end function
+
+
+'[inventory]
+
+    'if inventory$ = "auki" goto [closeInventoryClick]
+
+    'WindowWidth = 300
+    'WindowHeight = 768
+    'UpperLeftX=int((DisplayWidth-WindowWidth)/2)
+    'UpperLeftY=int((DisplayHeight-WindowHeight)/2)
+
+    'graphicbox #inventory.characterPic,  80,  80, 130, 200
+    'TextboxColor$ = "white"
+    'textbox #inventory.characterName,  80,  54, 130,  30
+    'button #inventory.close,"Close",[closeInventoryClick], UL, 199, 711,  90,  25
+
+    'open "Inventory" for window as #inventory
+    'print #inventory.characterPic, "down; fill white; flush"
+    'print #inventory, "font ms_sans_serif 10"
+
+    'wait
+
+'[closeInventoryClick]
+
+    'let inventory$ = "kiinni"
+    'close #inventory
+    'wait

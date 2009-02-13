@@ -35,6 +35,9 @@
     print #logIn.password, "!contents?"
     input #logIn.password, password$
     if accountName$ = "TestAccount" goto [accountOk]
+    if accountName$ = "testAccount" goto [accountOk]
+    if accountName$ = "Testaccount" goto [accountOk]
+    if accountName$ = "testaccount" goto [accountOk]
     statictext #accountNotOk.field, "Incorrect account", 10, 15, 170, 20
     button #accountNotOk.ok, "OK", [accountNotOkokClicked], UL, 70, 40, 50, 30
     WindowWidth = 200
@@ -52,6 +55,9 @@
 [accountOk]
 
     if password$ = "TestPassword" goto [passwordOk]
+    if password$ = "testPassword" goto [passwordOk]
+    if password$ = "Testpassword" goto [passwordOk]
+    if password$ = "testpassword" goto [passwordOk]
     statictext #passwordNotOk.field, "Incorrect Password", 10, 15, 170, 20
     button #passwordNotOk.ok, "OK", [passwordNotOkokClicked], UL, 70, 40, 50, 30
     WindowWidth = 200
@@ -78,6 +84,7 @@
     WindowHeight = 768
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
     UpperLeftY=int((DisplayHeight-WindowHeight)/2)
+    graphicbox #loggedIn.backGround, 0, 0, 1024, 768
     graphicbox #loggedIn.characterPic, 408, 102, 203, 409
     button #loggedIn.logOut,"Log out",[logOutClick], UL,  21, 690, 101,  25
     button #loggedIn.play,"Play",[playClick], UL, 408, 575, 203,  25
@@ -98,6 +105,9 @@
 
 [createdstart]
 
+    print #loggedIn.backGround, "getbmp logInBG 0 0 1024 768"
+    print #loggedIn.backGround, "background logInBG";
+    print #loggedIn.backGround, "drawsprites";
     print #loggedIn.charName, name$
     print #loggedIn.charGender, gender$
     print #loggedIn.charRace, race$

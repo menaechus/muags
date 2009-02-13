@@ -40,7 +40,7 @@ yy = 0
     ctrl$ = chr$(_VK_CONTROL)
     print "Keys pressed:"
     WindowWidth = 550
-    WindowHeight = 410
+    WindowHeight = 420
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
     UpperLeftY=int((DisplayHeight-WindowHeight)/2)
 
@@ -121,6 +121,11 @@ sub CheckCmd command$
     if command$ = "1" then cmd = 6
     if command$ = "2" then cmd = 7
     if command$ = "3" then cmd = 8
+    'if command$ = "w" then cmd = 9
+    'if command$ = "a" then cmd = 10
+    'if command$ = "s" then cmd = 11
+    'if command$ = "d" then cmd = 12
+    'Does not work.
 end sub
 
 
@@ -140,6 +145,10 @@ if cmd = 6 then PlayerLocX = PlayerLocX - 1
 if cmd = 7 then PlayerLocY = PlayerLocY + 1
 if cmd = 8 then PlayerLocY = PlayerLocY + 1
 if cmd = 8 then PlayerLocX = PlayerLocX + 1
+if cmd = 9 then PlayerLocY = PlayerLocY - 1
+if cmd = 10 then PlayerLocX = PlayerLocX - 1
+if cmd = 11 then PlayerLocX = PlayerLocX + 1
+if cmd = 12 then PlayerLocY = PlayerLocY + 1
 if PlayerLocX < 0 then PlayerLocX = 0
 if PlayerLocY < 0 then PlayerLocY = 0
 if map1$(PlayerLocX, PlayerLocY) = "#" then
@@ -205,7 +214,38 @@ function drawMap(PlayerLocX, PlayerLocY)
     fourtyseven$ = ""
     fourtyeight$ = ""
     fourtynine$ = ""
-
+    fifty$ = ""
+    fiftyone$ = ""
+    fiftytwo$ = ""
+    fiftythree$ = ""
+    fiftyfour$ = ""
+    fiftyfive$ = ""
+    fiftysix$ = ""
+    fiftyseven$ = ""
+    fiftyeight$ = ""
+    fiftynine$ = ""
+    sixty$ = ""
+    sixtyone$ = ""
+    sixtytwo$ = ""
+    sixtythree$ = ""
+    sixtyfour$ = ""
+    sixtyfive$ = ""
+    sixtysix$ = ""
+    sixtyseven$ = ""
+    sixtyeight$ = ""
+    sixtynine$ = ""
+    seventy$ = ""
+    seventyone$ = ""
+    seventytwo$ = ""
+    seventythree$ = ""
+    seventyfour$ = ""
+    seventyfive$ = ""
+    seventysix$ = ""
+    seventyseven$ = ""
+    seventyeight$ = ""
+    seventynine$ = ""
+    eighty$ = ""
+    eightyone$ = ""
 
     oneX = PlayerLocX - 1
     oneY = PlayerLocY - 1
@@ -487,6 +527,194 @@ function drawMap(PlayerLocX, PlayerLocY)
     if fourtynineY < 0 then fourtynineY = 0
     fourtynine$ = map1$(fourtynineX, fourtynineY)
 
+    fiftyX = PlayerLocX - 4
+    fiftyY = PlayerLocY - 4
+    if fiftyX < 0 then fiftyX = 0
+    if fiftyY < 0 then fiftyY = 0
+    fifty$ = map1$(fiftyX, fiftyY)
+
+    fiftyoneX = PlayerLocX - 3
+    fiftyoneY = PlayerLocY - 4
+    if fiftyoneX < 0 then fiftyoneX = 0
+    if fiftyoneY < 0 then fiftyoneY = 0
+    fiftyone$ = map1$(fiftyoneX, fiftyoneY)
+
+    fiftytwoX = PlayerLocX - 2
+    fiftytwoY = PlayerLocY - 4
+    if fiftytwoX < 0 then fiftytwoX = 0
+    if fiftytwoY < 0 then fiftytwoY = 0
+    fiftytwo$ = map1$(fiftytwoX, fiftytwoY)
+
+    fiftythreeX = PlayerLocX - 1
+    fiftythreeY = PlayerLocY - 4
+    if fiftythreeX < 0 then fiftythreeX = 0
+    if fiftythreeY < 0 then fiftythreeY = 0
+    fiftythree$ = map1$(fiftythreeX, fiftythreeY)
+
+    fiftyfourX = PlayerLocX
+    fiftyfourY = PlayerLocY -4
+    if fiftyfourY < 0 then fiftyfourY = 0
+    fiftyfour$ = map1$(fiftyfourX, fiftyfourY)
+
+    fiftyfiveX = PlayerLocX + 1
+    fiftyfiveY = PlayerLocY - 4
+    if fiftyfiveX < 0 then fiftyfiveX = 0
+    if fiftyfiveY < 0 then fiftyfiveY = 0
+    fiftyfive$ = map1$(fiftyfiveX, fiftyfiveY)
+
+    fiftysixX = PlayerLocX + 2
+    fiftysixY = PlayerLocY - 4
+    if fiftysixX < 0 then fiftysixX = 0
+    if fiftysixY < 0 then fiftysixY = 0
+    fiftysix$ = map1$(fiftysixX, fiftysixY)
+
+    fiftysevenX = PlayerLocX + 3
+    fiftysevenY = PlayerLocY - 4
+    if fiftysevenX < 0 then fiftysevenX = 0
+    if fiftysevenY < 0 then fiftysevenY = 0
+    fiftyseven$ = map1$(fiftysevenX, fiftysevenY)
+
+    fiftyeightX = PlayerLocX + 4
+    fiftyeightY = PlayerLocY - 4
+    if fiftyeightX < 0 then fiftyeightX = 0
+    if fiftyeightY < 0 then fiftyeightY = 0
+    fiftyeight$ = map1$(fiftyeightX, fiftyeightY)
+
+    fiftynineX = PlayerLocX - 4
+    fiftynineY = PlayerLocY - 3
+    if fiftynineX < 0 then fiftynineX = 0
+    if fiftynineY < 0 then fiftynineY = 0
+    fiftynine$ = map1$(fiftynineX, fiftynineY)
+
+    sixtyX = PlayerLocX + 4
+    sixtyY = PlayerLocY - 3
+    if sixtyX < 0 then sixtyX = 0
+    if sixtyY < 0 then sixtyY = 0
+    sixty$ = map1$(sixtyX, sixtyY)
+
+    sixtyoneX = PlayerLocX - 4
+    sixtyoneY = PlayerLocY - 2
+    if sixtyoneX < 0 then sixtyoneX = 0
+    if sixtyoneY < 0 then sixtyoneY = 0
+    sixtyone$ = map1$(sixtyoneX, sixtyoneY)
+
+    sixtytwoX = PlayerLocX + 4
+    sixtytwoY = PlayerLocY - 2
+    if sixtytwoX < 0 then sixtytwoX = 0
+    if sixtytwoY < 0 then sixtytwoY = 0
+    sixtytwo$ = map1$(sixtytwoX, sixtytwoY)
+
+    sixtythreeX = PlayerLocX - 4
+    sixtythreeY = PlayerLocY - 1
+    if sixtythreeX < 0 then sixtythreeX = 0
+    if sixtythreeY < 0 then sixtythreeY = 0
+    sixtythree$ = map1$(sixtythreeX, sixtythreeY)
+
+    sixtyfourX = PlayerLocX + 4
+    sixtyfourY = PlayerLocY - 1
+    if sixtyfourX < 0 then sixtyfourX = 0
+    if sixtyfourY < 0 then sixtyfourY = 0
+    sixtyfour$ = map1$(sixtyfourX, sixtyfourY)
+
+    sixtyfiveX = PlayerLocX - 4
+    sixtyfiveY = PlayerLocY
+    if sixtyfiveX < 0 then sixtyfiveX = 0
+    sixtyfive$ = map1$(sixtyfiveX, sixtyfiveY)
+
+    sixtysixX = PlayerLocX + 4
+    sixtysixY = PlayerLocY
+    if sixtysixX < 0 then sixtysixX = 0
+    sixtysix$ = map1$(sixtysixX, sixtysixY)
+
+    sixtysevenX = PlayerLocX - 4
+    sixtysevenY = PlayerLocY + 1
+    if sixtysevenX < 0 then sixtysevenX = 0
+    if sixtysevenY < 0 then sixtysevenY = 0
+    sixtyseven$ = map1$(sixtysevenX, sixtysevenY)
+
+    sixtyeightX = PlayerLocX + 4
+    sixtyeightY = PlayerLocY + 1
+    if sixtyeightX < 0 then sixtyeightX = 0
+    if sixtyeightY < 0 then sixtyeightY = 0
+    sixtyeight$ = map1$(sixtyeightX, sixtyeightY)
+
+    sixtynineX = PlayerLocX - 4
+    sixtynineY = PlayerLocY + 2
+    if sixtynineX < 0 then sixtynineX = 0
+    if sixtynineY < 0 then sixtynineY = 0
+    sixtynine$ = map1$(sixtynineX, sixtynineY)
+
+    seventyX = PlayerLocX + 4
+    seventyY = PlayerLocY + 2
+    if seventyX < 0 then seventyX = 0
+    if seventyY < 0 then seventyY = 0
+    seventy$ = map1$(seventyX, seventyY)
+
+    seventyoneX = PlayerLocX - 4
+    seventyoneY = PlayerLocY + 3
+    if seventyoneX < 0 then seventyoneX = 0
+    if seventyoneY < 0 then seventyoneY = 0
+    seventyone$ = map1$(seventyoneX, seventyoneY)
+
+    seventytwoX = PlayerLocX + 4
+    seventytwoY = PlayerLocY + 3
+    if seventytwoX < 0 then seventytwoX = 0
+    if seventytwoY < 0 then seventytwoY = 0
+    seventytwo$ = map1$(seventytwoX, seventytwoY)
+
+    seventythreeX = PlayerLocX - 4
+    seventythreeY = PlayerLocY + 4
+    if seventythreeX < 0 then seventythreeX = 0
+    if seventythreeY < 0 then seventythreeY = 0
+    seventythree$ = map1$(seventythreeX, seventythreeY)
+
+    seventyfourX = PlayerLocX + 3
+    seventyfourY = PlayerLocY + 4
+    if seventyfourX < 0 then seventyX = 0
+    if seventyfourY < 0 then seventyY = 0
+    seventyfour$ = map1$(seventyfourX, seventyfourY)
+
+    seventyfiveX = PlayerLocX - 2
+    seventyfiveY = PlayerLocY + 4
+    if seventyfiveX < 0 then seventyfiveX = 0
+    if seventyfiveY < 0 then seventyfiveY = 0
+    seventyfive$ = map1$(seventyfiveX, seventyfiveY)
+
+    seventysixX = PlayerLocX - 1
+    seventysixY = PlayerLocY + 4
+    if seventysixX < 0 then seventysixX = 0
+    if seventysixY < 0 then seventysixY = 0
+    seventysix$ = map1$(seventysixX, seventysixY)
+
+    seventysevenX = PlayerLocX
+    seventysevenY = PlayerLocY + 4
+    if seventysevenY < 0 then seventysevenY = 0
+    seventyseven$ = map1$(seventysevenX, seventysevenY)
+
+    seventyeightX = PlayerLocX + 1
+    seventyeightY = PlayerLocY + 4
+    if seventyeightX < 0 then seventyeightX = 0
+    if seventyeightY < 0 then seventyeightY = 0
+    seventyeight$ = map1$(seventyeightX, seventyeightY)
+
+    seventynineX = PlayerLocX + 2
+    seventynineY = PlayerLocY + 4
+    if seventynineX < 0 then seventynineX = 0
+    if seventynineY < 0 then seventynineY = 0
+    seventynine$ = map1$(seventynineX, seventynineY)
+
+    eightyX = PlayerLocX + 3
+    eightyY = PlayerLocY + 4
+    if eightyX < 0 then eightyX = 0
+    if eightyY < 0 then eightyY = 0
+    eighty$ = map1$(eightyX, eightyY)
+
+    eightyoneX = PlayerLocX + 4
+    eightyoneY = PlayerLocY + 4
+    if eightyoneX < 0 then eightyoneX = 0
+    if eightyoneY < 0 then eightyoneY = 0
+    eightyone$ = map1$(eightyoneX, eightyoneY)
+
 '    if one$ = "" then one$ = "#"
 '    if two$ = "" then two$ = "#"
 '    if three$ = "" then three$ = "#"
@@ -497,12 +725,14 @@ function drawMap(PlayerLocX, PlayerLocY)
 '    if nine$ = "" then nine$ = "#"
 
 
-    print #main.screen, twentysix$ + twentyseven$ + twentyeight$ + twentynine$ + thirty$ + thirtyone$ + thirtytwo$
-    print #main.screen, thirtythree$ + ten$ + eleven$ + twelve$ + thirteen$ + fourteen$ + thirtyfour$
-    print #main.screen, thirtyfive$ + fifteen$ + one$ + two$ + three$ + sixteen$ + thirtysix$
-    print #main.screen, thirtyseven$ + seventeen$ + four$ + "@" + six$ + eighteen$ + thirtyeight$
-    print #main.screen, thirtynine$ + nineteen$ + seven$ + eight$ + nine$ + twenty$ + fourty$
-    print #main.screen, fourtyone$ + twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$ + fourtytwo$
-    print #main.screen, fourtythree$ + fourtyfour$ + fourtyfive$ + fourtysix$ + fourtyseven$ + fourtyeight$ + fourtynine$
+    print #main.screen, fifty$ + fiftyone$ + fiftytwo$ + fiftythree$ + fiftyfour$ + fiftyfive$ + fiftysix$ + fiftyseven$ + fiftyeight$
+    print #main.screen, fiftynine$ + twentysix$ + twentyseven$ + twentyeight$ + twentynine$ + thirty$ + thirtyone$ + thirtytwo$ + sixty$
+    print #main.screen, sixtyone$ + thirtythree$ + ten$ + eleven$ + twelve$ + thirteen$ + fourteen$ + thirtyfour$ + sixtytwo$
+    print #main.screen, sixtythree$ + thirtyfive$ + fifteen$ + one$ + two$ + three$ + sixteen$ + thirtysix$ + sixtyfour$
+    print #main.screen, sixtyfive$ + thirtyseven$ + seventeen$ + four$ + "@" + six$ + eighteen$ + thirtyeight$ + sixtysix$
+    print #main.screen, sixtyseven$ + thirtynine$ + nineteen$ + seven$ + eight$ + nine$ + twenty$ + fourty$ + sixtyeight$
+    print #main.screen, sixtynine$ + fourtyone$ + twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$ + fourtytwo$ + seventy$
+    print #main.screen, seventyone$ + fourtythree$ + fourtyfour$ + fourtyfive$ + fourtysix$ + fourtyseven$ + fourtyeight$ + fourtynine$ + seventytwo$
+    print #main.screen, seventythree$ + seventyfour$ + seventyfive$ + seventysix$ + seventyseven$ + seventyeight$ + seventynine$ + eighty$ + eightyone$
 
 end function

@@ -9,8 +9,8 @@ global PlayerLocY
 global cmd
 dim dummy$(1000)
 dim map1$(1000,1000)
-PlayerLocX = 30
-PlayerLocY = 30
+PlayerLocX = 101
+PlayerLocY = 100
 x = 0
 open mapfile$ for input as #1
 [loop]
@@ -95,6 +95,14 @@ yy = 0
             command$ = key$
         case "9"
             command$ = key$
+        case "w"
+            command$ = key$
+        case "a"
+            command$ = key$
+        case "s"
+            command$ = key$
+        case "d"
+            command$ = key$
         case else
             goto [main.inputLoop]
     end select
@@ -121,11 +129,10 @@ sub CheckCmd command$
     if command$ = "1" then cmd = 6
     if command$ = "2" then cmd = 7
     if command$ = "3" then cmd = 8
-    'if command$ = "w" then cmd = 9
-    'if command$ = "a" then cmd = 10
-    'if command$ = "s" then cmd = 11
-    'if command$ = "d" then cmd = 12
-    'Does not work.
+    if command$ = "w" then cmd = 9
+    if command$ = "a" then cmd = 10
+    if command$ = "s" then cmd = 12
+    if command$ = "d" then cmd = 11
 end sub
 
 
@@ -159,7 +166,10 @@ if map1$(PlayerLocX, PlayerLocY) = "w" then
     PlayerLocX = OldX
     PlayerLocY = OldY
 end if
-
+if map1$(PlayerLocX, PlayerLocY) = "r" then
+    PlayerLocX = OldX
+    PlayerLocY = OldY
+end if
 
 
 end function
@@ -668,7 +678,7 @@ function drawMap(PlayerLocX, PlayerLocY)
     if seventythreeY < 0 then seventythreeY = 0
     seventythree$ = map1$(seventythreeX, seventythreeY)
 
-    seventyfourX = PlayerLocX + 3
+    seventyfourX = PlayerLocX - 3
     seventyfourY = PlayerLocY + 4
     if seventyfourX < 0 then seventyX = 0
     if seventyfourY < 0 then seventyY = 0

@@ -1,5 +1,15 @@
 [start]
 
+    accountfolder$ = DefaultDir$ + "\account\"
+    charfolder$ = DefaultDir$ + "\character\"
+    accountfile$ = accountfolder$ + "myaccount.bin"
+    characterfile$ = charfolder$ + "character.bin"
+    mypasswordfile$ = accountfolder$ + "mypassword.bin"
+    mycharcreatedfile$ = charfolder$ + "mycharcreated.bin"
+    mycharnamefile$ = charfolder$ + "mycharname.bin"
+    mycharracefile$ = charfolder$ + "mycharrace.bin"
+    mychargenderfile$ = charfolder$ + "mychargender.bin"
+
     nomainwin
     WindowWidth = 1024
     WindowHeight = 768
@@ -37,7 +47,7 @@
 
 [logInClick]
 
-    open "myaccount.bin" for binary as #myaccount
+    open accountfile$ for binary as #myaccount
     input #myaccount, myaccountname$
     close #myaccount
     print #logIn.accountName, "!contents?"
@@ -61,7 +71,7 @@
 
 [accountOk]
 
-    open "mypassword.bin" for binary as #mypassword
+    open mypasswordfile$ for binary as #mypassword
     input #mypassword, mypassword$
     close #mypassword
     if accountpassword$ = mypassword$ goto [passwordOk]
@@ -115,9 +125,9 @@
 
 [createdstart]
 
-    open "mycharcreated.bin" for binary as #mycharcreated
-    open "mycharname.bin" for binary as #mycharname
-    open "mycharrace.bin" for binary as #mycharrace
+    open mycharcreatedfile$ for binary as #mycharcreated
+    open mycharnamefile$ for binary as #mycharname
+    open mycharracefile$ for binary as #mycharrace
     input #mycharcreated, mycharcreated$
     input #mycharname, mycharname$
     input #mycharrace, mycharrace$
@@ -147,7 +157,7 @@
 
 [playClick]
 
-    open "character.bin" for binary as #character
+    open characterfile$ for binary as #character
     input #character, character$
     close #character
     if character$ = "ok" goto [GameMap]
@@ -188,7 +198,7 @@
 
 [creator]
 
-    open "character.bin" for binary as #character
+    open characterfile$ for binary as #character
     input #character, character$
     close #character
     if character$ = "ok" goto [charCreatedAllready]
@@ -218,17 +228,16 @@
 
     confirm "Delete character?"; answer$
     if answer$ <> "yes" then wait
-    open "mycharcreated.bin" for binary as #mycharcreated
-    open "mycharname.bin" for binary as #mycharname
-    open "mycharrace.bin" for binary as #mycharrace
-    open "mychargender.bin" for binary as #mychargender
-    open "character.bin" for binary as #character
-    blank$ = "                                                                     "
-    print #mycharcreated, blank$
-    print #mycharname, blank$
-    print #mycharrace, blank$
-    print #mychargender, blank$
-    print #character, blank$
+    open mycharcreatedfile$ for binary as #mycharcreated
+    open mycharnamefile$ for binary as #mycharname
+    open mycharracefile$ for binary as #mycharrace
+    open mychargenderfile$ for binary as #mychargender
+    open characterfile$ for binary as #character
+    print #mycharcreated, "                               "
+    print #mycharname, "                               "
+    print #mycharrace, "                               "
+    print #mychargender, "                               "
+    print #character, "                               "
     close #mycharcreated
     close #mycharname
     close #mycharrace
@@ -328,15 +337,15 @@
     statictext #created.field2, gender$, 10, 40, 170, 20
     statictext #created.field3, race$, 10, 65, 170, 20
     statictext #created.field4, date$ (), 10, 90, 170, 20
-    open "mycharcreated.bin" for binary as #mycharcreated
-    open "mycharname.bin" for binary as #mycharname
-    open "mycharrace.bin" for binary as #mycharrace
-    open "mychargender.bin" for binary as #mychargender
-    open "character.bin" for binary as #character
-    print #mycharcreated, date$ () + "                       "
-    print #mycharname, name$ + "                       "
-    print #mycharrace, race$ + "                       "
-    print #mychargender, gender$ + "                       "
+    open mycharcreatedfile$ for binary as #mycharcreated
+    open mycharnamefile$ for binary as #mycharname
+    open mycharracefile$ for binary as #mycharrace
+    open mychargenderfile$ for binary as #mychargender
+    open characterfile$ for binary as #character
+    print #mycharcreated, date$ () + "                               "
+    print #mycharname, name$ + "                               "
+    print #mycharrace, race$ + "                               "
+    print #mychargender, gender$ + "                               "
     print #character, "ok"
     close #mycharcreated
     close #mycharname
@@ -426,7 +435,7 @@
     input #changepassword.changepasswordnew, newpassword$
     print #changepassword.changepasswordconfirm, "!contents?"
     input #changepassword.changepasswordconfirm, confirmpassword$
-    open "mypassword.bin" for binary as #mypassword
+    open mypasswordfile$ for binary as #mypassword
     print #mypassword, confirmpassword$ + "                                                       "
     if newpassword$ <> confirmpassword$ goto [newpasswordnotok]
     close #mypassword

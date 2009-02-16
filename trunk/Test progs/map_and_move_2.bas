@@ -130,19 +130,19 @@ yy = 0
 
     WindowWidth = 300
     WindowHeight = 768
-    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
-    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
+    UpperLeftX= 5
+    UpperLeftY= 100
 
     graphicbox #inventory.characterPic,  80,  80, 130, 200
     TextboxColor$ = "white"
     textbox #inventory.characterName,  80,  54, 130,  30
-    button #inventory.close,"Close",[closeInventoryClick], UL, 199, 711,  90,  25
+    button #inventory.close,"Close",[closeInventoryClick], UL, 200, 700,  85,  25
 
     open "Inventory" for window as #inventory
     print #inventory.characterPic, "down; fill white; flush"
     print #inventory, "font ms_sans_serif 10"
     let inventory$ = "auki"
-
+    print #main.screen, "!setfocus"
     goto [main.inputLoop]
 
 [closeInventoryClick]
@@ -1055,18 +1055,21 @@ function drawMap(PlayerLocX, PlayerLocY)
 '    if eight$ = "" then eight$ = "#"
 '    if nine$ = "" then nine$ = "#"
 
-
-    print #main.screen, eightytwo$ + eightythree$ + eightyfour$ + eightyfive$ + eightysix$ + eightyseven$ + eightyeight$ + eightynine$ + ninety$ + ninetyone$ + ninetytwo$
-    print #main.screen, ninetythree$ + fifty$ + fiftyone$ + fiftytwo$ + fiftythree$ + fiftyfour$ + fiftyfive$ + fiftysix$ + fiftyseven$ + fiftyeight$ + ninetyfour$
-    print #main.screen, ninetyfive$ + fiftynine$ + twentysix$ + twentyseven$ + twentyeight$ + twentynine$ + thirty$ + thirtyone$ + thirtytwo$ + sixty$ + ninetysix$
-    print #main.screen, ninetyseven$ + sixtyone$ + thirtythree$ + ten$ + eleven$ + twelve$ + thirteen$ + fourteen$ + thirtyfour$ + sixtytwo$ + ninetyeight$
-    print #main.screen, ninetynine$ + sixtythree$ + thirtyfive$ + fifteen$ + one$ + two$ + three$ + sixteen$ + thirtysix$ + sixtyfour$ + onehundred$
-    print #main.screen, onehundredone$ + sixtyfive$ + thirtyseven$ + seventeen$ + four$ + "@" + six$ + eighteen$ + thirtyeight$ + sixtysix$ + onehundredtwo$
-    print #main.screen, onehundredthree$ + sixtyseven$ + thirtynine$ + nineteen$ + seven$ + eight$ + nine$ + twenty$ + fourty$ + sixtyeight$ + onehundredfour$
-    print #main.screen, onehundredfive$ + sixtynine$ + fourtyone$ + twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$ + fourtytwo$ + seventy$ + onehundredsix$
-    print #main.screen, onehundredseven$ + seventyone$ + fourtythree$ + fourtyfour$ + fourtyfive$ + fourtysix$ + fourtyseven$ + fourtyeight$ + fourtynine$ + seventytwo$ + onehundredeight$
-    print #main.screen, onehundrednine$ + seventythree$ + seventyfour$ + seventyfive$ + seventysix$ + seventyseven$ + seventyeight$ + seventynine$ + eighty$ + eightyone$ + onehundredten$
-    print #main.screen, oneeleven$ + onetwelve$ + onethirteen$ + onefourteen$ + onefifteen$ + onesixteen$ + oneseventeen$ + oneeighteen$ + onenineteen$ + onetwenty$ + onetwentyone$
+    print #main.screen, "   "
+    print #main.screen, "   "
+    print #main.screen, "   " + eightytwo$ + eightythree$ + eightyfour$ + eightyfive$ + eightysix$ + eightyseven$ + eightyeight$ + eightynine$ + ninety$ + ninetyone$ + ninetytwo$
+    print #main.screen, "   " + ninetythree$ + fifty$ + fiftyone$ + fiftytwo$ + fiftythree$ + fiftyfour$ + fiftyfive$ + fiftysix$ + fiftyseven$ + fiftyeight$ + ninetyfour$
+    print #main.screen, "   " + ninetyfive$ + fiftynine$ + twentysix$ + twentyseven$ + twentyeight$ + twentynine$ + thirty$ + thirtyone$ + thirtytwo$ + sixty$ + ninetysix$
+    print #main.screen, "   " + ninetyseven$ + sixtyone$ + thirtythree$ + ten$ + eleven$ + twelve$ + thirteen$ + fourteen$ + thirtyfour$ + sixtytwo$ + ninetyeight$
+    print #main.screen, "   " + ninetynine$ + sixtythree$ + thirtyfive$ + fifteen$ + one$ + two$ + three$ + sixteen$ + thirtysix$ + sixtyfour$ + onehundred$
+    print #main.screen, "   " + onehundredone$ + sixtyfive$ + thirtyseven$ + seventeen$ + four$ + "@" + six$ + eighteen$ + thirtyeight$ + sixtysix$ + onehundredtwo$
+    print #main.screen, "   " + onehundredthree$ + sixtyseven$ + thirtynine$ + nineteen$ + seven$ + eight$ + nine$ + twenty$ + fourty$ + sixtyeight$ + onehundredfour$
+    print #main.screen, "   " + onehundredfive$ + sixtynine$ + fourtyone$ + twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$ + fourtytwo$ + seventy$ + onehundredsix$
+    print #main.screen, "   " + onehundredseven$ + seventyone$ + fourtythree$ + fourtyfour$ + fourtyfive$ + fourtysix$ + fourtyseven$ + fourtyeight$ + fourtynine$ + seventytwo$ + onehundredeight$
+    print #main.screen, "   " + onehundrednine$ + seventythree$ + seventyfour$ + seventyfive$ + seventysix$ + seventyseven$ + seventyeight$ + seventynine$ + eighty$ + eightyone$ + onehundredten$
+    print #main.screen, "   " + oneeleven$ + onetwelve$ + onethirteen$ + onefourteen$ + onefifteen$ + onesixteen$ + oneseventeen$ + oneeighteen$ + onenineteen$ + onetwenty$ + onetwentyone$
+    print #main.screen, "   "
+    print #main.screen, "   "
 
 end function
 

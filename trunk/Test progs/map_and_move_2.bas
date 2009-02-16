@@ -299,6 +299,46 @@ function drawMap(PlayerLocX, PlayerLocY)
     seventynine$ = ""
     eighty$ = ""
     eightyone$ = ""
+    eightytwo$ = ""
+    eightythree$ = ""
+    eightyfour$ = ""
+    eightyfive$ = ""
+    eightysix$ = ""
+    eightyseven$ = ""
+    eightyeight$ = ""
+    eightynine$ = ""
+    ninety$ = ""
+    ninetyone$ = ""
+    ninetytwo$ = ""
+    ninetythree$ = ""
+    ninetyfour$ = ""
+    ninetyfive$ = ""
+    ninetysix$ = ""
+    ninetyseven$ = ""
+    ninetyeight$ = ""
+    ninetynine$ = ""
+    onehundred$ = ""
+    onehundredone$ = ""
+    onehundredtwo$ = ""
+    onehundredthree$ = ""
+    onehundredfour$ = ""
+    onehundredfive$ = ""
+    onehundredsix$ = ""
+    onehundredseven$ = ""
+    onehundredeight$ = ""
+    onehundrednine$ = ""
+    onehundredten$ = ""
+    oneeleven$ = ""
+    onetwelve$ = ""
+    onethirteen$ = ""
+    onefourteen$ = ""
+    onefifteen$ = ""
+    onesixteen$ = ""
+    oneseventeen$ = ""
+    oneeighteen$ = ""
+    onenineteen$ = ""
+    onetwenty$ = ""
+    onetwentyone$ = ""
 
     oneX = PlayerLocX - 1
     oneY = PlayerLocY - 1
@@ -768,6 +808,244 @@ function drawMap(PlayerLocX, PlayerLocY)
     if eightyoneY < 0 then eightyoneY = 0
     eightyone$ = map1$(eightyoneX, eightyoneY)
 
+    eightytwoX = PlayerLocX - 5
+    eightytwoY = PlayerLocY - 5
+    if eightytwoX < 0 then eightytwoX = 0
+    if eightytwoY < 0 then eightytwoY = 0
+    eightytwo$ = map1$(eightytwoX, eightytwoY)
+
+    eightythreeX = PlayerLocX - 4
+    eightythreeY = PlayerLocY - 5
+    if eightythreeX < 0 then eightythreeX = 0
+    if eightythreeY < 0 then eightythreeY = 0
+    eightythree$ = map1$(eightythreeX, eightythreeY)
+
+    eightyfourX = PlayerLocX - 3
+    eightyfourY = PlayerLocY - 5
+    if eightyfourX < 0 then eightyfourX = 0
+    if eightyfourY < 0 then eightyfourY = 0
+    eightyfour$ = map1$(eightyfourX, eightyfourY)
+
+    eightyfiveX = PlayerLocX - 2
+    eightyfiveY = PlayerLocY - 5
+    if eightyfiveX < 0 then eightyfiveX = 0
+    if eightyfiveY < 0 then eightyfiveY = 0
+    eightyfive$ = map1$(eightyfiveX, eightyfiveY)
+
+    eightysixX = PlayerLocX - 1
+    eightysixY = PlayerLocY - 5
+    if eightysixX < 0 then eightysixX = 0
+    if eightysixY < 0 then eightysixY = 0
+    eightysix$ = map1$(eightysixX, eightysixY)
+
+    eightysevenX = PlayerLocX
+    eightysevenY = PlayerLocY - 5
+    if eightysevenY < 0 then eightysevenY = 0
+    eightyseven$ = map1$(eightysevenX, eightysevenY)
+
+    eightyeightX = PlayerLocX + 1
+    eightyeightY = PlayerLocY - 5
+    if eightyeightX < 0 then eightyeightX = 0
+    if eightyeightY < 0 then eightyeightY = 0
+    eightyeight$ = map1$(eightyeightX, eightyeightY)
+
+    eightynineX = PlayerLocX + 2
+    eightynineY = PlayerLocY - 5
+    if eightynineX < 0 then eightynineX = 0
+    if eightynineY < 0 then eightynineY = 0
+    eightynine$ = map1$(eightynineX, eightynineY)
+
+    ninetyX = PlayerLocX + 3
+    ninetyY = PlayerLocY - 5
+    if ninetyX < 0 then ninetyX = 0
+    if ninetyY < 0 then ninetyY = 0
+    ninety$ = map1$(ninetyX, ninetyY)
+
+    ninetyoneX = PlayerLocX + 4
+    ninetyoneY = PlayerLocY - 5
+    if ninetyoneX < 0 then ninetyoneX = 0
+    if ninetyoneY < 0 then ninetyoneY = 0
+    ninetyone$ = map1$(ninetyoneX, ninetyoneY)
+
+    ninetytwoX = PlayerLocX + 5
+    ninetytwoY = PlayerLocY - 5
+    if ninetytwoX < 0 then ninetytwoX = 0
+    if ninetytwoY < 0 then ninetytwoY = 0
+    ninetytwo$ = map1$(ninetytwoX, ninetytwoY)
+
+    ninetythreeX = PlayerLocX - 5
+    ninetythreeY = PlayerLocY - 4
+    if ninetythreeX < 0 then ninetythreeX = 0
+    if ninetythreeY < 0 then ninetythreeY = 0
+    ninetythree$ = map1$(ninetythreeX, ninetythreeY)
+
+    ninetyfourX = PlayerLocX + 5
+    ninetyfourY = PlayerLocY - 4
+    if ninetyfourX < 0 then ninetyfourX = 0
+    if ninetyfourY < 0 then ninetyfourY = 0
+    ninetyfour$ = map1$(ninetyfourX, ninetyfourY)
+
+    ninetyfiveX = PlayerLocX - 5
+    ninetyfiveY = PlayerLocY - 3
+    if ninetyfiveX < 0 then ninetyfiveX = 0
+    if ninetyfiveY < 0 then ninetyfiveY = 0
+    ninetyfive$ = map1$(ninetyfiveX, ninetyfiveY)
+
+    ninetysixX = PlayerLocX + 5
+    ninetysixY = PlayerLocY - 3
+    if ninetysixX < 0 then ninetysixX = 0
+    if ninetysixY < 0 then ninetysixY = 0
+    ninetysix$ = map1$(ninetysixX, ninetysixY)
+
+    ninetysevenX = PlayerLocX - 5
+    ninetysevenY = PlayerLocY - 2
+    if ninetysevenX < 0 then ninetysevenX = 0
+    if ninetysevenY < 0 then ninetysevenY = 0
+    ninetyseven$ = map1$(ninetysevenX, ninetysevenY)
+
+    ninetyeightX = PlayerLocX + 5
+    ninetyeightY = PlayerLocY - 2
+    if ninetyeightX < 0 then ninetyeightX = 0
+    if ninetyeightY < 0 then ninetyeightY = 0
+    ninetyeight$ = map1$(ninetyeightX, ninetyeightY)
+
+    ninetynineX = PlayerLocX - 5
+    ninetynineY = PlayerLocY - 1
+    if ninetynineX < 0 then ninetynineX = 0
+    if ninetynineY < 0 then ninetynineY = 0
+    ninetynine$ = map1$(ninetynineX, ninetynineY)
+
+    onehundredX = PlayerLocX + 5
+    onehundredY = PlayerLocY - 1
+    if onehundredX < 0 then onehundredX = 0
+    if onehundredY < 0 then onehundredY = 0
+    onehundred$ = map1$(onehundredX, onehundredY)
+
+    onehundredoneX = PlayerLocX - 5
+    onehundredoneY = PlayerLocY
+    if onehundredoneX < 0 then onehundredoneX = 0
+    onehundredone$ = map1$(onehundredoneX, onehundredoneY)
+
+    onehundredtwoX = PlayerLocX + 5
+    onehundredtwoY = PlayerLocY
+    if onehundredtwoX < 0 then onehundredtwoX = 0
+    onehundredtwo$ = map1$(onehundredtwoX, onehundredtwoY)
+
+    onehundredthreeX = PlayerLocX - 5
+    onehundredthreeY = PlayerLocY + 1
+    if onehundredthreeX < 0 then onehundredthreeX = 0
+    if onehundredthreeY < 0 then onehundredthreeY = 0
+    onehundredthree$ = map1$(onehundredthreeX, onehundredthreeY)
+
+    onehundredfourX = PlayerLocX + 5
+    onehundredfourY = PlayerLocY + 1
+    if onehundredfourX < 0 then onehundredfourX = 0
+    if onehundredfourY < 0 then onehundredfourY = 0
+    onehundredfour$ = map1$(onehundredfourX, onehundredfourY)
+
+    onehundredfiveX = PlayerLocX - 5
+    onehundredfiveY = PlayerLocY + 2
+    if onehundredfiveX < 0 then onehundredfiveX = 0
+    if onehundredfiveY < 0 then onehundredfiveY = 0
+    onehundredfive$ = map1$(onehundredfiveX, onehundredfiveY)
+
+    onehundredsixX = PlayerLocX + 5
+    onehundredsixY = PlayerLocY + 2
+    if onehundredsixX < 0 then onehundredsixX = 0
+    if onehundredsixY < 0 then onehundredsixY = 0
+    onehundredsix$ = map1$(onehundredsixX, onehundredsixY)
+
+    onehundredsevenX = PlayerLocX - 5
+    onehundredsevenY = PlayerLocY + 3
+    if onehundredsevenX < 0 then onehundredsevenX = 0
+    if onehundredsevenY < 0 then onehundredsevenY = 0
+    onehundredseven$ = map1$(onehundredsevenX, onehundredsevenY)
+
+    onehundredeightX = PlayerLocX + 5
+    onehundredeightY = PlayerLocY + 3
+    if onehundredeightX < 0 then onehundredeightX = 0
+    if onehundredeightY < 0 then onehundredeightY = 0
+    onehundredeight$ = map1$(onehundredeightX, onehundredeightY)
+
+    onehundrednineX = PlayerLocX - 5
+    onehundrednineY = PlayerLocY + 4
+    if onehundrednineX < 0 then onehundrednineX = 0
+    if onehundrednineY < 0 then onehundrednineY = 0
+    onehundrednine$ = map1$(onehundrednineX, onehundrednineY)
+
+    onehundredtenX = PlayerLocX + 5
+    onehundredtenY = PlayerLocY + 4
+    if onehundredtenX < 0 then onehundredtenX = 0
+    if onehundredtenY < 0 then onehundredtenY = 0
+    onehundredten$ = map1$(onehundredtenX, onehundredtenY)
+
+    oneelevenX = PlayerLocX - 5
+    oneelevenY = PlayerLocY + 5
+    if oneelevenX < 0 then oneelevenX = 0
+    if oneelevenY < 0 then oneelevenY = 0
+    oneeleven$ = map1$(oneelevenX, oneelevenY)
+
+    onetwelveX = PlayerLocX - 4
+    onetwelveY = PlayerLocY + 5
+    if onetwelveX < 0 then onetwelveX = 0
+    if onetwelveY < 0 then onetwelveY = 0
+    onetwelve$ = map1$(onetwelveX, onetwelveY)
+
+    onethirteenX = PlayerLocX - 3
+    onethirteenY = PlayerLocY + 5
+    if onethirteenX < 0 then onethirteenX = 0
+    if onethirteenY < 0 then onethirteenY = 0
+    onethirteen$ = map1$(onethirteenX, onethirteenY)
+
+    onefourteenX = PlayerLocX - 2
+    onefourteenY = PlayerLocY + 5
+    if onefourteenX < 0 then onefourteenX = 0
+    if onefourteenY < 0 then onefourteenY = 0
+    onefourteen$ = map1$(onefourteenX, onefourteenY)
+
+    onefifteenX = PlayerLocX - 1
+    onefifteenY = PlayerLocY + 5
+    if onefifteenX < 0 then onefifteenX = 0
+    if onefifteenY < 0 then onefifteenY = 0
+    onefifteen$ = map1$(onefifteenX, onefifteenY)
+
+    onesixteenX = PlayerLocX
+    onesixteenY = PlayerLocY + 5
+    if onesixteenY < 0 then onesixteenY = 0
+    onesixteen$ = map1$(onesixteenX, onesixteenY)
+
+    oneseventeenX = PlayerLocX + 1
+    oneseventeenY = PlayerLocY + 5
+    if oneseventeenX < 0 then oneseventeenX = 0
+    if oneseventeenY < 0 then oneseventeenY = 0
+    oneseventeen$ = map1$(oneseventeenX, oneseventeenY)
+
+    oneeighteenX = PlayerLocX + 2
+    oneeighteenY = PlayerLocY + 5
+    if oneeighteenX < 0 then oneeighteenX = 0
+    if oneeighteenY < 0 then oneeighteenY = 0
+    oneeighteen$ = map1$(oneeighteenX, oneeighteenY)
+
+    onenineteenX = PlayerLocX + 3
+    onenineteenY = PlayerLocY + 5
+    if onenineteenX < 0 then onenineteenX = 0
+    if onenineteenY < 0 then onenineteenY = 0
+    onenineteen$ = map1$(onenineteenX, onenineteenY)
+
+    onetwentyX = PlayerLocX + 4
+    onetwentyY = PlayerLocY + 5
+    if onetwentyX < 0 then onetwentyX = 0
+    if onetwentyY < 0 then onetwentyY = 0
+    onetwenty$ = map1$(onetwentyX, onetwentyY)
+
+    onetwentyoneX = PlayerLocX + 5
+    onetwentyoneY = PlayerLocY + 5
+    if onetwentyoneX < 0 then onetwentyoneX = 0
+    if onetwentyoneY < 0 then onetwentyoneY = 0
+    onetwentyone$ = map1$(onetwentyoneX, onetwentyoneY)
+
+
+
 '    if one$ = "" then one$ = "#"
 '    if two$ = "" then two$ = "#"
 '    if three$ = "" then three$ = "#"
@@ -778,14 +1056,17 @@ function drawMap(PlayerLocX, PlayerLocY)
 '    if nine$ = "" then nine$ = "#"
 
 
-    print #main.screen, fifty$ + fiftyone$ + fiftytwo$ + fiftythree$ + fiftyfour$ + fiftyfive$ + fiftysix$ + fiftyseven$ + fiftyeight$
-    print #main.screen, fiftynine$ + twentysix$ + twentyseven$ + twentyeight$ + twentynine$ + thirty$ + thirtyone$ + thirtytwo$ + sixty$
-    print #main.screen, sixtyone$ + thirtythree$ + ten$ + eleven$ + twelve$ + thirteen$ + fourteen$ + thirtyfour$ + sixtytwo$
-    print #main.screen, sixtythree$ + thirtyfive$ + fifteen$ + one$ + two$ + three$ + sixteen$ + thirtysix$ + sixtyfour$
-    print #main.screen, sixtyfive$ + thirtyseven$ + seventeen$ + four$ + "@" + six$ + eighteen$ + thirtyeight$ + sixtysix$
-    print #main.screen, sixtyseven$ + thirtynine$ + nineteen$ + seven$ + eight$ + nine$ + twenty$ + fourty$ + sixtyeight$
-    print #main.screen, sixtynine$ + fourtyone$ + twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$ + fourtytwo$ + seventy$
-    print #main.screen, seventyone$ + fourtythree$ + fourtyfour$ + fourtyfive$ + fourtysix$ + fourtyseven$ + fourtyeight$ + fourtynine$ + seventytwo$
-    print #main.screen, seventythree$ + seventyfour$ + seventyfive$ + seventysix$ + seventyseven$ + seventyeight$ + seventynine$ + eighty$ + eightyone$
+    print #main.screen, eightytwo$ + eightythree$ + eightyfour$ + eightyfive$ + eightysix$ + eightyseven$ + eightyeight$ + eightynine$ + ninety$ + ninetyone$ + ninetytwo$
+    print #main.screen, ninetythree$ + fifty$ + fiftyone$ + fiftytwo$ + fiftythree$ + fiftyfour$ + fiftyfive$ + fiftysix$ + fiftyseven$ + fiftyeight$ + ninetyfour$
+    print #main.screen, ninetyfive$ + fiftynine$ + twentysix$ + twentyseven$ + twentyeight$ + twentynine$ + thirty$ + thirtyone$ + thirtytwo$ + sixty$ + ninetysix$
+    print #main.screen, ninetyseven$ + sixtyone$ + thirtythree$ + ten$ + eleven$ + twelve$ + thirteen$ + fourteen$ + thirtyfour$ + sixtytwo$ + ninetyeight$
+    print #main.screen, ninetynine$ + sixtythree$ + thirtyfive$ + fifteen$ + one$ + two$ + three$ + sixteen$ + thirtysix$ + sixtyfour$ + onehundred$
+    print #main.screen, onehundredone$ + sixtyfive$ + thirtyseven$ + seventeen$ + four$ + "@" + six$ + eighteen$ + thirtyeight$ + sixtysix$ + onehundredtwo$
+    print #main.screen, onehundredthree$ + sixtyseven$ + thirtynine$ + nineteen$ + seven$ + eight$ + nine$ + twenty$ + fourty$ + sixtyeight$ + onehundredfour$
+    print #main.screen, onehundredfive$ + sixtynine$ + fourtyone$ + twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$ + fourtytwo$ + seventy$ + onehundredsix$
+    print #main.screen, onehundredseven$ + seventyone$ + fourtythree$ + fourtyfour$ + fourtyfive$ + fourtysix$ + fourtyseven$ + fourtyeight$ + fourtynine$ + seventytwo$ + onehundredeight$
+    print #main.screen, onehundrednine$ + seventythree$ + seventyfour$ + seventyfive$ + seventysix$ + seventyseven$ + seventyeight$ + seventynine$ + eighty$ + eightyone$ + onehundredten$
+    print #main.screen, oneeleven$ + onetwelve$ + onethirteen$ + onefourteen$ + onefifteen$ + onesixteen$ + oneseventeen$ + oneeighteen$ + onenineteen$ + onetwenty$ + onetwentyone$
 
 end function
+

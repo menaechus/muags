@@ -97,12 +97,13 @@
     button #loggedIn.changePassword,"Change password",[ChangepasswordClick], UL,  224, 690, 202,  25
     button #loggedIn.exit,"Exit",[exitLoggedClick], UL,  21, 690, 101,  25
     button #loggedIn.play,"Play",[playClick], UL, 408, 575, 203,  25
-    button #loggedIn.create,"Create character",[creator], UL, 408, 620, 203,  25
+    button #loggedIn.create,"Create character",[creator], UL, 408, 605, 203,  25
+    button #loggedIn.delete,"Delete character",[deletor], UL, 408, 635, 203,  25
     textbox #loggedIn.news, 715, 103, 203, 202
     TextboxColor$ = "white"
-    textbox #loggedIn.charName, 408, 520, 203,  25
-    textbox #loggedIn.charCreated, 500, 545, 111,  25
-    textbox #loggedIn.charRace, 408, 545, 111,  25
+    textbox #loggedIn.charName, 400, 520, 220,  25
+    textbox #loggedIn.charCreated, 510, 545, 110,  25
+    textbox #loggedIn.charRace, 400, 545, 110,  25
     statictext #loggedIn.character, "Character", 409,  54, 201,  25
     statictext #loggedIn.News, "News", 714,  54, 201,  25
     statictext #loggedIn.clientInfo, "Account info", 104,  53, 201,  25
@@ -115,15 +116,21 @@
 [createdstart]
 
     open "mycharcreated.bin" for binary as #mycharcreated
+    open "mycharname.bin" for binary as #mycharname
+    open "mycharrace.bin" for binary as #mycharrace
     input #mycharcreated, mycharcreated$
+    input #mycharname, mycharname$
+    input #mycharrace, mycharrace$
     close #mycharcreated
+    close #mycharname
+    close #mycharrace
     print #loggedIn.backGround, "getbmp logInBG 0 0 1024 768"
     print #loggedIn.backGround, "background logInBG";
     print #loggedIn.backGround, "drawsprites";
-    print #loggedIn.charName, name$
-    print #loggedIn.charCreated, mycharcreated$
-    print #loggedIn.charRace, race$
     print #loggedIn.characterPic, "down; fill white; flush"
+    print #loggedIn.charName, mycharname$
+    print #loggedIn.charCreated, mycharcreated$
+    print #loggedIn.charRace, mycharrace$
     print #loggedIn, "font ms_sans_serif 10"
     print #loggedIn.info1, myaccountname$
     'print #loggedIn.info2,
@@ -140,6 +147,9 @@
 
 [playClick]
 
+    open "character.bin" for binary as #character
+    input #character, character$
+    close #character
     if character$ = "ok" goto [GameMap]
     goto [noCharCreated]
 
@@ -178,6 +188,10 @@
 
 [creator]
 
+    open "character.bin" for binary as #character
+    input #character, character$
+    close #character
+    if character$ = "ok" goto [charCreatedAllready]
     textbox #creator.race, 25, 25, 400, 20
     button #creator.human, "Human", [humanClicked], UL, 25, 50, 100, 30
     button #creator.unavailable, "Unavailable", [unavailableClicked], UL, 125, 50, 100, 30
@@ -199,6 +213,45 @@
     print #creator.gender, "Select your gender"
     Print #creator.name, "Name your character"
     wait
+
+[deletor]
+
+    confirm "Delete character?"; answer$
+    if answer$ <> "yes" then wait
+    open "mycharcreated.bin" for binary as #mycharcreated
+    open "mycharname.bin" for binary as #mycharname
+    open "mycharrace.bin" for binary as #mycharrace
+    open "mychargender.bin" for binary as #mychargender
+    open "character.bin" for binary as #character
+    blank$ = "                                                                     "
+    print #mycharcreated, blank$
+    print #mycharname, blank$
+    print #mycharrace, blank$
+    print #mychargender, blank$
+    print #character, blank$
+    close #mycharcreated
+    close #mycharname
+    close #mycharrace
+    close #mychargender
+    close #character
+    goto [createdstart]
+
+[charCreatedAllready]
+
+    statictext #createdAllready.field, "Can't create more characters", 10, 15, 170, 20
+    button #createdAllready.ok, "OK", [createdAllreadyokClicked], UL, 70, 40, 50, 30
+    WindowWidth = 200
+    WindowHeight = 110
+    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
+    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
+    Open "Character allready created" for window as #createdAllready
+    wait
+
+[createdAllreadyokClicked]
+
+    close #createdAllready
+    wait
+
 
 [humanClicked]
 
@@ -276,8 +329,20 @@
     statictext #created.field3, race$, 10, 65, 170, 20
     statictext #created.field4, date$ (), 10, 90, 170, 20
     open "mycharcreated.bin" for binary as #mycharcreated
-    print #mycharcreated, date$ () + "                        "
+    open "mycharname.bin" for binary as #mycharname
+    open "mycharrace.bin" for binary as #mycharrace
+    open "mychargender.bin" for binary as #mychargender
+    open "character.bin" for binary as #character
+    print #mycharcreated, date$ () + "                       "
+    print #mycharname, name$ + "                       "
+    print #mycharrace, race$ + "                       "
+    print #mychargender, gender$ + "                       "
+    print #character, "ok"
     close #mycharcreated
+    close #mycharname
+    close #mycharrace
+    close #mychargender
+    close #character
     button #created.back, "Back", [createdBack], UL, 10, 130, 50, 30
     button #created.next, "Next", [createdNext], UL, 230, 130, 50, 30
     WindowWidth = 300
@@ -285,7 +350,6 @@
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
     UpperLeftY=int((DisplayHeight-WindowHeight)/2)
     Open "Character created" for window as #created
-    let character$ = "ok"
     wait
 
 [genderNotOk]

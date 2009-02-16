@@ -16,9 +16,9 @@
     print #logIn.backGround, "getbmp logInBG 0 0 1024 768"
     print #logIn.backGround, "background logInBG";
     print #logIn.backGround, "drawsprites";
-    print #logIn.accountName, "testAccount"
-    print #logIn.password, "testPassword"
-    print #logIn.news, "Account is testAccount," + chr$(13) + chr$(10) + "Password is testPassword"
+    print #logIn.accountName, "Account"
+    print #logIn.password, "Password"
+    print #logIn.news, "Account is TestAccount," + chr$(13) + chr$(10) + "Password is TestPassword"
     wait
 
 [exitLogClick]
@@ -37,14 +37,14 @@
 
 [logInClick]
 
-    open "myaccount.bin" for binary as #myaccount
-    input #myaccount, myaccountname$
-    close #myaccount
     print #logIn.accountName, "!contents?"
     input #logIn.accountName, accountName$
     print #logIn.password, "!contents?"
-    input #logIn.password, accountpassword$
-    if accountName$ = myaccountname$ goto [accountOk]
+    input #logIn.password, password$
+    if accountName$ = "TestAccount" goto [accountOk]
+    if accountName$ = "testAccount" goto [accountOk]
+    if accountName$ = "Testaccount" goto [accountOk]
+    if accountName$ = "testaccount" goto [accountOk]
     statictext #accountNotOk.field, "Incorrect account", 10, 15, 170, 20
     button #accountNotOk.ok, "OK", [accountNotOkokClicked], UL, 70, 40, 50, 30
     WindowWidth = 200
@@ -61,10 +61,10 @@
 
 [accountOk]
 
-    open "mypassword.bin" for binary as #mypassword
-    input #mypassword, mypassword$
-    close #mypassword
-    if accountpassword$ = mypassword$ goto [passwordOk]
+    if password$ = "TestPassword" goto [passwordOk]
+    if password$ = "testPassword" goto [passwordOk]
+    if password$ = "Testpassword" goto [passwordOk]
+    if password$ = "testpassword" goto [passwordOk]
     statictext #passwordNotOk.field, "Incorrect Password", 10, 15, 170, 20
     button #passwordNotOk.ok, "OK", [passwordNotOkokClicked], UL, 70, 40, 50, 30
     WindowWidth = 200
@@ -94,15 +94,14 @@
     graphicbox #loggedIn.backGround, 0, 0, 1024, 768
     graphicbox #loggedIn.characterPic, 408, 102, 203, 409
     button #loggedIn.logOut,"Log out",[logOutClick], UL,  122, 690, 101,  25
-    button #loggedIn.changePassword,"Change password",[ChangepasswordClick], UL,  224, 690, 202,  25
-    button #loggedIn.exit,"Exit",[exitLoggedClick], UL,  21, 690, 101,  25
+    button #loggedIn.logOut,"Exit",[exitLoggedClick], UL,  21, 690, 101,  25
     button #loggedIn.play,"Play",[playClick], UL, 408, 575, 203,  25
     button #loggedIn.create,"Create character",[creator], UL, 408, 620, 203,  25
     textbox #loggedIn.news, 715, 103, 203, 202
     TextboxColor$ = "white"
     textbox #loggedIn.charName, 408, 520, 203,  25
-    textbox #loggedIn.charCreated, 500, 545, 111,  25
-    textbox #loggedIn.charRace, 408, 545, 111,  25
+    textbox #loggedIn.charGender, 408, 545, 101,  25
+    textbox #loggedIn.charRace, 510, 545, 101,  25
     statictext #loggedIn.character, "Character", 409,  54, 201,  25
     statictext #loggedIn.News, "News", 714,  54, 201,  25
     statictext #loggedIn.clientInfo, "Account info", 104,  53, 201,  25
@@ -114,19 +113,16 @@
 
 [createdstart]
 
-    open "mycharcreated.bin" for binary as #mycharcreated
-    input #mycharcreated, mycharcreated$
-    close #mycharcreated
     print #loggedIn.backGround, "getbmp logInBG 0 0 1024 768"
     print #loggedIn.backGround, "background logInBG";
     print #loggedIn.backGround, "drawsprites";
     print #loggedIn.charName, name$
-    print #loggedIn.charCreated, mycharcreated$
+    print #loggedIn.charGender, gender$
     print #loggedIn.charRace, race$
     print #loggedIn.characterPic, "down; fill white; flush"
     print #loggedIn, "font ms_sans_serif 10"
-    print #loggedIn.info1, myaccountname$
-    'print #loggedIn.info2,
+    print #loggedIn.info1, accountName$
+    ''print #loggedIn.info2,
     'print #loggedIn.info3,
     'print #loggedIn.info4,
     wait
@@ -274,10 +270,6 @@
     statictext #created.field1, name$, 10, 15, 170, 20
     statictext #created.field2, gender$, 10, 40, 170, 20
     statictext #created.field3, race$, 10, 65, 170, 20
-    statictext #created.field4, date$ (), 10, 90, 170, 20
-    open "mycharcreated.bin" for binary as #mycharcreated
-    print #mycharcreated, date$ () + "                        "
-    close #mycharcreated
     button #created.back, "Back", [createdBack], UL, 10, 130, 50, 30
     button #created.next, "Next", [createdNext], UL, 230, 130, 50, 30
     WindowWidth = 300
@@ -338,66 +330,3 @@
     close #created
     close #creator
     goto [createdstart]
-
-[ChangepasswordClick]
-
-    WindowWidth = 400
-    WindowHeight = 230
-    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
-    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
-    button #changepassword.changepasswordok,"OK",[changepasswordokClick], UL,  99, 160, 100,  25
-    button #changepassword.changepasswordcancel,"Cancel",[changepasswordcancelClick], UL, 201, 160, 100,  25
-    TextboxColor$ = "white"
-    textbox #changepassword.changepasswordnew,  50,  60, 300,  25
-    textbox #changepassword.changepasswordconfirm,  50,  90, 300,  25
-    open "Change password" for window as #changepassword
-    print #changepassword, "font ms_sans_serif 10"
-    print #changepassword.changepasswordnew, "Enter new password"
-    print #changepassword.changepasswordconfirm, "Confirm new password"
-    wait
-
-[changepasswordokClick]
-
-    print #changepassword.changepasswordnew, "!contents?"
-    input #changepassword.changepasswordnew, newpassword$
-    print #changepassword.changepasswordconfirm, "!contents?"
-    input #changepassword.changepasswordconfirm, confirmpassword$
-    open "mypassword.bin" for binary as #mypassword
-    print #mypassword, confirmpassword$ + "                                                       "
-    if newpassword$ <> confirmpassword$ goto [newpasswordnotok]
-    close #mypassword
-    statictext #passwordchanged.field, "Your password has been changed", 10, 15, 170, 20
-    button #passwordchanged.ok, "OK", [passwordchangedokClicked], UL, 70, 40, 50, 30
-    WindowWidth = 200
-    WindowHeight = 110
-    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
-    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
-    Open "Password changed" for window as #passwordchanged
-    wait
-
-[changepasswordcancelClick]
-
-    close #changepassword
-    wait
-
-[passwordchangedokClicked]
-
-    close #passwordchanged
-    close #changepassword
-    wait
-
-[newpasswordnotok]
-
-    statictext #newpasswordnotok.field, "Password not confirmed", 10, 15, 170, 20
-    button #newpasswordnotok.ok, "OK", [newpasswordnotokokClicked], UL, 70, 40, 50, 30
-    WindowWidth = 200
-    WindowHeight = 110
-    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
-    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
-    Open "Password not changed" for window as #newpasswordnotok
-    wait
-
-[newpasswordnotokokClicked]
-
-    close #newpasswordnotok
-    wait

@@ -1,28 +1,85 @@
 'Form created with the help of Freeform 3 v03-27-03
 'Generated on Feb 25, 2008 at 14:09:45
-dim info$(10, 10)
 
+
+dim info$(10, 10)
+GLOBAL vc
+GLOBAL maplist$
+GLOBAL VERSION$ 
 GLOBAL MAXPLAYERS
 GLOBAL PORT
-conffile$ = DefaultDir$ + "\data\"
-conff$ = conffile$ + "config.conf"
-if fileExists(conffile$, "config.conf") then
+GLOBAL map1$
+GLOBAL confdir$
+GLOBAL extconfdir$
+GLOBAL mapdir$
+dim map1$(1000,1000)
+dim maplist$(1000)
+'TEMPORARY DEFINITIONS!!!
+startX = 2
+startY = 2
+'TEMPORARY DEFINATIONS END!!!
+
+
+'directory definations
+confdir$ = DefaultDir$ + "\data\"
+extconfdir$ = conffile$ + "\configs\"
+mapdir$ = confdir$ + "\maps\"
+
+
+'configuration and needed files definations
+levelconf$ = extconfdir$ + "level.exp"
+conff$ = confdir$ + "config.conf"
+mapconf$ = mapdir$ + "maps.list"
+
+
+'file checks for the important files
+if fileExists(confdir$, "config.conf") then
     goto [conf.read]
   else
     notice "Error!" + chr$(13) + "\data\config.conf is missing, server cannot be started!"
     goto [quit.main2]
   end if
+if fileExists(extconfdir$, "level.exp") then
+
+  else
+    notice "Error!" + chr$(13) + "\data\config\level.exp is missing, server cannot be started!"
+    goto [quit.main2]
+  end if
+if fileExists(mapdir$, "maps.list") then
+
+  else
+    notice "Error!" + chr$(13) + "\data\maps\maps.list is missing, server cannot be started!"
+    goto [quit.main2]
+  end if
+
 
 [conf.read]
-
     open conff$ for input as #conf
+        line input #conf, VERSION$
         line input #conf, maxplayers$
         line input #conf, port$
     close #conf
     MAXPLAYERS = val(maxplayers$)
     PORT = val(port$)
-    'noticeline$ = "MAX: " + maxplayers$ + " PORT: " + port$ + "."
-    'notice noticeline$
+
+[map.list.read]
+    s = 0
+    open mapdir$ + "maps.list" for input as #maplist
+[map.list.loop]
+    s = s + 1
+    input #maplist, maplist$(s)
+    if eof(#maplist) = 0 then [map.list.loop]
+[map.list.skipIt]
+
+    close #maplist
+
+[map.loading]
+    for ss = 1 to 1000
+        if maplist$(ss) <> "" then
+            mapfile$ = maplist$(ss)
+            sa = MapToMemory(mapfile$,ss)
+        end if
+    next ss
 
 
 
@@ -32,8 +89,6 @@ if fileExists(conffile$, "config.conf") then
     GLOBAL passwordc$
     GLOBAL player$
     GLOBAL logok
-    'MAXPLAYERS = 100  'Change to set the max number of clients that can connect. and we should get this one from a conf too
-    'PORT = 1568 'we should read this from a conf file later on
     GLOBAL admin 'we will remove this later on
     admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.
     Dim player.sock(MAXPLAYERS)    ' Socket descriptor
@@ -143,14 +198,13 @@ if fileExists(conffile$, "config.conf") then
     Player = 1
 
 [s_Loop]
-'    let buf$ = ""
     Scan
     CallDLL #kernel32, "Sleep", _
         10 As Long, _
         rc As Void
 
     If player.sock(Player) <> -1 Then
-        buf$ = player.inbuf$(Player) ' print "s_Loop - player: "; Player; " buf: " + buf$
+        buf$ = player.inbuf$(Player) 
         If Len(buf$) > 0 Then
             I = InStr(buf$, Chr$(13))
             If I = 0 Then I = InStr(buf$, Chr$(10))
@@ -201,10 +255,18 @@ if fileExists(conffile$, "config.conf") then
 
 '*** SUBS/Funcs for the engine ***
 function CheckCommand(Player, buf$)
-'        print "Player: " ; Player; " Incoming: " + buf$
-        PlayerLog$ = player$(Player,4)
-        Playerlog = val(PlayerLog$)
-        if word$(buf$, 1) = "00001" then
+       if word$(buf$, 1) = "00000" then
+            CVersion$ = word$(buf, 2)
+            ad = VersionCheck(CVersion$, VERSION$)
+            if vc = 0 then
+            output$ = "00000 Wrong version, server at version: " + VERSION$
+            plr = 101
+            a = pbroadcast(Player, plr, output$)
+            goto [EndCheckCommand]
+            end if
+            
+       end if
+       if word$(buf$, 1) = "00001" then
             accountc$ = word$(buf$, 2)
             passwordc$ = word$(buf$, 3)
             ad = CreateAccount(accountc$,passwordc$)
@@ -231,7 +293,6 @@ function CheckCommand(Player, buf$)
             end if
         end if
 
-
         if word$(buf$, 1) = "00100" then
             if Playerlog = 1 then
                 output$ = buf$
@@ -239,10 +300,13 @@ function CheckCommand(Player, buf$)
             end if
         end if
 
-
+[EndCheckCommand]
 
 end function
 
+function MoveCheck(Player, dir)
+
+end function 
 
 
 function CreateAccount(Account$,Passwd$) ' used for the acc creation
@@ -250,7 +314,7 @@ function CreateAccount(Account$,Passwd$) ' used for the acc creation
     #main.log "Create Acc: " + Account$ + " : " + Passwd$
     Acc$ = DefaultDir$ + "/data/accounts/" + Account$
     Pass$ = DefaultDir$ + "/data/accounts/" + Account$ + "/" + Account$ + ".o"
-    ctime$ = date$ + " : " time$
+    ctime$ = date$ + " : " + time$
     result = mkdir(Acc$)
     if result <> 0 then ErrorLog = 0001
     open Pass$ for output as #acccreate
@@ -272,6 +336,39 @@ function Loginauth(Account$,Passwd$,Player)
     end if
 end function
 
+function VersionCheck(ClientVersion$, ServerVersion$)
+    if ClientVersion$ = ServerVersion$ then
+    vc = 1
+    else
+    vc = 0
+    end if
+
+end function
+
+function MapToMemory(mapfile$,mapid)
+    if mapid = 1 then
+        mapfile2$ = mapdir$ + mapfile$ 
+        open mapfile2$ for input as #1
+        [loop]
+            input #1, dummy$(x)
+            x = x + 1
+            if eof(#1) = 0 then [loop]
+        close #1
+        x = x - 1
+        y = 0
+
+        xx = 0
+        yy = 0
+
+        for xx = 0 to x
+            for yy = 0 to 1000
+            map1$(yy,xx) = mid$(dummy$(xx), yy, 1)
+        'if map1$(xx,yy) = "" then yy = 1000
+            next yy
+        next xx
+    end if
+
+end function
 
 '*** Application Procedures ***
 function broadcast(from,buf$) ' this will become the channel system some day
@@ -349,7 +446,7 @@ Function SockProc( hWnd, uMsg, sock, lParam )
             If plr Then
                 s = accept(sock)
                 '#main.log "User "; plr; " ["; _
-                      GetHostByAddr$(sockaddr.sinaddr.struct); "] joined!"
+                '      GetHostByAddr$(sockaddr.sinaddr.struct); "] joined!"
 
                 player.sock(plr) = s
                 player.match(plr) = Int(100 * Rnd(0)) + 1

@@ -23,3 +23,4 @@ One piece of data per line
   * modifier 1 value (0 - 999999)
   * mod 2 stat
   * mod 2 value
+  * item spell (/data/items/spells/ hold the item spells)

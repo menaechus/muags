@@ -8,8 +8,7 @@ This tells you what the .item file holds
 = Details =
 
 One piece of data per line
-  * Item type (1 = weapon, 2 = armour, 3 = food, 4 = needed for something, 5 = quest, 6 =
-drink, 7 = trinket, 8 = junk, add more as you think you'll need them)
+  * Item type (1 = weapon, 2 = armour, 3 = food, 4 = needed for something, 5 = quest, 6 = drink, 7 = trinket, 8 = junk, add more as you think you'll need them)   
   * SubClass (1 = one handed sword, 2 = two-handed sword, etc. will define more as needed)
   * Quality (0 - 100, zero being worst)
   * rarity (1 = junk, 2 = common, 3 = magical, 4 = rare, 5 = epic, 6 = godly)

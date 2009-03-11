@@ -15,4 +15,3 @@ reserved numbers
    *  player$(x, 10) = mapID
    *  player$(x, 11) = x coord
    *  player$(x, 12) = y coord
-   *  player$(x, 4) = Authed/not authed (1 / 0)

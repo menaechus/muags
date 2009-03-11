@@ -1,12 +1,14 @@
-#summary The main conf file for the game.
+#summary The main conf file for the server.
 
 = Introduction =
 
-The main conf file for the game
+Servers config file "config.conf". One item per line
 
 
 = Details =
 
-Version Number
-
-Server address
+   * Version Number
+   * Server address
+   * Exp rate
+   * hp regen rate
+   * mp regen rate

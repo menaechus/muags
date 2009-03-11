@@ -150,14 +150,14 @@ if fileExists(conffile$, "config.conf") then
         rc As Void
 
     If player.sock(Player) <> -1 Then
-'        let buf$ = ""
-        buf$ = player.inbuf$(Player)
-'        print "s_Loop - player: "; Player; " buf: " + buf$
+        buf$ = player.inbuf$(Player) ' print "s_Loop - player: "; Player; " buf: " + buf$
         If Len(buf$) > 0 Then
             I = InStr(buf$, Chr$(13))
+            If I = 0 Then I = InStr(buf$, Chr$(10))
                 If I <> 0 Then
                     ad = CheckCommand(Player, buf$)
                 end if
+            player.inbuf$(Player) = Mid$(player.inbuf$(Player), I + 1)
         end if
     End If
 
@@ -202,6 +202,8 @@ if fileExists(conffile$, "config.conf") then
 '*** SUBS/Funcs for the engine ***
 function CheckCommand(Player, buf$)
 '        print "Player: " ; Player; " Incoming: " + buf$
+        PlayerLog$ = player$(Player,4)
+        Playerlog = val(PlayerLog$)
         if word$(buf$, 1) = "00001" then
             accountc$ = word$(buf$, 2)
             passwordc$ = word$(buf$, 3)
@@ -218,18 +220,23 @@ function CheckCommand(Player, buf$)
             ad = Loginauth(account$,passwd$, Player)
             if logok = 1 then
                 output$ = "00002 ok"
+                Logfail = 0
                 plr = 101
                 a = pbroadcast(Player, plr, output$)
             else
                 output$ = "00002 failed"
+                Logfail = 1
                 plr = 101
                 a = pbroadcast(Player, plr, output$)
             end if
         end if
 
+
         if word$(buf$, 1) = "00100" then
-            output$ = buf$
-            a = broadcast(Player,output$)
+            if Playerlog = 1 then
+                output$ = buf$
+                a = broadcast(Player,output$)
+            end if
         end if
 
 
@@ -243,10 +250,12 @@ function CreateAccount(Account$,Passwd$) ' used for the acc creation
     #main.log "Create Acc: " + Account$ + " : " + Passwd$
     Acc$ = DefaultDir$ + "/data/accounts/" + Account$
     Pass$ = DefaultDir$ + "/data/accounts/" + Account$ + "/" + Account$ + ".o"
+    ctime$ = date$ + " : " time$
     result = mkdir(Acc$)
     if result <> 0 then ErrorLog = 0001
     open Pass$ for output as #acccreate
         print #acccreate, Passwd$
+        print #acccreate, ctime$
     close #acccreate
 end function
 
@@ -325,7 +334,6 @@ Function SockProc( hWnd, uMsg, sock, lParam )
                 b$ = Recv$(sock, 256, 0)
             Wend
             plr = GetPlayer(sock)
-            print "FD_READ: " + buf$
             player.inbuf$(plr) = player.inbuf$(plr) + buf$
         Case 2 'FD_WRITE
             plr = GetPlayer(sock)
@@ -340,12 +348,12 @@ Function SockProc( hWnd, uMsg, sock, lParam )
             plr = GetPlayer(-1)
             If plr Then
                 s = accept(sock)
-                #main.log "User "; plr; " ["; _
+                '#main.log "User "; plr; " ["; _
                       GetHostByAddr$(sockaddr.sinaddr.struct); "] joined!"
 
                 player.sock(plr) = s
                 player.match(plr) = Int(100 * Rnd(0)) + 1
-                a = broadcast(admin, "-- User ";plr;" joined! -- ")
+                'a = broadcast(admin, "-- User ";plr;" joined! -- ")
             Else
                 ' Too many players. Close connection.
                 rc = closesocket(sock)
@@ -362,7 +370,7 @@ Function SockProc( hWnd, uMsg, sock, lParam )
             player.match(plr) = 0
 
             #main.log "> User "; plr; " disconnected."
-            a = broadcast(admin, "-- User ";plr;" disconnected. -- ")
+            'a = broadcast(admin, "-- User ";plr;" disconnected. -- ")
         Case 64
             rc = SockProc(hWnd, uMsg, sock, 1) 'force read
 
@@ -606,7 +614,7 @@ Function Recv$( s, buflen, flags )
         flags As Long, _
         buflen As Long
     Recv$ = Left$(Recv$, buflen)
-    print "RECEIVE: " + Recv$
+    'print "RECEIVE: " + Recv$
 End Function
 
 Function Send$( s, buf$, buflen, flags )

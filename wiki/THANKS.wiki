@@ -1,0 +1,7 @@
+#summary This is the page where all the people who helped or made this easier.
+
+= List =
+
+  * Brent / BaySixSoftware for the telnet hilo demo
+  * Shoptalk Systems for creating LibertyBasic
+  * If you think you should be in this list please mail me at: markus.tolin@gmail.com

@@ -8,6 +8,8 @@ this is the list of the authcodes used in the MUAGS
 
 * 00002 is used for logging in (Like: "00002 account passwd")
 
+* 00003 is used for telling the client that user is not logged in (Like: "00003")
+
 * 01000 is used for /tell (Like: "01000 fromplayer toplayer msg")
 
 * 00100 is used for /chat (Like "00100 fromplayer msg")

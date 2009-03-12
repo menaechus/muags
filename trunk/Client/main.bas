@@ -9,6 +9,8 @@ global dummy$
 GLOBAL PORT
 GLOBAL map1$
 GLOBAL maplist$
+GLOBAL VERSION$
+GLOBAL address$
 dim info$(10, 10)
 dim dummy$(1000)
 dim map1$(1000,1000)
@@ -33,11 +35,43 @@ if fileExists(mapDir$, "maps.list") then
     goto [quit.main2]
   end if
 
+ConfigFile$ = configDir$ + "config.conf"
 
+[conf.read]
+    open conff$ for input as #conf
+        line input #conf, VERSION$
+        line input #conf, address$
+        line input #conf, port$
+    close #conf
+    PORT = val(port$)
+mapFile$ = mapdir$ + "maps.list"
+    
+[map.list.read]
+    s = 0
+    open mapFile$ for input as #maplist
+[map.list.loop]
+    s = s + 1
+    input #maplist, maplist$(s)
+    if eof(#maplist) = 0 then [map.list.loop]
+[map.list.skipIt]
 
+    close #maplist
+    
+    
+    
+    
+    
+    
+    
+    
+'Program goes here    
+    
+    
+    
 
 [quit]
 
+'program ends here
 
 '---Subs---
 sub CheckCmd command$

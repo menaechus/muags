@@ -62,9 +62,11 @@ if fileExists(mapdir$, "maps.list") then
     MAXPLAYERS = val(maxplayers$)
     PORT = val(port$)
 
+	mapFile$ = mapdir$ + "maps.list"
+	
 [map.list.read]
     s = 0
-    open mapdir$ + "maps.list" for input as #maplist
+    open mapFile$ for input as #maplist
 [map.list.loop]
     s = s + 1
     input #maplist, maplist$(s)

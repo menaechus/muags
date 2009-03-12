@@ -10,3 +10,4 @@ Configuration for client
 One item per line
   * version
   * address of the server
+  * port to connect

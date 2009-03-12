@@ -5,14 +5,38 @@ global text$
 global PlayerLocX
 global PlayerLocY
 global cmd
+global dummy$
+GLOBAL PORT
+GLOBAL map1$
+GLOBAL maplist$
+dim info$(10, 10)
 dim dummy$(1000)
+dim map1$(1000,1000)
+dim maplist$(1000)
+
+
+configDir$ = DefaultDir$ + "\data\"
+mapDir$ = configDir$ + "\maps\"
+
+
+'file checks for the important files
+if fileExists(configDir$, "config.conf") then
+    goto [conf.read]
+  else
+    notice "Error!" + chr$(13) + "\data\config.conf is missing, server cannot be started!"
+    goto [quit.main2]
+  end if
+if fileExists(mapDir$, "maps.list") then
+
+  else
+    notice "Error!" + chr$(13) + "\data\maps\maps.list is missing, server cannot be started!"
+    goto [quit.main2]
+  end if
 
 
 
 
-
-
-
+[quit]
 
 
 '---Subs---

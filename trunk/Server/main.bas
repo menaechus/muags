@@ -14,6 +14,23 @@ GLOBAL extconfdir$
 GLOBAL mapdir$
 dim map1$(1000,1000)
 dim maplist$(1000)
+GLOBAL accountc$
+GLOBAL passwordc$
+GLOBAL player$
+GLOBAL logok
+GLOBAL admin 'we will remove this later on
+admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.
+Dim player.sock(MAXPLAYERS)    ' Socket descriptor
+Dim player.inbuf$(MAXPLAYERS)  ' Input buffer
+Dim player.outbuf$(MAXPLAYERS) ' Output buffer
+Dim player.match(MAXPLAYERS)   ' The number to match
+dim player$(MAXPLAYERS, 1000)
+    ' Initialize client data.
+    For plr = 1 To MAXPLAYERS
+        player.sock(plr) = -1 ' Invalidate sockets.
+    Next
+    
+
 'TEMPORARY DEFINITIONS!!!
 startX = 2
 startY = 2
@@ -52,7 +69,7 @@ if fileExists(mapdir$, "maps.list") then
     goto [quit.main2]
   end if
 
-
+'Read the config.conf file
 [conf.read]
     open conff$ for input as #conf
         line input #conf, VERSION$
@@ -62,8 +79,9 @@ if fileExists(mapdir$, "maps.list") then
     MAXPLAYERS = val(maxplayers$)
     PORT = val(port$)
 
-	mapFile$ = mapdir$ + "maps.list"
-	
+    mapFile$ = mapdir$ + "maps.list"
+ 
+'Read the maps.list file    
 [map.list.read]
     s = 0
     open mapFile$ for input as #maplist
@@ -75,6 +93,7 @@ if fileExists(mapdir$, "maps.list") then
 
     close #maplist
 
+'read the maps to the memory
 [map.loading]
     for ss = 1 to 1000
         if maplist$(ss) <> "" then
@@ -82,29 +101,6 @@ if fileExists(mapdir$, "maps.list") then
             sa = MapToMemory(mapfile$,ss)
         end if
     next ss
-
-
-
-[start]
-
-    GLOBAL accountc$
-    GLOBAL passwordc$
-    GLOBAL player$
-    GLOBAL logok
-    GLOBAL admin 'we will remove this later on
-    admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.
-    Dim player.sock(MAXPLAYERS)    ' Socket descriptor
-    Dim player.inbuf$(MAXPLAYERS)  ' Input buffer
-    Dim player.outbuf$(MAXPLAYERS) ' Output buffer
-    Dim player.match(MAXPLAYERS)   ' The number to match
-    dim player$(MAXPLAYERS, 1000)
-    ' Initialize client data.
-    For plr = 1 To MAXPLAYERS
-        player.sock(plr) = -1 ' Invalidate sockets.
-    Next
-
-
-
 [setup.main.Window]
 
     '-----Begin code for #main
@@ -143,7 +139,7 @@ if fileExists(mapdir$, "maps.list") then
 
 
 
-[Start]   'Perform action for the button named 'button1'
+[Start]  
     ' Now create a socket, bind it to a local port, set some
     ' network events to trap, and start listening for clients.
 
@@ -199,7 +195,7 @@ if fileExists(mapdir$, "maps.list") then
 
     Player = 1
 
-[s_Loop]
+[s_Loop] ' Main loop where the server checks the data coming from clients
     Scan
     CallDLL #kernel32, "Sleep", _
         10 As Long, _
@@ -224,7 +220,7 @@ if fileExists(mapdir$, "maps.list") then
     wait
 
 
-[button2Click]   'Perform action for the button named 'button2'
+[button2Click]  'stopping the server
 
 ' Clean up sockets.
     For plr = 1 To MAXPLAYERS
@@ -250,14 +246,14 @@ if fileExists(mapdir$, "maps.list") then
     close #main
     end
 
-[quit.main2]
+[quit.main2] 'for premature stopping of the server
     end
 
 
 
 '*** SUBS/Funcs for the engine ***
-function CheckCommand(Player, buf$)
-       if word$(buf$, 1) = "00000" then
+function CheckCommand(Player, buf$) ' check the command the client sent for the server
+       if word$(buf$, 1) = "00000" then 'first the version number check
             CVersion$ = word$(buf, 2)
             ad = VersionCheck(CVersion$, VERSION$)
             if vc = 0 then
@@ -268,7 +264,7 @@ function CheckCommand(Player, buf$)
             end if
             
        end if
-       if word$(buf$, 1) = "00001" then
+       if word$(buf$, 1) = "00001" then ' account creation
             accountc$ = word$(buf$, 2)
             passwordc$ = word$(buf$, 3)
             ad = CreateAccount(accountc$,passwordc$)
@@ -277,7 +273,7 @@ function CheckCommand(Player, buf$)
             a = pbroadcast(Player, plr, output$)
         end if
 
-        if word$(buf$, 1) = "00002" then
+        if word$(buf$, 1) = "00002" then ' login auth
             logok = 0
             account$ = word$(buf$, 2)
             passwd$ = word$(buf$, 3)
@@ -295,7 +291,7 @@ function CheckCommand(Player, buf$)
             end if
         end if
 
-        if word$(buf$, 1) = "00100" then
+        if word$(buf$, 1) = "00100" then ' chat?
             if Playerlog = 1 then
                 output$ = buf$
                 a = broadcast(Player,output$)
@@ -306,7 +302,8 @@ function CheckCommand(Player, buf$)
 
 end function
 
-function MoveCheck(Player, dir)
+
+function MoveCheck(Player, dir) ' this will hold the movement checks
 
 end function 
 
@@ -325,7 +322,7 @@ function CreateAccount(Account$,Passwd$) ' used for the acc creation
     close #acccreate
 end function
 
-function Loginauth(Account$,Passwd$,Player)
+function Loginauth(Account$,Passwd$,Player)' login auth
     #main.log "LOG Auth: " + Account$ + " : " + Passwd$
     Acc$ = DefaultDir$ + "/data/accounts/" + Account$
     Acc1$ = Account$ + ".o"
@@ -338,7 +335,7 @@ function Loginauth(Account$,Passwd$,Player)
     end if
 end function
 
-function VersionCheck(ClientVersion$, ServerVersion$)
+function VersionCheck(ClientVersion$, ServerVersion$) ' version check
     if ClientVersion$ = ServerVersion$ then
     vc = 1
     else
@@ -347,7 +344,7 @@ function VersionCheck(ClientVersion$, ServerVersion$)
 
 end function
 
-function MapToMemory(mapfile$,mapid)
+function MapToMemory(mapfile$,mapid) ' map to memory reading NOT READY
     if mapid = 1 then
         mapfile2$ = mapdir$ + mapfile$ 
         open mapfile2$ for input as #1
@@ -374,18 +371,9 @@ end function
 
 '*** Application Procedures ***
 function broadcast(from,buf$) ' this will become the channel system some day
-    'If word$(buf$, 1) = "/d" then
-    '    a = closesocket(player.sock(from))
-    '    a = SockProc(hwnd(#main), uMsg, player.sock(from), 32)
-    'End if
-    'If from = admin then
-    '    buf$ = "SERVER: " + buf$  'If message is from Server, Add SERVER.
-    'else
-        buf$ = "00100 ";from;": "+buf$  'If not, add which user it's from.
-    'End If
+       buf$ = "00100 ";from;": "+buf$  'If not, add which user it's from.
     for i = 1 to MAXPLAYERS
         If player.sock(i) <> -1 and i <> from Then
-'        If player.sock(i) <> -1 Then
             obuf$ = player.outbuf$(i) + buf$ + chr$(7) + chr$(13) + chr$(10)
             player.outbuf$(i) = Send$(player.sock(i), obuf$, Len(obuf$), 0)
         #main.log "Sent "; buf$ ;" to Client ";i

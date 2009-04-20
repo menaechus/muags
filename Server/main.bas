@@ -19,17 +19,6 @@ GLOBAL passwordc$
 GLOBAL player$
 GLOBAL logok
 GLOBAL admin 'we will remove this later on
-admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.
-Dim player.sock(MAXPLAYERS)    ' Socket descriptor
-Dim player.inbuf$(MAXPLAYERS)  ' Input buffer
-Dim player.outbuf$(MAXPLAYERS) ' Output buffer
-Dim player.match(MAXPLAYERS)   ' The number to match
-dim player$(MAXPLAYERS, 1000)
-    ' Initialize client data.
-    For plr = 1 To MAXPLAYERS
-        player.sock(plr) = -1 ' Invalidate sockets.
-    Next
-    
 
 'TEMPORARY DEFINITIONS!!!
 startX = 2
@@ -78,10 +67,21 @@ if fileExists(mapdir$, "maps.list") then
     close #conf
     MAXPLAYERS = val(maxplayers$)
     PORT = val(port$)
+'These need to be set AFTER the config file reading    
+admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.
+Dim player.sock(MAXPLAYERS)    ' Socket descriptor
+Dim player.inbuf$(MAXPLAYERS)  ' Input buffer
+Dim player.outbuf$(MAXPLAYERS) ' Output buffer
+Dim player.match(MAXPLAYERS)   ' The number to match
+dim player$(MAXPLAYERS, 1000)
+    ' Initialize client data.
+    For plr = 1 To MAXPLAYERS
+        player.sock(plr) = -1 ' Invalidate sockets.
+    Next
 
+
+'Read the maps.list file
     mapFile$ = mapdir$ + "maps.list"
- 
-'Read the maps.list file    
 [map.list.read]
     s = 0
     open mapFile$ for input as #maplist
@@ -139,7 +139,7 @@ if fileExists(mapdir$, "maps.list") then
 
 
 
-[Start]  
+[Start]
     ' Now create a socket, bind it to a local port, set some
     ' network events to trap, and start listening for clients.
 
@@ -202,7 +202,7 @@ if fileExists(mapdir$, "maps.list") then
         rc As Void
 
     If player.sock(Player) <> -1 Then
-        buf$ = player.inbuf$(Player) 
+        buf$ = player.inbuf$(Player)
         If Len(buf$) > 0 Then
             I = InStr(buf$, Chr$(13))
             If I = 0 Then I = InStr(buf$, Chr$(10))
@@ -262,7 +262,7 @@ function CheckCommand(Player, buf$) ' check the command the client sent for the 
             a = pbroadcast(Player, plr, output$)
             goto [EndCheckCommand]
             end if
-            
+
        end if
        if word$(buf$, 1) = "00001" then ' account creation
             accountc$ = word$(buf$, 2)
@@ -305,7 +305,7 @@ end function
 
 function MoveCheck(Player, dir) ' this will hold the movement checks
 
-end function 
+end function
 
 
 function CreateAccount(Account$,Passwd$) ' used for the acc creation

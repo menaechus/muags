@@ -1,0 +1,6 @@
+#summary Forum link.
+
+= Introduction =
+
+  * Forums are here : http://muags.freeforums.org/
+

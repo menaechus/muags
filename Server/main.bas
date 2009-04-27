@@ -67,7 +67,7 @@ if fileExists(mapdir$, "maps.list") then
     close #conf
     MAXPLAYERS = val(maxplayers$)
     PORT = val(port$)
-'These need to be set AFTER the config file reading    
+'These need to be set AFTER the config file reading
 admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.
 Dim player.sock(MAXPLAYERS)    ' Socket descriptor
 Dim player.inbuf$(MAXPLAYERS)  ' Input buffer
@@ -94,6 +94,7 @@ dim player$(MAXPLAYERS, 1000)
     close #maplist
 
 'read the maps to the memory
+'this sucks big time, i have no idea what it's supposed to do, so feel free to destroy/rewrite
 [map.loading]
     for ss = 1 to 1000
         if maplist$(ss) <> "" then
@@ -257,7 +258,7 @@ function CheckCommand(Player, buf$) ' check the command the client sent for the 
             CVersion$ = word$(buf, 2)
             ad = VersionCheck(CVersion$, VERSION$)
             if vc = 0 then
-            output$ = "00000 Wrong version, server at version: " + VERSION$
+            output$ = "00000 Wrong version " + VERSION$
             plr = 101
             a = pbroadcast(Player, plr, output$)
             goto [EndCheckCommand]

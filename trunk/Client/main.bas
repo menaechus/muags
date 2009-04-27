@@ -1,5 +1,11 @@
+'Form created with the help of Freeform 3 v03-27-03
+'Generated on Apr 27, 2009 at 18:58:14
 'Created by: Markus Tolin for MUAGS
+
+'definations
 open "mesock32.dll" for dll as #me
+global connect
+global rec$
 global handle
 global text$
 global PlayerLocX
@@ -11,41 +17,45 @@ GLOBAL map1$
 GLOBAL maplist$
 GLOBAL VERSION$
 GLOBAL address$
+global fail
 dim info$(10, 10)
 dim dummy$(1000)
 dim map1$(1000,1000)
 dim maplist$(1000)
-
+dim playerData$(1000,1000)
+connect = 0
+fail = 0
 
 configDir$ = DefaultDir$ + "\data\"
-mapDir$ = configDir$ + "\maps\"
+mapDir$ = configDir$ + "maps\"
 
 
 'file checks for the important files
 if fileExists(configDir$, "config.conf") then
-    goto [conf.read]
+    'goto [conf.read]
   else
-    notice "Error!" + chr$(13) + "\data\config.conf is missing, server cannot be started!"
+    notice "Error!" + chr$(13) + "\data\config.conf is missing, client cannot be started!"
     goto [quit.main2]
   end if
 if fileExists(mapDir$, "maps.list") then
 
   else
-    notice "Error!" + chr$(13) + "\data\maps\maps.list is missing, server cannot be started!"
+    notice "Error!" + chr$(13) + "\data\maps\maps.list is missing, client cannot be started!"
     goto [quit.main2]
   end if
 
 ConfigFile$ = configDir$ + "config.conf"
 
 [conf.read]
-    open conff$ for input as #conf
+    open ConfigFile$ for input as #conf
         line input #conf, VERSION$
         line input #conf, address$
         line input #conf, port$
     close #conf
     PORT = val(port$)
-mapFile$ = mapdir$ + "maps.list"
-    
+
+mapFile$ = mapDir$ + "maps.list"
+
 [map.list.read]
     s = 0
     open mapFile$ for input as #maplist
@@ -56,231 +66,302 @@ mapFile$ = mapdir$ + "maps.list"
 [map.list.skipIt]
 
     close #maplist
-    
-    
-    
-    
-    
-    
-    
-    
-'Program goes here    
-    
-    
-    
 
-[quit]
+'program starts here
 
-'program ends here
+[setup.main.Window]
+
+    '-----Begin code for #main
+
+    nomainwin
+    WindowWidth = 1024
+    WindowHeight = 768
+    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
+    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
+
+
+    '-----Begin GUI objects code
+
+    TexteditorColor$ = "white"
+    texteditor #main.mainview,   5,   5, 900, 680
+    TextboxColor$ = "white"
+    textbox #main.input,   5, 692, 900,  25
+    button #main.button1,"1",[button1Click], UL, 910,   5,  17,  25
+    button #main.button2,"2",[button2Click], UL, 910,  35,  17,  25
+    button #main.button3,"3",[button3Click], UL, 910,  65,  17,  25
+    button #main.button4,"4",[button4Click], UL, 910,  95,  17,  25
+    button #main.button5,"5",[button5Click], UL, 910, 125,  17,  25
+    button #main.button6,"6",[button6Click], UL, 910, 155,  17,  25
+    button #main.button7,"7",[button7Click], UL, 910, 185,  17,  25
+    button #main.button8,"8",[button8Click], UL, 910, 215,  17,  25
+    button #main.button9,"9",[button9Click], UL, 910, 245,  17,  25
+    button #main.button0,"0",[button0Click], UL, 910, 275,  17,  25
+
+    '-----End GUI objects code
+
+    '-----Begin menu code
+
+    menu #main, "Game",_
+                "Connect"   , [open.connect],_
+                "Disconnect", [disconnect],|,_
+                "Quit"      , [quit.main]
+
+    menu #main, "Help",_
+                "Help" , [open.help],_
+                "About", [open.about]
+
+    menu #main, "Settings",_
+                "Settings", [open.settings]
+
+    menu #main, "Edit"  ' <-- Texteditor menu.
+
+
+    '-----End menu code
+
+    open "Muags client" for window as #main
+    print #main, "font ms_sans_serif 10"
+    print #main, "trapclose [quit.main]"
+
+
+[main.inputLoop]   'wait here for input event
+    wait
+
+
+[game.main.loop]    'main loop after connection is succesful
+    scan
+    if connect = 1 then
+        let rec$ = ""
+        let rec$ = TCPReceive$(handle)
+        if rec$ <> "" then
+            ad = CheckData(rec$)
+        end if
+
+    wait
+
+
+[button1Click]   'Perform action for the button named 'button1'
+
+    'Insert your own code here
+
+    wait
+
+
+[button2Click]   'Perform action for the button named 'button2'
+
+    'Insert your own code here
+
+    wait
+
+
+[button3Click]   'Perform action for the button named 'button3'
+
+    'Insert your own code here
+
+    wait
+
+
+[button4Click]   'Perform action for the button named 'button4'
+
+    'Insert your own code here
+
+    wait
+
+
+[button5Click]   'Perform action for the button named 'button5'
+
+    'Insert your own code here
+
+    wait
+
+
+[button6Click]   'Perform action for the button named 'button6'
+
+    'Insert your own code here
+
+    wait
+
+
+[button7Click]   'Perform action for the button named 'button7'
+
+    'Insert your own code here
+
+    wait
+
+
+[button8Click]   'Perform action for the button named 'button8'
+
+    'Insert your own code here
+
+    wait
+
+
+[button9Click]   'Perform action for the button named 'button9'
+
+    'Insert your own code here
+
+    wait
+
+
+[button0Click]   'Perform action for the button named 'button0'
+
+    'Insert your own code here
+
+    wait
+
+
+[open.connect]   'Perform action for menu Game, item Connect, this will connect the client to the server
+    if connect = 0 then
+    [setup.login.Window]
+
+    '-----Begin code for #login
+
+    WindowWidth = 190
+    WindowHeight = 135
+    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
+    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
+
+    statictext #login.statictext1, "Username:",   5,   5,  66,  20
+    statictext #login.statictext2, "Password:",   5,  30,  63,  20
+    textbox #login.LoginUserName,  75,   5, 100,  25
+    textbox #login.LoginPassword,  75,  30, 100,  25
+    checkbox #login.rememberUsername, "Remember username", [rememberUser], [ForgetUser],   5,  55, 156,  25
+    button #login.LoginButton,"Login",[LoginButton], UL,   5,  80,  80,  25
+    button #login.LoginCancel,"Cancel",[quit.login], UL,  95,  80,  80,  25
+
+    '-----End GUI objects code
+
+    open "Username and password" for dialog_popup as #login
+    print #login, "font ms_sans_serif 10"
+    print #login, "trapclose [quit.login]"
+
+
+[login.inputLoop]   'wait here for input event
+    wait
+
+
+[rememberUser]   'Perform action for the textbox named 'LoginUserName'
+
+
+    'Insert your own code here
+
+    wait
+
+
+
+[ForgetUser]   'Perform action for the textbox named 'LoginUserName'
+
+    'Insert your own code here
+
+    wait
+
+
+
+
+[LoginButton]   'Perform action for the button named 'LoginButton'
+    print #login.LoginUserName, "!contents? user$";
+    print #login.LoginPassword, "!contents? pass$";
+    if user$ <> "" and pass$ <> "" then
+        goto [quit.login]
+    else
+        notice "Please type username and password"
+        print #login.LoginUserName, ""
+        print #login.LoginPassword, ""
+        goto [login.inputLoop]
+    end if
+    wait
+
+
+[quit.login] 'End the program
+        close #login
+        if user$ <> "" and pass$ <> "" then
+                hd = OpenConnection(user$,pass$)
+        end if
+        if fail = 1 then
+            let func = TCPClose(handle)
+            let connect = 0
+        end if
+    end if
+    end if
+    wait
+
+
+[disconnect]   'Perform action for menu Game, item Disconnect
+    if connect = 1 then
+        let func = TCPClose(handle)
+        let connect = 0
+    end if
+    wait
+
+
+[open.help]   'Perform action for menu Help, item Help
+
+    'Insert your own code here
+
+    wait
+
+
+[open.about]   'Perform action for menu Help, item About
+
+    'Insert your own code here
+
+    wait
+
+
+[open.settings]   'Perform action for menu Settings, item Settings
+
+    'Insert your own code here
+
+    wait
+
+[quit.main] 'End the program
+    if connect = 1 then
+        let func = TCPClose(handle)
+        let connect = 0
+    end if
+    close #me
+    close #main
+    end
+
+
 
 '---Subs---
-sub CheckCmd command$
-    cmd = 0
-    if command$ = "n" then cmd = 1
-    if command$ = "e" then cmd = 2
-    if command$ = "w" then cmd = 3
-    if command$ = "s" then cmd = 4
 
-end sub
 
 
 '---Funcs---
-function MovePlayer(cmd)
-OldX = PlayerLocX
-OldY = PlayerLocY
-if cmd = 1 then PlayerLocY = PlayerLocY - 1
-if cmd = 2 then PlayerLocX = PlayerLocX + 1
-if cmd = 3 then PlayerLocX = PlayerLocX - 1
-if cmd = 4 then PlayerLocY = PlayerLocY + 1
-if PlayerLocX < 0 then PlayerLocX = 0
-if PlayerLocY < 0 then PlayerLocY = 0
-if map1$(PlayerLocX, PlayerLocY) = "#" then
-    PlayerLocX = OldX
-    PlayerLocY = OldY
-end if
+function SendData(data$)
+    let func = TCPSend(handle,test$)
+        CallDLL #kernel32, "Sleep", _
+        10 As Long, _
+        rc As Void
+end function
 
-'and in here we should inform the server of the new coordinates of the player
+function CheckData(rec$)
+    
+end function
+
+function OpenConnection(user$,pass$) ' not ready
+    let handle = TCPOpen(address$,port)
+    let connect = 1
+    data1$ = "00000" + VERSION$
+    sa = SendData(data1$)
+    let rec$ = TCPReceive$(handle)
+    if word$(rec$,1) = "00000" and word$(rec$, 4) <> "" then
+        SVERSION$ = word$(rec$, 4)
+        notice "Wrong version, you have " + VERSION$ + " and the server has " + SVERSION$ + "."
+        fail = 1
+    end if
+    if fail = 0 then
+         data1$ = "00002 " + user$ + " " + pass$
+         sa = SendData(data1$)
+         let rec$ = TCPReceive$(handle)
+         if word$(rec$,1) = "00002" and word$(rec$,2) = "ok" then
+            notice "Logged in."
+         end if
+    end if
 
 end function
 
-function drawMap(PlayerLocX, PlayerLocY)
-
-    one$ = ""
-    two$ = ""
-    three$ = ""
-    four$ = ""
-    six$ = ""
-    seven$ = ""
-    eight$ = ""
-    nine$ = ""
-    ten$ = ""
-    eleven$ = ""
-    twelve$ = ""
-    thirteen$ = ""
-    fourteen$ = ""
-    fifteen$ = ""
-    sixteen$ = ""
-    seventeen$ = ""
-    eighteen$ = ""
-    nineteen$ = ""
-    twenty$ = ""
-    twentyone$ = ""
-    twentytwo$ = ""
-    twentythree$ = ""
-    twentyfour$ = ""
-    twentyfive$ = ""
-
-
-
-    oneX = PlayerLocX - 1
-    oneY = PlayerLocY - 1
-    if oneX < 0 then oneX = 1
-    if oneY < 0 then oneY = 0
-    one$ = map1$(oneX, oneY)
-
-    twoX = PlayerLocX
-    twoY = PlayerLocY - 1
-    if twoX < 0 then twoX = 1
-    if twoY < 0 then twoY = 0
-    two$ = map1$(twoX, twoY)
-
-    threeX = PlayerLocX + 1
-    threeY = PlayerLocY - 1
-    if threeX < 0 then threeX = 1
-    if threeY < 0 then threeY = 0
-    three$ = map1$(threeX, threeY)
-
-    fourX = PlayerLocX - 1
-    fourY = PlayerLocY
-    if fourX < 0 then fourX = 1
-    if fourY < 0 then fourY = 0
-    four$ = map1$(fourX, fourY)
-
-    sixX = PlayerLocX + 1
-    sixY = PlayerLocY
-    if sixX < 0 then sixX = 1
-    if sixY < 0 then sixY = 0
-    six$ = map1$(sixX, sixY)
-
-    sevenX = PlayerLocX - 1
-    sevenY = PlayerLocY + 1
-    if sevenX < 0 then sevenX = 1
-    if sevenY < 0 then sevenY = 0
-    seven$ = map1$(sevenX, sevenY)
-
-    eightX = PlayerLocX
-    eightY = PlayerLocY + 1
-    if eightX < 0 then eightX = 1
-    if eightY < 0 then eightY = 0
-    eight$ = map1$(eightX, eightY)
-
-    nineX = PlayerLocX + 1
-    nineY = PlayerLocY + 1
-    if nineX < 0 then nineX = 1
-    if nineY < 0 then nineY = 0
-    nine$ = map1$(nineX, nineY)
-
-    tenX = PlayerLocX - 2
-    tenY = PlayerLocY - 2
-    if tenX < 0 then tenX = 0
-    if tenY < 0 then tenY = 0
-    ten$ = map1$(tenX, tenY)
-
-    elevenX = PlayerLocX - 1
-    elevenY = PlayerLocY - 2
-    if elevenX < 0 then elevenX = 0
-    if elevenY < 0 then elevenY = 0
-    eleven$ = map1$(elevenX, elevenY)
-
-    twelveX = PlayerLocX
-    twelveY = PlayerLocY - 2
-    if twelveY < 0 then twelveY = 0
-    twelve$ = map1$(twelveX, twelveY)
-
-    thirteenX = PlayerLocX + 1
-    thirteenY = PlayerLocY - 2
-    if thirteenX < 0 then thirteenX = 0
-    if thirteenY < 0 then thirteenY = 0
-    thirteen$ = map1$(thirteenX, thirteenY)
-
-    fourteenX = PlayerLocX + 2
-    fourteenY = PlayerLocY - 2
-    if fourteenX < 0 then fourteenX = 0
-    if fourteenY < 0 then fourteenY = 0
-    fourteen$ = map1$(fourteenX, fourteenY)
-
-    fifteenX = PlayerLocX - 2
-    fifteenY = PlayerLocY - 1
-    if fifteenX < 0 then fifteenX = 0
-    if fifteenY < 0 then fifteenY = 0
-    fifteen$ = map1$(fifteenX, fifteenY)
-
-    sixteenX = PlayerLocX + 2
-    sixteenY = PlayerLocY - 1
-    if sixteenX < 0 then sixteenX = 0
-    if sixteenY < 0 then sixteenY = 0
-    sixteen$ = map1$(sixteenX, sixteenY)
-
-    seventeenX = PlayerLocX - 2
-    seventeenY = PlayerLocY
-    if seventeenX < 0 then seventeenX = 0
-    seventeen$ = map1$(seventeenX, seventeenY)
-
-    eighteenX = PlayerLocX + 2
-    eighteenY = PlayerLocY
-    if eighteenX < 0 then eighteenX = 0
-    eighteen$ = map1$(eighteenX, eighteenY)
-
-    nineteenX = PlayerLocX - 2
-    nineteenY = PlayerLocY + 1
-    if nineteenX < 0 then nineteenX = 0
-    if nineteenY < 0 then nineteenY = 0
-    nineteen$ = map1$(nineteenX, nineteenY)
-
-    twentyX = PlayerLocX + 2
-    twentyY = PlayerLocY + 1
-    if twentyX < 0 then twentyX = 0
-    if twentyY < 0 then twentyY = 0
-    twenty$ = map1$(twentyX, twentyY)
-
-    twentyoneX = PlayerLocX - 2
-    twentyoneY = PlayerLocY + 2
-    if twentyoneX < 0 then twentyoneX = 0
-    if twentyoneY < 0 then twentyoneY = 0
-    twentyone$ = map1$(twentyoneX, twentyoneY)
-
-    twentytwoX = PlayerLocX - 1
-    twentytwoY = PlayerLocY + 2
-    if twentytwoX < 0 then twentytwoX = 0
-    if twentytwoY < 0 then twentytwoY = 0
-    twentytwo$ = map1$(twentytwoX, twentytwoY)
-
-    twentythreeX = PlayerLocX
-    twentythreeY = PlayerLocY + 2
-    if twentythreeY < 0 then twentythreeY = 0
-    twentythree$ = map1$(twentythreeX, twentythreeY)
-
-    twentyfourX = PlayerLocX + 1
-    twentyfourY = PlayerLocY + 2
-    if twentyfourX < 0 then twentyfourX = 0
-    if twentyfourY < 0 then twentyfourY = 0
-    twentyfour$ = map1$(twentyfourX, twentyfourY)
-
-    twentyfiveX = PlayerLocX + 2
-    twentyfiveY = PlayerLocY + 2
-    if twentyfiveX < 0 then twentyfiveX = 0
-    if twentyfiveY < 0 then twentyfiveY = 0
-    twentyfive$ = map1$(twentyfiveX, twentyfiveY)
-   
-    print
-    print ten$ + eleven$ + twelve$ + thirteen$ + fourteen$
-    print fifteen$ + one$ + two$ + three$ + sixteen$
-    print seventeen$ + four$ + "@" + six$ + eighteen$
-    print nineteen$ + seven$ + eight$ + nine$ + twenty$
-    print twentyone$ + twentytwo$ + twentythree$ + twentyfour$ + twentyfive$
-    print
-
-end function
 
 
 ''''Function TCPOpen()''''''''''
@@ -317,3 +398,11 @@ Function TCPClose(handle)
 calldll #me, "CloseA",handle As Long,_
 TCPClose As Long
 End Function
+
+'*** File check ***
+function fileExists(path$, filename$)
+  'dimension the array info$( at the beginning of your program
+  files path$, filename$, info$()
+  fileExists = val(info$(0, 0))  'non zero is true
+end function
+

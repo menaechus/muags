@@ -10,6 +10,7 @@ global handle
 global text$
 global PlayerLocX
 global PlayerLocY
+global PlayerLocZ
 global cmd
 global dummy$
 GLOBAL PORT
@@ -37,12 +38,6 @@ if fileExists(configDir$, "config.conf") then
     notice "Error!" + chr$(13) + "\data\config.conf is missing, client cannot be started!"
     goto [quit.main2]
   end if
-if fileExists(mapDir$, "maps.list") then
-
-  else
-    notice "Error!" + chr$(13) + "\data\maps\maps.list is missing, client cannot be started!"
-    goto [quit.main2]
-  end if
 
 ConfigFile$ = configDir$ + "config.conf"
 
@@ -54,18 +49,6 @@ ConfigFile$ = configDir$ + "config.conf"
     close #conf
     PORT = val(port$)
 
-mapFile$ = mapDir$ + "maps.list"
-
-[map.list.read]
-    s = 0
-    open mapFile$ for input as #maplist
-[map.list.loop]
-    s = s + 1
-    input #maplist, maplist$(s)
-    if eof(#maplist) = 0 then [map.list.loop]
-[map.list.skipIt]
-
-    close #maplist
 
 'program starts here
 
@@ -73,7 +56,7 @@ mapFile$ = mapDir$ + "maps.list"
 
     '-----Begin code for #main
 
-    nomainwin
+'    nomainwin
     WindowWidth = 1024
     WindowHeight = 768
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -133,6 +116,7 @@ mapFile$ = mapDir$ + "maps.list"
         let rec$ = ""
         let rec$ = TCPReceive$(handle)
         if rec$ <> "" then
+            print rec$
             ad = CheckData(rec$)
         end if
 
@@ -330,22 +314,24 @@ mapFile$ = mapDir$ + "maps.list"
 
 '---Funcs---
 function SendData(data$)
-    let func = TCPSend(handle,test$)
+    let func = TCPSend(handle,data$)
         CallDLL #kernel32, "Sleep", _
         10 As Long, _
         rc As Void
 end function
 
 function CheckData(rec$)
-    
+
 end function
 
 function OpenConnection(user$,pass$) ' not ready
     let handle = TCPOpen(address$,port)
     let connect = 1
-    data1$ = "00000" + VERSION$
+    data1$ = "00000 " + VERSION$
+        print data1$
     sa = SendData(data1$)
     let rec$ = TCPReceive$(handle)
+    print rec$
     if word$(rec$,1) = "00000" and word$(rec$, 4) <> "" then
         SVERSION$ = word$(rec$, 4)
         notice "Wrong version, you have " + VERSION$ + " and the server has " + SVERSION$ + "."
@@ -359,7 +345,6 @@ function OpenConnection(user$,pass$) ' not ready
             notice "Logged in."
          end if
     end if
-
 end function
 
 

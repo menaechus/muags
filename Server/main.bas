@@ -4,16 +4,15 @@
 
 dim info$(10, 10)
 GLOBAL vc
-GLOBAL maplist$
+
 GLOBAL VERSION$ 
 GLOBAL MAXPLAYERS
 GLOBAL PORT
-GLOBAL map1$
+
 GLOBAL confdir$
 GLOBAL extconfdir$
 GLOBAL mapdir$
-dim map1$(1000,1000)
-dim maplist$(1000)
+
 GLOBAL accountc$
 GLOBAL passwordc$
 GLOBAL player$
@@ -80,28 +79,7 @@ dim player$(MAXPLAYERS, 1000)
     Next
 
 
-'Read the maps.list file
-    mapFile$ = mapdir$ + "maps.list"
-[map.list.read]
-    s = 0
-    open mapFile$ for input as #maplist
-[map.list.loop]
-    s = s + 1
-    input #maplist, maplist$(s)
-    if eof(#maplist) = 0 then [map.list.loop]
-[map.list.skipIt]
 
-    close #maplist
-
-'read the maps to the memory
-'this sucks big time, i have no idea what it's supposed to do, so feel free to destroy/rewrite
-[map.loading]
-    for ss = 1 to 1000
-        if maplist$(ss) <> "" then
-            mapfile$ = maplist$(ss)
-            sa = MapToMemory(mapfile$,ss)
-        end if
-    next ss
 [setup.main.Window]
 
     '-----Begin code for #main
@@ -208,6 +186,7 @@ dim player$(MAXPLAYERS, 1000)
             I = InStr(buf$, Chr$(13))
             If I = 0 Then I = InStr(buf$, Chr$(10))
                 If I <> 0 Then
+                    print buf$
                     ad = CheckCommand(Player, buf$)
                 end if
             player.inbuf$(Player) = Mid$(player.inbuf$(Player), I + 1)
@@ -254,6 +233,7 @@ dim player$(MAXPLAYERS, 1000)
 
 '*** SUBS/Funcs for the engine ***
 function CheckCommand(Player, buf$) ' check the command the client sent for the server
+       print buf$
        if word$(buf$, 1) = "00000" then 'first the version number check
             CVersion$ = word$(buf, 2)
             ad = VersionCheck(CVersion$, VERSION$)
@@ -345,30 +325,7 @@ function VersionCheck(ClientVersion$, ServerVersion$) ' version check
 
 end function
 
-function MapToMemory(mapfile$,mapid) ' map to memory reading NOT READY
-    if mapid = 1 then
-        mapfile2$ = mapdir$ + mapfile$ 
-        open mapfile2$ for input as #1
-        [loop]
-            input #1, dummy$(x)
-            x = x + 1
-            if eof(#1) = 0 then [loop]
-        close #1
-        x = x - 1
-        y = 0
 
-        xx = 0
-        yy = 0
-
-        for xx = 0 to x
-            for yy = 0 to 1000
-            map1$(yy,xx) = mid$(dummy$(xx), yy, 1)
-        'if map1$(xx,yy) = "" then yy = 1000
-            next yy
-        next xx
-    end if
-
-end function
 
 '*** Application Procedures ***
 function broadcast(from,buf$) ' this will become the channel system some day

@@ -13,3 +13,4 @@ One item per line
   * SpellValue
   * hit message
   * crit message
+  * % chance of happening

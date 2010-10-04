@@ -2,7 +2,7 @@
 
 = Introduction =
 
-defiations for server/data/items/spells/*.ispell
+definations for server/data/items/spells/*.ispell
 
 
 = Details =

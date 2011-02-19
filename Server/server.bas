@@ -7,6 +7,7 @@ GLOBAL vc
 GLOBAL XPrate
 GLOBAL HPregen
 GLOBAL MPregen
+GLOBAL EPregen
 
 GLOBAL VERSION$ 
 GLOBAL MAXPLAYERS
@@ -55,19 +56,39 @@ if fileExists(mapdir$, "maps.list") then
 'Read the config.conf file
 [conf.read]
     open conff$ for input as #conf
-        line input #conf, VERSION$
-        line input #conf, maxplayers$
-        line input #conf, port$
-        line input #conf, XPrate$
-        line input #conf, HPregenrate$
-        line input #conf, MPregenrate$
-    close #conf
-    MAXPLAYERS = val(maxplayers$)
-    PORT = val(port$)
-    XPrate = val(XPrate$)
-    HPregen = val(HPregenrate$)
-    MPregen = val(MPregenrate$)
+            while not(eof(#conf))
+                line input #conf, contents$
 
+                Option$ = word$(contents$, 1, "=")
+                Value$  = word$(contents$, 2, "=")
+
+                select case trim$(Option$)
+                    Value$ = trim$(Value$)
+
+                    case "Version"
+                    VERSION$ = Value$
+
+                    case "Maxplayers"
+                    MAXPLAYERS = val(Value$)
+
+                    case "Port"
+                    PORT = val(Value$)
+
+                    case "ExpRate"
+                    XPrate = val(Value$)
+
+                    case "HPregen"
+                    HPregen = val(Value$)
+
+                    case "MPregen"
+                    MPregen = val(Value$)
+
+                    case "EPregen"
+                    EPregen = val(Value$)
+
+                end select
+            wend
+    close #conf
 
 'These need to be set AFTER the config file reading
 admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.

@@ -11,6 +11,7 @@ reserved numbers
    *  player$(x, 0) = account name
    *  player$(x, 1) = account level
    *  player$(x, 2) = version ok (1/0)
+   *  player$(x, 3) = login ok (1/0)
    *  player$(x, 200) = char 1 race
    *  player$(x, 201) = char 1 gender
    *  player$(x, 202) = char 1 name

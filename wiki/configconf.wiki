@@ -12,3 +12,4 @@ Servers config file "config.conf". One item per line
    * Exp rate
    * hp regen rate
    * mp regen rate
+   * ep regen rate

@@ -70,4 +70,16 @@ ConfigFile$ = configDir$ + "config.conf"
             wend
     close #ConfigFile  
   
-'Main program starts here!  
+'Main program starts here!
+'Client will use one "program" for login, one for char selection and one for the game
+'so that the player only sees one window of the above at any given time  
+
+'1. Login/user creating window
+
+'2. Character selection/creating screen
+
+'3. Game window
+
+
+
+

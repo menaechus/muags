@@ -1,0 +1,2 @@
+MapName = Testarea
+MapContinent = First

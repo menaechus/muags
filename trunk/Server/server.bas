@@ -197,6 +197,7 @@ Dim PLAYER$(MAXPLAYERS, 1000)
     If player.sock(Player) <> -1 Then
         buf$ = player.inbuf$(Player)
         If Len(buf$) > 2 Then
+            print "Buffer= " ; buf$
             I = InStr(buf$, Chr$(13))
             If I = 0 Then I = InStr(buf$, Chr$(10))
                 If I <> 0 Then

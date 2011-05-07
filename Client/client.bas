@@ -105,7 +105,28 @@ ConfigFile$ = confdir$ + "config.conf"
     wait
 
 [login]   'Perform action for the button named 'login'
-    'Insert your own code here
+    print #login.username, "!contents? user$";
+    print #login.password, "!contents? pass$";
+    if user$ <> "" and pass$ <> "" then
+        goto [auth.login]
+    else
+        notice "Please type username and password"
+        print #login.username, ""
+        print #login.password, ""
+        goto [login.inputLoop]
+    end if
+
+    wait
+
+[auth.login]
+    if user$ <> "" and pass$ <> "" then
+          hd = OpenConnection(user$,pass$)
+    end if
+    if fail = 1 then
+          let func = TCPClose(handle)
+          let connect = 0
+    end if
+
     wait
 
 [newAccount]   'Perform action for the button named 'newacc'
@@ -115,6 +136,8 @@ ConfigFile$ = confdir$ + "config.conf"
 [quit.login] 'End the program
     close #login
     close #me
+    let func = TCPClose(handle)
+    let connect = 0
     end
 
 '--- 2. Character selection/creating screen ---
@@ -123,7 +146,7 @@ ConfigFile$ = confdir$ + "config.conf"
 
 
 
-
+'--- Auth code check ---
 
 '*** File check ***
 function fileExists(path$, filename$)
@@ -131,3 +154,76 @@ function fileExists(path$, filename$)
   files path$, filename$, info$()
   fileExists = val(info$(0, 0))  'non zero is true
 end function
+
+
+'---Network Funcs---
+function SendData(data$)
+    let func = TCPSend(handle,data$)
+        CallDLL #kernel32, "Sleep", _
+        10 As Long, _
+        rc As Void
+end function
+
+function CheckData(rec$)
+
+end function
+
+function OpenConnection(user$,pass$) ' not ready
+    let handle = TCPOpen(address$,port)
+    let connect = 1
+    data1$ = "00000 " + VERSION$
+        print data1$
+    sa = SendData(data1$)
+    let rec$ = TCPReceive$(handle)
+    print "receive= "; rec$
+    if word$(rec$,1) = "00000" and word$(rec$, 4) <> "" then
+        SVERSION$ = word$(rec$, 4)
+        notice "Wrong version, you have " + VERSION$ + " and the server has " + SVERSION$ + "."
+        fail = 1
+    end if
+    if fail = 0 then
+         data1$ = "00002 " + user$ + " " + pass$
+         sa = SendData(data1$)
+         let rec$ = TCPReceive$(handle)
+         if word$(rec$,1) = "00002" and word$(rec$,2) = "ok" then
+            notice "Logged in."
+         end if
+    end if
+end function
+
+
+
+''''Function TCPOpen()''''''''''
+Function TCPOpen(address$,Port)
+Timeout=1000
+calldll #me, "Open", address$ As ptr,_
+Port As Long,_
+Timeout As Long, re As Long
+TCPOpen=re
+End Function
+
+''''Function TCPReceive$()''''''''''
+Function TCPReceive$(handle)
+buffer=4096
+all=0
+calldll #me, "ReceiveA" ,handle As Long,_
+buffer As Long,_
+all As Long, re As long
+if re<>0 then TCPReceive$ = winstring(re)
+End Function
+
+''''Function TCPSend()''''''''''
+Function TCPSend(handle,text1$)
+text1$ = text1$ + chr$(7) + chr$(13) + chr$(10)
+print text1$
+calldll #me, "PrintA", handle As Long,_
+text1$ As ptr,re As Long
+TCPSend=re
+text1$ = ""
+End Function
+
+''''Function TCPClose()''''''''''
+Function TCPClose(handle)
+calldll #me, "CloseA",handle As Long,_
+TCPClose As Long
+End Function

@@ -18,13 +18,15 @@ GLOBAL maplist$
 GLOBAL VERSION$
 GLOBAL address$
 GLOBAL fail
-configDir$ = DefaultDir$ + "\data\"
-mapDir$ = configDir$ + "maps\"
+'--- Directory definations
+confdir$ = DefaultDir$ + "\data\"
+mapDir$ = confdir$ + "maps\"
+'--- End directory def
 dim info$(10, 10)
 dim dummy$(1000)
-dim map$(1000,10) 
-	'map$(x,0) = MapName from maplist$
-	'map$(x,1) = 
+dim map$(1000,10)
+    'map$(x,0) = MapName from maplist$
+    'map$(x,1) =
 dim maplist$(1000)
 dim playerData$(1000,1000)
 connect = 0
@@ -32,22 +34,22 @@ fail = 0
 '--- END OF DEFINATIONS ---
 
 '--- File checks for the important files ---
-if fileExists(configDir$, "config.conf") then
+if fileExists(confdir$, "config.conf") then
     'goto [conf.read]
   else
     notice "Error!" + chr$(13) + "\data\config.conf is missing, client cannot be started!"
     goto [quit.main2]
   end if
-  
+
 if fileExists(mapDir$, "maps.list") then
     'goto [map.read]
   else
     notice "Error!" + chr$(13) + "\data\maps\maps.list is missing, client cannot be started!"
     goto [quit.main2]
   end if
-  
+
 '--- Read the config.conf file ---
-ConfigFile$ = configDir$ + "config.conf"
+ConfigFile$ = confdir$ + "config.conf"
 [conf.read]
     open ConfigFile$ for input as #conf
             while not(eof(#conf))
@@ -70,16 +72,16 @@ ConfigFile$ = configDir$ + "config.conf"
 
                 end select
             wend
-    close #ConfigFile  
-  
+    close #conf
+
 'Main program starts here!
 'Client will use one "program" for login, one for char selection and one for the game
-'so that the player only sees one window of the above at any given time  
+'so that the player only sees one window of the above at any given time
 
 '--- 1. Login/user creating window ---
 [setup.login.Window]
     '-----Begin code for #login
-    nomainwin
+'    nomainwin
     WindowWidth = 210
     WindowHeight = 150
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -112,8 +114,9 @@ ConfigFile$ = configDir$ + "config.conf"
 
 [quit.login] 'End the program
     close #login
-	end
-	
+    close #me
+    end
+
 '--- 2. Character selection/creating screen ---
 
 '--- 3. Game window ---
@@ -121,3 +124,10 @@ ConfigFile$ = configDir$ + "config.conf"
 
 
 
+
+'*** File check ***
+function fileExists(path$, filename$)
+  'dimension the array info$( at the beginning of your program
+  files path$, filename$, info$()
+  fileExists = val(info$(0, 0))  'non zero is true
+end function

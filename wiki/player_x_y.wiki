@@ -6,6 +6,8 @@
 reserved numbers
 
 
+char 1 = current char, will load these once character is selected
+
 = Details =
    *  x = player socket
    *  player$(x, 0) = account name

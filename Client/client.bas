@@ -18,6 +18,10 @@ GLOBAL maplist$
 GLOBAL VERSION$
 GLOBAL address$
 GLOBAL fail
+GLOBAL versionFail
+GLOBAL ServerNews$
+GLOBAL LogIn
+ServerNews$ = "Didn't get the news from the server.."
 '--- Directory definations
 confdir$ = DefaultDir$ + "\data\"
 mapDir$ = confdir$ + "maps\"
@@ -77,26 +81,29 @@ ConfigFile$ = confdir$ + "config.conf"
 'Main program starts here!
 'Client will use one "program" for login, one for char selection and one for the game
 'so that the player only sees one window of the above at any given time
+'--- 0. Open the connection and check version and get news!
+hd = OpenConnection(empty$)
 
 '--- 1. Login/user creating window ---
 [setup.login.Window]
     'nomainwin
-    WindowWidth = 210
-    WindowHeight = 150
+    WindowWidth = 390
+    WindowHeight = 250
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
     UpperLeftY=int((DisplayHeight-WindowHeight)/2)
 
     '-----Begin GUI objects code
-    statictext #login.user, "Username",   5,  10,  63,  20
+    statictext #login.news, ServerNews$,   5,  5,  380,  165
+    statictext #login.user, "Username",   5,  175,  63,  20
     TextboxColor$ = "white"
-    textbox #login.username,  90,   5, 100,  25
-    statictext #login.pass, "Password",   5,  35,  60,  20
-    textbox #login.password,  90,  30, 100,  25
-    button #login.login,"Login",[login], UL,   5,  55, 185,  25
-    button #login.newacc,"Create new account",[newAccount], UL,  5,  85, 185,  25
+    textbox #login.username,  90,   170, 100,  25
+    statictext #login.pass, "Password",   195,  175,  60,  20
+    textbox #login.password,  280,  170, 100,  25
+    button #login.login,"Login",[login], UL,   5,  195, 185,  25
+    button #login.newacc,"Create new account",[newAccount], UL,  195,  195, 185,  25
     '-----End GUI objects code
 
-    open "MUAGS - Login" for window as #login
+    open "MUAGS - Login" for window_nf as #login
     print #login, "font ms_sans_serif 10"
     print #login, "trapclose [quit.login]"
 
@@ -119,7 +126,7 @@ ConfigFile$ = confdir$ + "config.conf"
 
 [auth.login]
     if user$ <> "" and pass$ <> "" then
-          hd = OpenConnection(user$,pass$)
+          hd = OpenConnection(empty$)
     end if
     if fail = 1 then
           let func = TCPClose(handle)
@@ -129,7 +136,7 @@ ConfigFile$ = confdir$ + "config.conf"
     wait
 
 [newAccount]   'Perform action for the button named 'newacc'
-    'popup windows asking for username, password and email
+ 'popup windows asking for username, password and email
     'then send "00001 username password email" to the server
     WindowWidth = 245
     WindowHeight = 180
@@ -151,10 +158,34 @@ ConfigFile$ = confdir$ + "config.conf"
 
     open "Account creation" for window as #accountcreation
     print #accountcreation, "font ms_sans_serif 10"
-    print #accountcreation, "trapclose [quit.accountcreation]"
+    print #accountcreation, "trapclose [create.cancel]"
 
 [accountcreation.inputLoop]   'wait here for input event
     wait
+
+[create.acc]
+    print #accountcreation.usernamecrea, "!contents? CreateUser$";
+    print #accountcreation.passwordcrea, "!contents? CreatePass$";
+    print #accountcreation.passwordreusercrea, "!contents? CreatePass2$";
+    print #accountcreation.emailcrea, "!contents? CreateEmail$";
+
+    if CreateUser$ <> "" then
+        if CreatePass$ <> "" then
+            if CreatePass2$ <> "" then
+                if CreateEmail$ <> "" then
+                    if CreatePass$ = CreatePass2$ then
+                        CreateData$ = "00001 " + CreateUser$ + " " + CreatePass$ + " " + CreateEmail$
+                        ca = SendData(CreateData$)
+                    else
+
+                    end if
+                end if
+             end if
+         end if
+    end if
+
+    wait
+
 [create.cancel]
     close #accountcreation
     wait
@@ -166,6 +197,7 @@ ConfigFile$ = confdir$ + "config.conf"
     end
 
 '--- 2. Character selection/creating screen ---
+' LogIn = 1 before opening this window!
 
 '--- 3. Game window ---
 
@@ -181,35 +213,30 @@ end function
 
 '---Network Funcs---
 function SendData(data$)
+    print "Data sent: " + data$
     let func = TCPSend(handle,data$)
         CallDLL #kernel32, "Sleep", _
-        10 As Long, _
+        30 As Long, _
         rc As Void
 end function
 
 function CheckData(rec$)
-
+    print "CheckData rec: " + rec$
+    recn$ = word$(rec$, 2)
+    select case recn$
+        case "00000"
+            da = VersionCheck(rec$)
+        case "00002"
+            if LogIn = 0 then
+                da = LogInCheck(rec$)
+            end if
+        case "00004"
+            da = ReadNews(rec$)
+    end select
 end function
 
-function OpenConnection(user$,pass$) ' not ready
-    let handle = TCPOpen(address$,port)
-    let connect = 1
-    data1$ = "00000 " + VERSION$
-        print "output: " + data1$ + " !!! "
-    sa = SendData(data1$)
-    let rec$ = TCPReceive$(handle)
-    print "input: "; rec$
-    if rec$ = "" then
-      notice "No connection to the server."
-      print "no connection"
-      fail = 2
-    end if
-    if word$(rec$,1) = "00000" and word$(rec$, 4) <> "" then
-        SVERSION$ = word$(rec$, 4)
-        notice "Wrong version, you have " + VERSION$ + " and the server has " + SVERSION$ + "."
-        fail = 1
-    end if
-    if fail = 0 then
+function LogIn(user$,pass$)
+    if versionFail <> 1 then
          data1$ = "00002 " + user$ + " " + pass$
          sa = SendData(data1$)
          let rec$ = TCPReceive$(handle)
@@ -217,6 +244,46 @@ function OpenConnection(user$,pass$) ' not ready
             notice "Logged in."
          end if
     end if
+end function
+
+function LogInCheck(rec$)
+    if word$(rec$,2) = "ok" then
+          notice "Logged in."
+          LogIn = 1
+    else
+          notice "Login failed."
+          LogIn = 0
+    end if
+end function
+
+function VersionCheck(rec$)
+        SVERSION$ = word$(rec$, 5)
+            if SVERSION$ <> VERSION$ then
+                notice "Wrong version, you have " + VERSION$ + " and the server has " + SVERSION$ + "."
+                versionFail = 1
+            end if
+            print "VersionFail: " ; versionFail
+end function
+
+function ReadNews(rec$)
+    newslen = len(rec$)
+    ServerNews1$ = mid$(rec$, 14)
+    newslen = len(ServerNews1$) - 3
+    ServerNews$ = left$(ServerNews1$, newslen)
+    print "ServNews: "; ServerNews$
+end function
+
+function OpenConnection(empty$) ' not ready
+    let handle = TCPOpen(address$,PORT)
+    let connect = 1
+    data1$ = "00000 " + VERSION$
+    sa = SendData(data1$)
+    let rec$ = TCPReceive$(handle)
+    rec = CheckData(rec$)
+    data1$ = "00004"
+    sa = SendData(data1$)
+    let rec$ = TCPReceive$(handle)
+    rec = CheckData(rec$)
 end function
 
 
@@ -231,6 +298,7 @@ end function
 
 ''''Function TCPOpen()''''''''''
 Function TCPOpen(address$,Port)
+print "tcpopen: address:port : " + address$ + ":" ; Port
 Timeout=1000
 calldll #me, "Open", address$ As ptr,_
 Port As Long,_

@@ -19,3 +19,7 @@ this is the list of the authcodes used in the MUAGS
 * 00004 is used for gamenews (client send only 00004 and server responds with 00004 followed by gamenews)
 
 * 90000 to 99999 is reserved for helper/coder/admin commands
+
+* 90001 is user for to get user info based on character name
+
+* 90002 is used for changing account level

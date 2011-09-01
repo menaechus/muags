@@ -155,29 +155,6 @@ ConfigFile$ = confdir$ + "config.conf"
 
 [accountcreation.inputLoop]   'wait here for input event
     wait
-
-[create.acc]
-    CreatePasswdOK = 0
-    print #accountcreation.usernamecrea, "!contents? usercreate$";
-    print #accountcreation.passwordcrea, "!contents? passwdcreate$";
-    print #accountcreation.passwordreusercrea, "!contents? passwdcreate2$";
-    print #accountcreation.emailcrea, "!contents? emailcreate$";
-    if passwdcreate$ = passwdcreate2$ then
-        CreatePasswdOK = 1
-    else
-        CreatePasswdOK = 0
-        notice "Passwords do not match, please re-type them."
-        goto [accountcreation.inputLoop]
-    end if
-
-    if CreatePasswdOK = 1 then
-        dataCreate$ = "00001 " + usercreate$ + " " + passwdcreate$ + " " + emailcreate$
-        print dataCreate$
-        sa = SendData(dataCreate$)
-    end if
-    
-    wait
-
 [create.cancel]
     close #accountcreation
     wait
@@ -236,14 +213,8 @@ function OpenConnection(user$,pass$) ' not ready
          data1$ = "00002 " + user$ + " " + pass$
          sa = SendData(data1$)
          let rec$ = TCPReceive$(handle)
-         if word$(rec$,1) = "00002" then
-            select case word$(rec$,2) 
-                case "ok"
-                   notice "Logged in."
-                case "failed"
-                    notice "Login failed."
-                
-            end select
+         if word$(rec$,1) = "00002" and word$(rec$,2) = "ok" then
+            notice "Logged in."
          end if
     end if
 end function

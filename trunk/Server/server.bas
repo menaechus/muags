@@ -270,7 +270,7 @@ function CheckCommand(Player, buf$) ' check the command the client sent for the 
             accountc$ = word$(buf$, 2)
             passwordc$ = word$(buf$, 3)
             emailc$ = word$(buf$, 4)
-            ad = CreateAccount(accountc$,passwordc$)
+            ad = CreateAccount(accountc$,passwordc$,emailc$)
             output$ = "00001 ok"
             plr = 101
             a = pbroadcast(Player, plr, output$)
@@ -317,7 +317,7 @@ function CreateAccount(Account$,Passwd$,Email$) ' used for the acc creation
     #main.log "Create Acc: " + Account$ + " : " + Passwd$
     Acc$ = DefaultDir$ + "/data/accounts/" + Account$
     Pass$ = DefaultDir$ + "/data/accounts/" + Account$ + "/" + Account$ + ".o"
-    ctime$ = date$ + " : " + time$
+    ctime$ = date$() + " : " + time$()
     result = mkdir(Acc$)
     if result <> 0 then ErrorLog = 0001
     open Pass$ for output as #acccreate

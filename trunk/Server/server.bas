@@ -23,23 +23,22 @@ GLOBAL PLAYER$
 GLOBAL logok
 GLOBAL admin 'we will remove this later on
 
+GLOBAL ServerNews$
+GLOBAL NewsFile$
+
 'directory definations
 confdir$ = DefaultDir$ + "\data\"
-extconfdir$ = conffile$ + "\configs\"
+extconfdir$ = confdir$ + "\configs\"
 mapdir$ = confdir$ + "\maps\"
 
 'configuration and needed files definations
 levelconf$ = extconfdir$ + "level.exp"
 conff$ = confdir$ + "config.conf"
 mapconf$ = mapdir$ + "maps.list"
+NewsFile$ = confdir$ + "news.file"
 
 'file checks for the important files
-if fileExists(confdir$, "config.conf") then
-    goto [conf.read]
-  else
-    notice "Error!" + chr$(13) + "\data\config.conf is missing, server cannot be started!"
-    goto [quit.main2]
-  end if
+
 if fileExists(extconfdir$, "level.exp") then
 
   else
@@ -53,6 +52,18 @@ if fileExists(mapdir$, "maps.list") then
     goto [quit.main2]
   end if
 
+if fileExists(confdir$, "news.file") then
+    s = ReadNewsFile(NewsFile$)
+   else
+    ServerNews$ = "News file missing!"
+end if
+
+if fileExists(confdir$, "config.conf") then
+    goto [conf.read]
+  else
+    notice "Error!" + chr$(13) + "\data\config.conf is missing, server cannot be started!"
+    goto [quit.main2]
+  end if
 'Read the config.conf file
 [conf.read]
     open conff$ for input as #conf
@@ -89,6 +100,7 @@ if fileExists(mapdir$, "maps.list") then
                 end select
             wend
     close #conf
+
 
 'These need to be set AFTER the config file reading
 admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.
@@ -245,12 +257,24 @@ Dim PLAYER$(MAXPLAYERS, 1000)
     end
 
 '*** SUBS/Funcs for the engine ***
+function ReadNewsFile(NewsFile$)
+    open NewsFile$ for input as #news
+        line input #news, ServerNews$
+    close #news
+    if ServerNews$ = "" then ServerNews$ = "News file empty."
+end function
+
+
+
 function CheckCommand(Player, buf$) ' check the command the client sent for the server
-' NEED TO CHANGE THIS TO USE SELECT CASE!!! and to call other functions more.. it's not necessary to do all the command from here
-       if word$(buf$, 1) = "00000" and PLAYER$(Player, 2) = "0" then 'first the version number check
-            vc = 0
-            CVersion$ = word$(buf$, 2)
-            ad = VersionCheck(CVersion$, VERSION$)
+' NEED TO CHANGE THIS TO call other functions more.. it's not necessary to do all the command from here
+caseword$ = word$(buf$, 1)
+select case caseword$
+  case "00000"
+    if PLAYER$(Player, 2) = "0" then
+      vc = 0
+      CVersion$ = word$(buf$, 2)
+      ad = VersionCheck(CVersion$, VERSION$)
             if vc = 0 then
                 output$ = "00000 Wrong version " + VERSION$
                 print output$
@@ -258,29 +282,29 @@ function CheckCommand(Player, buf$) ' check the command the client sent for the 
                 a = pbroadcast(Player, plr, output$)
                 PLAYER$(Player, 2) = "0"
             else
-                output$ = "00000 Version ok"
+                output$ = "00000 Version ok "  + VERSION$
                 print output$
                 plr = 101
                 a = pbroadcast(Player, plr, output$)
                 PLAYER$(Player, 2) = "1"
             end if
-       end if
+    end if
 
-       if word$(buf$, 1) = "00001" then ' account creation
-            accountc$ = word$(buf$, 2)
-            passwordc$ = word$(buf$, 3)
-            emailc$ = word$(buf$, 4)
-            ad = CreateAccount(accountc$,passwordc$,emailc$)
-            output$ = "00001 ok"
-            plr = 101
-            a = pbroadcast(Player, plr, output$)
-        end if
+  case "00001"
+    accountc$ = word$(buf$, 2)
+    passwordc$ = word$(buf$, 3)
+    emailc$ = word$(buf$, 4)
+    ad = CreateAccount(accountc$,passwordc$,emailc$)
+    output$ = "00001 ok"
+    plr = 101
+    a = pbroadcast(Player, plr, output$)
 
-        if word$(buf$, 1) = "00002" and PLAYER$(Player, 3) = "0" then ' login auth
-            logok = 0
-            account$ = word$(buf$, 2)
-            passwd$ = word$(buf$, 3)
-            ad = Loginauth(account$,passwd$, Player)
+  case "00002"
+    if PLAYER$(Player, 3) = "0" then ' login auth
+      logok = 0
+      account$ = word$(buf$, 2)
+      passwd$ = word$(buf$, 3)
+      ad = Loginauth(account$,passwd$, Player)
                 if logok = 1 then
                     PLAYER$(Player, 3) = "1"
                     output$ = "00002 ok"
@@ -294,15 +318,27 @@ function CheckCommand(Player, buf$) ' check the command the client sent for the 
                     plr = 101
                     a = pbroadcast(Player, plr, output$)
                 end if
-        end if
+    end if
 
-        if word$(buf$, 1) = "00100" then ' chat?
-            if PLAYER$(Player, 3) = "1" then
+  case "00004"
+    output$ = "00004 " + ServerNews$
+    print "case 00004 output: " + output$
+    plr = 101
+    a = pbroadcast(Player, plr, output$)
+
+  case "00100"
+    if PLAYER$(Player, 3) = "1" then
                 output$ = buf$
                 a = broadcast(Player,output$)
-            end if
-        end if
+     end if
 
+  case else
+    output$ = "99999 unknown authcode"
+    plr = 101
+    a = pbroadcast(Player, plr, output$)
+
+
+  end select
 [EndCheckCommand]
 
 end function

@@ -15,3 +15,7 @@ this is the list of the authcodes used in the MUAGS
 * 01000 is used for /tell (Like: "01000 fromplayer toplayer msg")
 
 * 00100 is used for /chat (Like "00100 fromplayer msg")
+
+* 00004 is used for gamenews (client send only 00004 and server responds with 00004 followed by gamenews)
+
+* 90000 to 99999 is reserved for helper/coder/admin commands

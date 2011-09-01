@@ -246,7 +246,7 @@ Dim PLAYER$(MAXPLAYERS, 1000)
 
 '*** SUBS/Funcs for the engine ***
 function CheckCommand(Player, buf$) ' check the command the client sent for the server
-' NEED TO CHANGE THIS TO USE SELECT CASE!!!
+' NEED TO CHANGE THIS TO USE SELECT CASE!!! and to call other functions more.. it's not necessary to do all the command from here
        if word$(buf$, 1) = "00000" and PLAYER$(Player, 2) = "0" then 'first the version number check
             vc = 0
             CVersion$ = word$(buf$, 2)
@@ -269,6 +269,7 @@ function CheckCommand(Player, buf$) ' check the command the client sent for the 
        if word$(buf$, 1) = "00001" then ' account creation
             accountc$ = word$(buf$, 2)
             passwordc$ = word$(buf$, 3)
+            emailc$ = word$(buf$, 4)
             ad = CreateAccount(accountc$,passwordc$)
             output$ = "00001 ok"
             plr = 101
@@ -311,7 +312,7 @@ function MoveCheck(Player, dir) ' this will hold the movement checks
 
 end function
 
-function CreateAccount(Account$,Passwd$) ' used for the acc creation
+function CreateAccount(Account$,Passwd$,Email$) ' used for the acc creation
 ' need to do the code for sql system here
     #main.log "Create Acc: " + Account$ + " : " + Passwd$
     Acc$ = DefaultDir$ + "/data/accounts/" + Account$
@@ -322,6 +323,7 @@ function CreateAccount(Account$,Passwd$) ' used for the acc creation
     open Pass$ for output as #acccreate
         print #acccreate, Passwd$
         print #acccreate, ctime$
+        print #acccreate, Email$
     close #acccreate
 end function
 

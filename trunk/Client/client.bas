@@ -80,8 +80,7 @@ ConfigFile$ = confdir$ + "config.conf"
 
 '--- 1. Login/user creating window ---
 [setup.login.Window]
-    '-----Begin code for #login
-'    nomainwin
+    'nomainwin
     WindowWidth = 210
     WindowHeight = 150
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -130,21 +129,20 @@ ConfigFile$ = confdir$ + "config.conf"
     wait
 
 [newAccount]   'Perform action for the button named 'newacc'
-    'Insert your own code here
+    'popup windows asking for username, password and email
+    'then send "00001 username password email" to the server
+    
     wait
 
 [quit.login] 'End the program
     close #login
+    sa = CloseConn(connect) 'remember to call CloseConn before closing #me
     close #me
-    let func = TCPClose(handle)
-    let connect = 0
     end
 
 '--- 2. Character selection/creating screen ---
 
 '--- 3. Game window ---
-
-
 
 '--- Auth code check ---
 
@@ -172,10 +170,15 @@ function OpenConnection(user$,pass$) ' not ready
     let handle = TCPOpen(address$,port)
     let connect = 1
     data1$ = "00000 " + VERSION$
-        print data1$
+        print "output: " + data1$ + " !!! "
     sa = SendData(data1$)
     let rec$ = TCPReceive$(handle)
-    print "receive= "; rec$
+    print "input: "; rec$
+    if rec$ = "" then
+      notice "No connection to the server."
+      print "no connection"
+      fail = 2
+    end if
     if word$(rec$,1) = "00000" and word$(rec$, 4) <> "" then
         SVERSION$ = word$(rec$, 4)
         notice "Wrong version, you have " + VERSION$ + " and the server has " + SVERSION$ + "."
@@ -191,6 +194,14 @@ function OpenConnection(user$,pass$) ' not ready
     end if
 end function
 
+
+'--- function to close the connection to the server
+function CloseConn(connect)
+    if connect = 1 then 
+      let func = TCPClose(handle)
+      let connect = 0
+     end if
+end function
 
 
 ''''Function TCPOpen()''''''''''

@@ -131,7 +131,55 @@ ConfigFile$ = confdir$ + "config.conf"
 [newAccount]   'Perform action for the button named 'newacc'
     'popup windows asking for username, password and email
     'then send "00001 username password email" to the server
+    WindowWidth = 245
+    WindowHeight = 180
+    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
+    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
+
+    statictext #accountcreation.statictext1, "Username:",   5,  10,  66,  20
+    statictext #accountcreation.statictext2, "Password:",   5,  35,  63,  20
+    statictext #accountcreation.statictext3, "Retype password:",   5,  60, 109,  20
+    statictext #accountcreation.statictext4, "E-mail address:",   5,  85,  94,  20
+    TextboxColor$ = "white"
+    textbox #accountcreation.usernamecrea, 125,   5, 100,  25
+    textbox #accountcreation.passwordcrea, 125,  30, 100,  25
+    textbox #accountcreation.passwordreusercrea, 125,  55, 100,  25
+    textbox #accountcreation.emailcrea, 125,  80, 100,  25
+    button #accountcreation.create,"Create Account",[create.acc], UL,   5,  110, 105,  25
+    button #accountcreation.cancel,"Cancel",[create.cancel], UL,   120,  110, 105,  25
+    '-----End GUI objects code
+
+    open "Account creation" for window as #accountcreation
+    print #accountcreation, "font ms_sans_serif 10"
+    print #accountcreation, "trapclose [quit.accountcreation]"
+
+[accountcreation.inputLoop]   'wait here for input event
+    wait
+
+[create.acc]
+    CreatePasswdOK = 0
+    print #accountcreation.usernamecrea, "!contents? usercreate$";
+    print #accountcreation.passwordcrea, "!contents? passwdcreate$";
+    print #accountcreation.passwordreusercrea, "!contents? passwdcreate2$";
+    print #accountcreation.emailcrea, "!contents? emailcreate$";
+    if passwdcreate$ = passwdcreate2$ then
+        CreatePasswdOK = 1
+    else
+        CreatePasswdOK = 0
+        notice "Passwords do not match, please re-type them."
+        goto [accountcreation.inputLoop]
+    end if
+
+    if CreatePasswdOK = 1 then
+        dataCreate$ = "00001 " + usercreate$ + " " + passwdcreate$ + " " + emailcreate$
+        print dataCreate$
+        sa = SendData(dataCreate$)
+    end if
     
+    wait
+
+[create.cancel]
+    close #accountcreation
     wait
 
 [quit.login] 'End the program
@@ -188,8 +236,14 @@ function OpenConnection(user$,pass$) ' not ready
          data1$ = "00002 " + user$ + " " + pass$
          sa = SendData(data1$)
          let rec$ = TCPReceive$(handle)
-         if word$(rec$,1) = "00002" and word$(rec$,2) = "ok" then
-            notice "Logged in."
+         if word$(rec$,1) = "00002" then
+            select case word$(rec$,2) 
+                case "ok"
+                   notice "Logged in."
+                case "failed"
+                    notice "Login failed."
+                
+            end select
          end if
     end if
 end function
@@ -197,7 +251,7 @@ end function
 
 '--- function to close the connection to the server
 function CloseConn(connect)
-    if connect = 1 then 
+    if connect = 1 then
       let func = TCPClose(handle)
       let connect = 0
      end if

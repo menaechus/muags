@@ -23,3 +23,5 @@ this is the list of the authcodes used in the MUAGS
 * 90001 is user for to get user info based on character name
 
 * 90002 is used for changing account level
+
+* 99999 is generic wrong auth code :P

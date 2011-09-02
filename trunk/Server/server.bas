@@ -213,7 +213,7 @@ Dim PLAYER$(MAXPLAYERS, 1000)
             I = InStr(buf$, Chr$(13))
             If I = 0 Then I = InStr(buf$, Chr$(10))
                 If I <> 0 Then
-                    print "s_loop, Player: "; player.sock(Player)  ;", MSG: "  ;buf$
+                    'print "s_loop, Player: "; player.sock(Player)  ;", MSG: "  ;buf$
                     ad = CheckCommand(Player, buf$)
                 end if
             player.inbuf$(Player) = Mid$(player.inbuf$(Player), I + 1)
@@ -311,6 +311,7 @@ select case caseword$
                     Logfail = 0
                     plr = 101
                     a = pbroadcast(Player, plr, output$)
+
                 else
                     PLAYER$(Player, 3) = "0"
                     output$ = "00002 failed"
@@ -322,7 +323,6 @@ select case caseword$
 
   case "00004"
     output$ = "00004 " + ServerNews$
-    print "case 00004 output: " + output$
     plr = 101
     a = pbroadcast(Player, plr, output$)
 
@@ -333,7 +333,7 @@ select case caseword$
      end if
 
   case else
-    output$ = "99999 unknown authcode"
+    output$ = "99999 unknown authcode" 'for debugging reasons
     plr = 101
     a = pbroadcast(Player, plr, output$)
 
@@ -365,6 +365,7 @@ end function
 
 function Loginauth(Account$,Passwd$,Player)' login auth
     #main.log "LOG Auth: " + Account$ + " : " + Passwd$
+    print "LOG Auth: " + Account$ + " : " + Passwd$
     Acc$ = DefaultDir$ + "/data/accounts/" + Account$
     Acc1$ = Account$ + ".o"
     Pass$ = DefaultDir$ + "/data/accounts/" + Account$ + "/" + Account$ + ".o"
@@ -383,6 +384,7 @@ function Loginauth(Account$,Passwd$,Player)' login auth
     else
         ErrorLog = 0002
     end if
+
 end function
 
 function VersionCheck(ClientVersion$, ServerVersion$) ' version check
@@ -421,7 +423,7 @@ function pbroadcast(user, from, buf$)' this will be used for client-server messa
     End If
     obuf$ = player.outbuf$(user) + buf$ + chr$(7) + chr$(13) + chr$(10)
     player.outbuf$(user) = Send$(player.sock(user), obuf$, Len(obuf$), 0)
-    '#main.log "Sent to Client ";user
+    #main.log "Sent to Client ";user
 End Function
 
 Function SockProc( hWnd, uMsg, sock, lParam )

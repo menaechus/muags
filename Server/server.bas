@@ -26,6 +26,8 @@ GLOBAL admin 'we will remove this later on
 GLOBAL ServerNews$
 GLOBAL NewsFile$
 
+GLOBAL createFail
+
 'directory definations
 confdir$ = DefaultDir$ + "\data\"
 extconfdir$ = confdir$ + "\configs\"
@@ -295,7 +297,11 @@ select case caseword$
     passwordc$ = word$(buf$, 3)
     emailc$ = word$(buf$, 4)
     ad = CreateAccount(accountc$,passwordc$,emailc$)
-    output$ = "00001 ok"
+    if createFail = 0 then 
+        output$ = "00001 ok"
+    else
+        output$ = "00001 username"
+    end if
     plr = 101
     a = pbroadcast(Player, plr, output$)
 
@@ -350,17 +356,32 @@ end function
 
 function CreateAccount(Account$,Passwd$,Email$) ' used for the acc creation
 ' need to do the code for sql system here
+'needs to check if the username is allready taken!
+    userlvl = 1
     #main.log "Create Acc: " + Account$ + " : " + Passwd$
     Acc$ = DefaultDir$ + "/data/accounts/" + Account$
+    char1$ = Acc$ + "/1/"
+    char2$ = Acc$ + "/2/"
+    char3$ = Acc$ + "/3/"
+    char4$ = Acc$ + "/4/"
+    char5$ = Acc$ + "/5/"
+    char6$ = Acc$ + "/6/"
     Pass$ = DefaultDir$ + "/data/accounts/" + Account$ + "/" + Account$ + ".o"
     ctime$ = date$() + " : " + time$()
     result = mkdir(Acc$)
-    if result <> 0 then ErrorLog = 0001
+    if result <> 0 then createFail = 1
     open Pass$ for output as #acccreate
         print #acccreate, Passwd$
         print #acccreate, ctime$
         print #acccreate, Email$
+        print #acccreate, userlvl
     close #acccreate
+    r = mkdir(char1$)
+    r = mkdir(char2$)
+    r = mkdir(char3$)
+    r = mkdir(char4$)
+    r = mkdir(char5$)
+    r = mkdir(char6$)
 end function
 
 function Loginauth(Account$,Passwd$,Player)' login auth

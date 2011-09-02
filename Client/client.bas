@@ -21,6 +21,7 @@ GLOBAL fail
 GLOBAL versionFail
 GLOBAL ServerNews$
 GLOBAL LogIn
+GLOBAL createOK
 LogIn = 0
 ServerNews$ = "Didn't get the news from the server.."
 '--- Directory definations
@@ -178,14 +179,20 @@ hd = OpenConnection(empty$)
                     if CreatePass$ = CreatePass2$ then
                         CreateData$ = "00001 " + CreateUser$ + " " + CreatePass$ + " " + CreateEmail$
                         ca = SendData(CreateData$)
-                    else
-
+                        let rec$ = TCPReceive$(handle)
+                        rec = CheckData(rec$)
                     end if
                 end if
              end if
          end if
     end if
-
+    if createOK = 1 then 
+        notice "Account created."
+        goto [create.cancel]     
+    end if
+    if createOK = 2 then
+        notice "Username taken."
+        goto [accountcreation.inputLoop]
     wait
 
 [create.cancel]
@@ -194,10 +201,9 @@ hd = OpenConnection(empty$)
 
 [quit.login] 'End the program
     close #login
-    sa = CloseConn(connect) 'remember to call CloseConn before closing #me
-    close #me
-    end
-    
+    goto [Final.Quit]
+    wait
+
 [quit.login.next]
     close #login
     goto [Char.start]
@@ -392,6 +398,8 @@ function CheckData(rec$)
     select case recn$
         case "00000"
             da = VersionCheck(rec$)
+        case "00001"
+            da = CreateMsg(rec$)
         case "00002"
             if LogIn = 0 then
                 da = LogInCheck(rec$)
@@ -400,6 +408,14 @@ function CheckData(rec$)
             da = ReadNews(rec$)
     end select
 
+end function
+
+function CreateMsg(rec$)
+    if instr(rec$,"ok") then
+        createOK = 1
+    else 
+        createOK = 2
+    end if
 end function
 
 function LogIn(user$,pass$)

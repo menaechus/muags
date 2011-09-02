@@ -21,6 +21,7 @@ GLOBAL fail
 GLOBAL versionFail
 GLOBAL ServerNews$
 GLOBAL LogIn
+LogIn = 0
 ServerNews$ = "Didn't get the news from the server.."
 '--- Directory definations
 confdir$ = DefaultDir$ + "\data\"
@@ -108,6 +109,8 @@ hd = OpenConnection(empty$)
     print #login, "trapclose [quit.login]"
 
 [login.inputLoop]   'wait here for input event
+    print "versionfail: "; versionFail
+    'goto [login.inputLoop]
     wait
 
 [login]   'Perform action for the button named 'login'
@@ -126,13 +129,12 @@ hd = OpenConnection(empty$)
 
 [auth.login]
     if user$ <> "" and pass$ <> "" then
-          hd = OpenConnection(empty$)
+          hd = LogIn(user$,pass$)
     end if
     if fail = 1 then
-          let func = TCPClose(handle)
-          let connect = 0
+         sa = CloseConn(connect) 'remember to call CloseConn before closing #me
     end if
-
+    if LogIn = 1 then goto [quit.login.next]
     wait
 
 [newAccount]   'Perform action for the button named 'newacc'
@@ -195,12 +197,174 @@ hd = OpenConnection(empty$)
     sa = CloseConn(connect) 'remember to call CloseConn before closing #me
     close #me
     end
+    
+[quit.login.next]
+    close #login
+    goto [Char.start]
+    wait
 
 '--- 2. Character selection/creating screen ---
 ' LogIn = 1 before opening this window!
+[Char.start]
+    WindowWidth = 800
+    WindowHeight = 350
+    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
+    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
 
+
+    '-----Begin GUI objects code
+
+    statictext #character.statictext1, "Account name",   5,  10,  85,  20
+    radiobutton #character.radiobutton2, "1", [radiobutton2Set], [radiobutton2Reset],   5,  90,  32,  25
+    radiobutton #character.radiobutton3, "2", [radiobutton3Set], [radiobutton3Reset], 155,  90,  32,  25
+    radiobutton #character.radiobutton4, "3", [radiobutton4Set], [radiobutton4Reset], 305,  90,  32,  25
+    radiobutton #character.radiobutton5, "4", [radiobutton5Set], [radiobutton5Reset],   5, 210,  32,  25
+    radiobutton #character.radiobutton6, "5", [radiobutton6Set], [radiobutton6Reset], 155, 210,  32,  25
+    radiobutton #character.radiobutton7, "6", [radiobutton7Set], [radiobutton7Reset], 305, 210,  32,  25
+    statictext #character.statictext8, "selected character info", 375,  30, 410, 275
+    button #character.button10,"Enter the game",[button10Click], UL,   5, 295, 115,  25
+    button #character.button11,"New character",[button11Click], UL, 125, 295, 110,  25
+    button #character.button12,"Delete selected character",[button12Click], UL, 615, 295, 175,  25
+
+    '-----End GUI objects code
+
+    open "Character Selection" for graphics_nf_nsb as #character
+    print #character, "down;fill white; flush"
+    print #character, "color black; backcolor white"
+    print #character, "font ms_sans_serif 10"
+    print #character.statictext1, "!font ms_sans_serif 10"
+    print #character.statictext8, "!font ms_sans_serif 10"
+    print #character.button10, "!font ms_sans_serif 10"
+    print #character.button11, "!font ms_sans_serif 10"
+    print #character.button12, "!font ms_sans_serif 10"
+    print #character, "trapclose [quit.character]"
+
+
+[character.inputLoop]   'wait here for input event
+    wait
+
+
+[radiobutton2Set]   'Perform action for the radiobutton named 'radiobutton2'
+
+
+    'Insert your own code here
+
+    wait
+
+
+
+[radiobutton2Reset]   'Perform action for the radiobutton named 'radiobutton2'
+
+    'Insert your own code here
+
+    wait
+
+[radiobutton3Set]   'Perform action for the radiobutton named 'radiobutton3'
+
+
+    'Insert your own code here
+
+    wait
+
+
+
+[radiobutton3Reset]   'Perform action for the radiobutton named 'radiobutton3'
+
+    'Insert your own code here
+
+    wait
+
+[radiobutton4Set]   'Perform action for the radiobutton named 'radiobutton4'
+
+
+    'Insert your own code here
+
+    wait
+
+
+
+[radiobutton4Reset]   'Perform action for the radiobutton named 'radiobutton4'
+
+    'Insert your own code here
+
+    wait
+
+[radiobutton5Set]   'Perform action for the radiobutton named 'radiobutton5'
+
+
+    'Insert your own code here
+
+    wait
+
+
+
+[radiobutton5Reset]   'Perform action for the radiobutton named 'radiobutton5'
+
+    'Insert your own code here
+
+    wait
+
+[radiobutton6Set]   'Perform action for the radiobutton named 'radiobutton6'
+
+
+    'Insert your own code here
+
+    wait
+
+
+
+[radiobutton6Reset]   'Perform action for the radiobutton named 'radiobutton6'
+
+    'Insert your own code here
+
+    wait
+
+[radiobutton7Set]   'Perform action for the radiobutton named 'radiobutton7'
+
+
+    'Insert your own code here
+
+    wait
+
+
+
+[radiobutton7Reset]   'Perform action for the radiobutton named 'radiobutton7'
+
+    'Insert your own code here
+
+    wait
+
+
+[button10Click]   'Perform action for the button named 'button10'
+
+    'Insert your own code here
+
+    wait
+
+
+[button11Click]   'Perform action for the button named 'button11'
+
+    'Insert your own code here
+
+    wait
+
+
+[button12Click]   'Perform action for the button named 'button12'
+
+    'Insert your own code here
+
+    wait
+
+[quit.character] 'End the program
+    close #character
 '--- 3. Game window ---
 
+
+
+[Final.Quit]
+    sa = CloseConn(connect) 'remember to call CloseConn before closing #me
+    close #me
+    end
 '--- Auth code check ---
 
 '*** File check ***
@@ -213,15 +377,17 @@ end function
 
 '---Network Funcs---
 function SendData(data$)
-    print "Data sent: " + data$
     let func = TCPSend(handle,data$)
         CallDLL #kernel32, "Sleep", _
-        30 As Long, _
+        10 As Long, _
         rc As Void
+
 end function
 
+
+
 function CheckData(rec$)
-    print "CheckData rec: " + rec$
+    print "CHECKDATA: " + rec$
     recn$ = word$(rec$, 2)
     select case recn$
         case "00000"
@@ -233,21 +399,21 @@ function CheckData(rec$)
         case "00004"
             da = ReadNews(rec$)
     end select
+
 end function
 
 function LogIn(user$,pass$)
-    if versionFail <> 1 then
-         data1$ = "00002 " + user$ + " " + pass$
-         sa = SendData(data1$)
+   if versionFail <> 1 then
+         logdata$ = "00002 " + user$ + " " + pass$
+         sa = SendData(logdata$)
          let rec$ = TCPReceive$(handle)
-         if word$(rec$,1) = "00002" and word$(rec$,2) = "ok" then
-            notice "Logged in."
-         end if
+         rec = CheckData(rec$)
     end if
 end function
 
 function LogInCheck(rec$)
-    if word$(rec$,2) = "ok" then
+    print "LOGCHECK: " + rec$
+    if instr(rec$,"ok") then
           notice "Logged in."
           LogIn = 1
     else
@@ -262,7 +428,7 @@ function VersionCheck(rec$)
                 notice "Wrong version, you have " + VERSION$ + " and the server has " + SVERSION$ + "."
                 versionFail = 1
             end if
-            print "VersionFail: " ; versionFail
+
 end function
 
 function ReadNews(rec$)
@@ -270,7 +436,7 @@ function ReadNews(rec$)
     ServerNews1$ = mid$(rec$, 14)
     newslen = len(ServerNews1$) - 3
     ServerNews$ = left$(ServerNews1$, newslen)
-    print "ServNews: "; ServerNews$
+
 end function
 
 function OpenConnection(empty$) ' not ready
@@ -284,6 +450,7 @@ function OpenConnection(empty$) ' not ready
     sa = SendData(data1$)
     let rec$ = TCPReceive$(handle)
     rec = CheckData(rec$)
+    let rec$ = ""
 end function
 
 
@@ -314,16 +481,17 @@ calldll #me, "ReceiveA" ,handle As Long,_
 buffer As Long,_
 all As Long, re As long
 if re<>0 then TCPReceive$ = winstring(re)
+print "TCPReceive: " + TCPReceive$
 End Function
 
 ''''Function TCPSend()''''''''''
 Function TCPSend(handle,text1$)
-text1$ = text1$ + chr$(7) + chr$(13) + chr$(10)
-print text1$
+text2$ = text1$ + chr$(7) + chr$(13) + chr$(10)
+print "TCPSend: " + text2$
 calldll #me, "PrintA", handle As Long,_
 text1$ As ptr,re As Long
 TCPSend=re
-text1$ = ""
+text2$ = ""
 End Function
 
 ''''Function TCPClose()''''''''''

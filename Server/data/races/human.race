@@ -1,11 +1,11 @@
-10
-10
-10
-10
-10
-100
-100
-1
-2
-2
-1
+agility = 10
+strength = 10
+wisdom = 10
+dexterity = 10
+intelligence = 10
+hitpoints = 100
+manapoints = 100
+start_loc_mapid = 1
+start_loc_x = 2
+start_loc_y = 2
+start_loc_z = 1

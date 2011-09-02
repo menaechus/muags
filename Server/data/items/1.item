@@ -1,16 +1,16 @@
-1
-1
-100
-6
-50
-50
-Make's miekka
-This sword is totally black and seem's to absord light. It look's like it was made by a master weaponsmith
-3
-0001
-0
-1
-1000
-2
-1000
-1
+item_type = 1
+subclass = 1
+quality = 100
+rarity = 6
+base_damage = 50
+base_armor = 50
+short_desc = Make's miekka
+long_dest = This sword is totally black and seem's to absord light. It look's like it was made by a master weaponsmith
+slot = 3
+inventory_icon = 0001
+model_id = 0
+modifier1_stat = 1
+modifier1_value = 1000
+modifier2_stat = 2
+modifier2_value = 1000
+itemspell = 1

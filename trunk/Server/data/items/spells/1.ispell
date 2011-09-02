@@ -1,5 +1,6 @@
-10
-10
-1000
-As the weapon hits it seems to suck life from the victim and heals the owner
-As the weapon hits it seems to suck HUGE AMOUNTS of life from the victim and healing the OWNER a LOT
+spell_type = 10
+spell_element = 10
+spell_value = 1000
+hit_message = As the weapon hits it seems to suck life from the victim and heals the owner
+crit_message = As the weapon hits it seems to suck HUGE AMOUNTS of life from the victim and healing the OWNER a LOT
+crit_percent = 10

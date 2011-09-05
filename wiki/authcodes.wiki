@@ -14,7 +14,9 @@ this is the list of the authcodes used in the MUAGS
 
 * 00004 is used for gamenews (client send only 00004 and server responds with 00004 followed by gamenews)
 
-* 00005 is used for character creation
+* 00005 is used for character list (client sends 00005 and server responds with a list of clients characters)
+
+* 00006 is used to get character info from the server (client sends 00006 char_num and server responds by sending more info about that char)
 
 * 01000 is used for /tell (Like: "01000 fromplayer toplayer msg")
 

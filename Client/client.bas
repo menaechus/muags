@@ -31,8 +31,8 @@ mapDir$ = confdir$ + "maps\"
 dim info$(10, 10)
 dim dummy$(1000)
 dim map$(1000,10)
-    'map$(x,0) = MapName from maplist$
-    'map$(x,1) =
+    'map$(x,0) = MapID from .i file
+    'map$(x,1) = Mapname from .i file
 dim maplist$(1000)
 dim playerData$(1000,1000)
 connect = 0
@@ -193,6 +193,7 @@ hd = OpenConnection(empty$)
     if createOK = 2 then
         notice "Username taken."
         goto [accountcreation.inputLoop]
+    end if
     wait
 
 [create.cancel]
@@ -211,6 +212,10 @@ hd = OpenConnection(empty$)
 
 '--- 2. Character selection/creating screen ---
 ' LogIn = 1 before opening this window!
+
+charData$ = "00005"
+ad = SendData(CharData$)
+
 [Char.start]
     WindowWidth = 800
     WindowHeight = 350
@@ -228,9 +233,9 @@ hd = OpenConnection(empty$)
     radiobutton #character.radiobutton6, "5", [radiobutton6Set], [radiobutton6Reset], 155, 210,  32,  25
     radiobutton #character.radiobutton7, "6", [radiobutton7Set], [radiobutton7Reset], 305, 210,  32,  25
     statictext #character.statictext8, "selected character info", 375,  30, 410, 275
-    button #character.button10,"Enter the game",[button10Click], UL,   5, 295, 115,  25
-    button #character.button11,"New character",[button11Click], UL, 125, 295, 110,  25
-    button #character.button12,"Delete selected character",[button12Click], UL, 615, 295, 175,  25
+    button #character.button10,"Enter the game",[character.enter], UL,   5, 295, 115,  25
+    button #character.button11,"New character",[character.new], UL, 125, 295, 110,  25
+    button #character.button12,"Delete selected character",[character.delete], UL, 615, 295, 175,  25
 
     '-----End GUI objects code
 
@@ -251,111 +256,66 @@ hd = OpenConnection(empty$)
 
 
 [radiobutton2Set]   'Perform action for the radiobutton named 'radiobutton2'
-
-
-    'Insert your own code here
-
     wait
 
 
 
 [radiobutton2Reset]   'Perform action for the radiobutton named 'radiobutton2'
-
-    'Insert your own code here
-
-    wait
+   wait
 
 [radiobutton3Set]   'Perform action for the radiobutton named 'radiobutton3'
-
-
-    'Insert your own code here
-
     wait
 
 
 
 [radiobutton3Reset]   'Perform action for the radiobutton named 'radiobutton3'
-
-    'Insert your own code here
-
-    wait
+   wait
 
 [radiobutton4Set]   'Perform action for the radiobutton named 'radiobutton4'
-
-
-    'Insert your own code here
-
     wait
 
 
 
 [radiobutton4Reset]   'Perform action for the radiobutton named 'radiobutton4'
-
-    'Insert your own code here
-
-    wait
+   wait
 
 [radiobutton5Set]   'Perform action for the radiobutton named 'radiobutton5'
-
-
-    'Insert your own code here
-
     wait
 
 
 
 [radiobutton5Reset]   'Perform action for the radiobutton named 'radiobutton5'
-
-    'Insert your own code here
-
-    wait
+   wait
 
 [radiobutton6Set]   'Perform action for the radiobutton named 'radiobutton6'
-
-
-    'Insert your own code here
-
-    wait
+   wait
 
 
 
 [radiobutton6Reset]   'Perform action for the radiobutton named 'radiobutton6'
-
-    'Insert your own code here
-
-    wait
+   wait
 
 [radiobutton7Set]   'Perform action for the radiobutton named 'radiobutton7'
-
-
-    'Insert your own code here
-
-    wait
+   wait
 
 
 
 [radiobutton7Reset]   'Perform action for the radiobutton named 'radiobutton7'
+   wait
+
+
+[character.enter]   'Perform action for the button named 'button10'
+   wait
+
+
+[character.new]   'Perform action for the button named 'button11'
 
     'Insert your own code here
 
     wait
 
 
-[button10Click]   'Perform action for the button named 'button10'
-
-    'Insert your own code here
-
-    wait
-
-
-[button11Click]   'Perform action for the button named 'button11'
-
-    'Insert your own code here
-
-    wait
-
-
-[button12Click]   'Perform action for the button named 'button12'
+[character.delete]   'Perform action for the button named 'button12'
 
     'Insert your own code here
 

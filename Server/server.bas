@@ -1,7 +1,6 @@
 'server.bas 19.2.2011
 'MUAGS / Markus Tolin
 
-dim info$(10, 10)
 GLOBAL vc
 
 GLOBAL XPrate
@@ -27,6 +26,12 @@ GLOBAL ServerNews$
 GLOBAL NewsFile$
 
 GLOBAL createFail
+GLOBAL maplist$
+GLOBAL map$
+
+dim info$(10, 10)
+dim maplist$(1000)
+dim map$(1000,10)
 
 'directory definations
 confdir$ = DefaultDir$ + "\data\"
@@ -297,7 +302,7 @@ select case caseword$
     passwordc$ = word$(buf$, 3)
     emailc$ = word$(buf$, 4)
     ad = CreateAccount(accountc$,passwordc$,emailc$)
-    if createFail = 0 then 
+    if createFail = 0 then
         output$ = "00001 ok"
     else
         output$ = "00001 username"
@@ -332,6 +337,9 @@ select case caseword$
     plr = 101
     a = pbroadcast(Player, plr, output$)
 
+  case "00005"
+    ad = GetCharacterList(dummy$)
+
   case "00100"
     if PLAYER$(Player, 3) = "1" then
                 output$ = buf$
@@ -352,6 +360,57 @@ end function
 
 function MoveCheck(Player, dir) ' this will hold the movement checks
 
+end function
+
+function GetCharacterList(dummy$) 'get all the char names and info from /data/account_name/1/ - /6/
+'open *.char in each folder if it exists and read info from there, then send that info to the client
+'PLAYER$(Player, 100) to (Player, 200) is reserved for this info
+Acc$ = DefaultDir$ + "/data/accounts/" + PLAYER$(Player, 0)
+for ii = 1 to 6
+    chardir$ = Acc$ + "/" ; ii ; "/"
+    if fileExists(chardir$, "*.char") then
+        charfile$ = chardir$ + info$(1,0)
+        print charfile$
+        if ii = 1 then arraynum = 100
+        if ii = 2 then arraynum = 110
+        if ii = 3 then arraynum = 120
+        if ii = 4 then arraynum = 130
+        if ii = 5 then arraynum = 140
+        if ii = 6 then arraynum = 150
+        open charfile$ for input as #char
+            while not(eof(#char))
+                line input #char, contents$
+                Option$ = word$(contents$, 1, "=")
+                Value$  = word$(contents$, 2, "=")
+
+                select case trim$(Option$)
+                    Value$ = trim$(Value$)
+                    case "Name"
+                        arraynum2 = arraynum + 1
+                        PLAYER$(Player, arraynum2) = Value$
+
+                    case "Class"
+                        arraynum2 = arraynum + 3
+                        PLAYER$(Player, arraynum2) = Value$
+
+                    case "Race"
+                        arraynum2 = arraynum + 4
+                        PLAYER$(Player, arraynum2) = Value$
+
+                    case "Gender"
+                        arraynum2 = arraynum + 5
+                        PLAYER$(Player, arraynum2) = Value$
+
+                    case "Level"
+                        arraynum2 = arraynum + 2
+                        PLAYER$(Player, arraynum2) = Value$
+
+                end select
+                arraynum3 = arraynum + 6
+                PLAYER$(Player, arraynum3) = charfile$ 
+            wend
+        close #char
+next ii
 end function
 
 function CreateAccount(Account$,Passwd$,Email$) ' used for the acc creation

@@ -1,2 +1,2 @@
 MapName = Testarea
-MapContinent = First
+MapId = 1

@@ -19,6 +19,7 @@ GLOBAL mapdir$
 GLOBAL accountc$
 GLOBAL passwordc$
 GLOBAL PLAYER$ 
+GLOBAL Player
 GLOBAL logok
 GLOBAL admin 'we will remove this later on
 
@@ -365,12 +366,21 @@ end function
 function GetCharacterList(dummy$) 'get all the char names and info from /data/account_name/1/ - /6/
 'open *.char in each folder if it exists and read info from there, then send that info to the client
 'PLAYER$(Player, 100) to (Player, 200) is reserved for this info
+'FOR and WHILE cancel each other here, need to work on this
 Acc$ = DefaultDir$ + "/data/accounts/" + PLAYER$(Player, 0)
+print "GCL: " + Acc$
 for ii = 1 to 6
     chardir$ = Acc$ + "/" ; ii ; "/"
     if fileExists(chardir$, "*.char") then
         charfile$ = chardir$ + info$(1,0)
-        print charfile$
+        charr = GetCharacterList2(charfile$,ii)
+    end if
+next ii
+end function
+
+function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()
+'This should not go to the player$(array)? perhaps an array just for the while it takes to
+'send this info to the client?
         if ii = 1 then arraynum = 100
         if ii = 2 then arraynum = 110
         if ii = 3 then arraynum = 120
@@ -385,6 +395,7 @@ for ii = 1 to 6
 
                 select case trim$(Option$)
                     Value$ = trim$(Value$)
+                    print "GCL: " + Option$ + " : " + Value$
                     case "Name"
                         arraynum2 = arraynum + 1
                         PLAYER$(Player, arraynum2) = Value$
@@ -410,7 +421,6 @@ for ii = 1 to 6
                 PLAYER$(Player, arraynum3) = charfile$ 
             wend
         close #char
-next ii
 end function
 
 function CreateAccount(Account$,Passwd$,Email$) ' used for the acc creation
@@ -450,13 +460,15 @@ function Loginauth(Account$,Passwd$,Player)' login auth
     Acc1$ = Account$ + ".o"
     Pass$ = DefaultDir$ + "/data/accounts/" + Account$ + "/" + Account$ + ".o"
     if fileExists(Acc$, Acc1$) then
-        PLAYER$(Player, 0) = Account$
         open Pass$ for input as #conf
             line input #conf, password$
+            line input #conf, date$
+            line input #conf, email$
             line input #conf, acclevel$
         close #conf
         if Passwd$ = password$ then
             PLAYER$(Player, 1) = acclevel$
+            PLAYER$(Player, 0) = Account$
             logok = 1
         else
             logok = 0

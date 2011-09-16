@@ -186,9 +186,9 @@ hd = OpenConnection(empty$)
              end if
          end if
     end if
-    if createOK = 1 then 
+    if createOK = 1 then
         notice "Account created."
-        goto [create.cancel]     
+        goto [create.cancel]
     end if
     if createOK = 2 then
         notice "Username taken."
@@ -213,10 +213,10 @@ hd = OpenConnection(empty$)
 '--- 2. Character selection/creating screen ---
 ' LogIn = 1 before opening this window!
 
-charData$ = "00005"
-ad = SendData(CharData$)
-
 [Char.start]
+    charData$ = "00005"
+    ad = SendData(charData$)
+    
     WindowWidth = 800
     WindowHeight = 350
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -329,6 +329,10 @@ ad = SendData(CharData$)
 
 [Final.Quit]
     sa = CloseConn(connect) 'remember to call CloseConn before closing #me
+    if connect = 1 then
+        let func = TCPClose(handle)
+        let connect = 0
+    end if
     close #me
     end
 '--- Auth code check ---
@@ -373,7 +377,7 @@ end function
 function CreateMsg(rec$)
     if instr(rec$,"ok") then
         createOK = 1
-    else 
+    else
         createOK = 2
     end if
 end function

@@ -10,9 +10,9 @@ This is here just to remind us on what to work on.
 Milestone 0.1
   * Working network code / _quite operational, perhaps ready for milestone_
   * Basic client - Create account, log in, log out, send and receive data / _create, log in, send and receive working, log out missing_
-  * Basic server - Send and receive data, read data from files, require log in, handle accounts and characters 
-  * Chat
-  * Player movement 
+  * Basic server - Send and receive data, read data from files, require log in, handle accounts and characters / _very close to working, small work on the character handling (move,save,load) and it should be ready_
+  * Chat / _working in theory, needs a gui, so we need to work on the client a bit more_
+  * Player movement / _not implemented yet - perhaps we will leave the movement out from this milestone, just a basic view on the map so we will know that it works in theory_
 
 Milestone 1.0
   * Optimizing network code

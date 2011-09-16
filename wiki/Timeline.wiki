@@ -16,5 +16,6 @@ Milestone 0.1
 
 Milestone 1.0
   * Optimizing network code
+  * Implement Cheetah database for server
   * Client - create character, remove character, enter world, talk, move
   * Server - Receive and send coordinates, channel system, talking, whispering, save character

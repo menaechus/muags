@@ -1,4 +1,5 @@
 #summary Timeline for the project.
+#labels Featured,Phase-Requirements,Phase-Design
 
 = Introduction =
 

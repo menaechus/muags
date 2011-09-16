@@ -10,7 +10,9 @@ This is here just to remind us on what to work on.
 Milestone 0.1
   * Working network code
   * Basic client - Create account, log in, log out, send and receive data
-  * Basic server - Send and receive data, read data from files, require log in
+  * Basic server - Send and receive data, read data from files, require log in, handle accounts and characters 
+  * Chat
+  * Player movement 
 
 Milestone 1.0
   * Optimizing network code

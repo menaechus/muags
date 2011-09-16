@@ -29,7 +29,9 @@ GLOBAL NewsFile$
 GLOBAL createFail
 GLOBAL maplist$
 GLOBAL map$
+GLOBAL dummy$
 
+dim dummy$(1000,1000)
 dim info$(10, 10)
 dim maplist$(1000)
 dim map$(1000,10)
@@ -339,7 +341,7 @@ select case caseword$
     a = pbroadcast(Player, plr, output$)
 
   case "00005"
-    ad = GetCharacterList(dummy$)
+    ad = GetCharacterList(dummy1$)
 
   case "00100"
     if PLAYER$(Player, 3) = "1" then
@@ -363,7 +365,7 @@ function MoveCheck(Player, dir) ' this will hold the movement checks
 
 end function
 
-function GetCharacterList(dummy$) 'get all the char names and info from /data/account_name/1/ - /6/
+function GetCharacterList(dummy1$) 'get all the char names and info from /data/account_name/1/ - /6/
 'open *.char in each folder if it exists and read info from there, then send that info to the client
 'PLAYER$(Player, 100) to (Player, 200) is reserved for this info
 'FOR and WHILE cancel each other here, need to work on this
@@ -421,6 +423,16 @@ function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()
                 PLAYER$(Player, arraynum3) = charfile$ 
             wend
         close #char
+        namee = arraynum + 1
+        class = arraynum + 3
+        race = arraynum + 4
+        gender = arraynum + 5
+        level = arraynum + 2
+        'send to client: 00006 ii name class race gender level
+        sendString$ = "00006 " ; ii ; " " + PLAYER$(Player, namee) + " " + PLAYER$(Player, class) + " " + PLAYER$(Player, race) + " " + PLAYER$(Player, gender) + " " + PLAYER$(Player, level)
+        print sendString$
+        plr = 101
+        sendChar = pbroadcast(Player, plr, sendString$)
 end function
 
 function CreateAccount(Account$,Passwd$,Email$) ' used for the acc creation

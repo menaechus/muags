@@ -40,6 +40,7 @@ dim map$(1000,10)
 confdir$ = DefaultDir$ + "\data\"
 extconfdir$ = confdir$ + "\configs\"
 mapdir$ = confdir$ + "\maps\"
+racedir$ = confdir$ + "\races\"
 
 'configuration and needed files definations
 levelconf$ = extconfdir$ + "level.exp"
@@ -48,7 +49,7 @@ mapconf$ = mapdir$ + "maps.list"
 NewsFile$ = confdir$ + "news.file"
 
 'file checks for the important files
-
+'can we change this in to a function?
 if fileExists(extconfdir$, "level.exp") then
 
   else
@@ -74,6 +75,16 @@ if fileExists(confdir$, "config.conf") then
     notice "Error!" + chr$(13) + "\data\config.conf is missing, server cannot be started!"
     goto [quit.main2]
   end if
+  
+if fileExists(racedir$, "races.list") then
+    goto [conf.read]
+  else
+    notice "Error!" + chr$(13) + "\data\races\races.list is missing, server cannot be started!"
+    goto [quit.main2]
+  end if  
+  
+  
+  
 'Read the config.conf file
 [conf.read]
     open conff$ for input as #conf

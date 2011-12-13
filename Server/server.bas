@@ -394,6 +394,7 @@ for ii = 1 to 6
 next ii
 sendString$ = "00006 " + "end" + " "
 			print sendString$
+			plr = 101
 			sendChar = pbroadcast(Player, plr, sendString$)
 end function
 

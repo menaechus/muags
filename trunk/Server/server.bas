@@ -399,8 +399,7 @@ sendString$ = "00006 " + "end" + " "
 end function
 
 function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()
-'This should not go to the player$(array)? perhaps an array just for the while it takes to
-'send this info to the client?
+
         if ii = 1 then arraynum = 100
         if ii = 2 then arraynum = 110
         if ii = 3 then arraynum = 120

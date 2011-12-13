@@ -16,7 +16,9 @@ this is the list of the authcodes used in the MUAGS
 
 * 00005 is used for character list (client sends 00005 and server responds with a list of clients characters)
 
-* 00006 is used to get character info from the server (client sends 00006 char_num and server responds by sending more info about that char)
+* 00006 is used by the server to send the character list
+
+* 00007 is used to get character info (like: "00007 characternumber" and the server responds with "00007 charactername class race gender level xcoord ycoord zcoord" etc.)
 
 * 01000 is used for /tell (Like: "01000 fromplayer toplayer msg")
 

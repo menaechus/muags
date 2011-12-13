@@ -390,7 +390,8 @@ for ii = 1 to 6
         charfile$ = chardir$ + info$(1,0)
         charr = GetCharacterList2(charfile$,ii)
 		else
-		sendString$ = "00006 " + "end"
+		sendString$ = "00006 " + "end" + " "
+		print sendString$
 		sendChar = pbroadcast(Player, plr, sendString$)
     end if
 next ii
@@ -446,7 +447,7 @@ function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()
         gender = arraynum + 5
         
         'send to client: 00006 ii name class race gender level
-        sendString$ = "00006 " ; ii ; " " + PLAYER$(Player, namee) + " " + PLAYER$(Player, class) + " " + PLAYER$(Player, race) + " " + PLAYER$(Player, gender) + " " + PLAYER$(Player, level)
+        sendString$ = "00006 " ; ii ; " " + PLAYER$(Player, namee) + " " + PLAYER$(Player, class) + " " + PLAYER$(Player, race) + " " + PLAYER$(Player, gender) + " " + PLAYER$(Player, level) + " "
         print PLAYER$(Player, 0) + " " + sendString$
         plr = 101
         sendChar = pbroadcast(Player, plr, sendString$)

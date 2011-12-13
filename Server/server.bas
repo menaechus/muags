@@ -28,14 +28,34 @@ GLOBAL NewsFile$
 
 GLOBAL createFail
 GLOBAL maplist$
+'hardcoded max maps = 10 for now, if someone figures a way to do this better please change it
 GLOBAL map$
+GLOBAL map2$
+GLOBAL map3$
+GLOBAL map4$
+GLOBAL map5$
+GLOBAL map6$
+GLOBAL map7$
+GLOBAL map8$
+GLOBAL map9$
+GLOBAL dummymap$
 GLOBAL dummy$
 
 
 dim dummy$(1000,1000)
+dim dummymap$(1000)
 dim info$(10, 10)
-dim maplist$(1000)
-dim map$(1000,10)
+dim maplist$(10)
+dim map1$(1000,1000)
+dim map2$(1000,1000)
+dim map3$(1000,1000)
+dim map4$(1000,1000)
+dim map5$(1000,1000)
+dim map6$(1000,1000)
+dim map7$(1000,1000)
+dim map8$(1000,1000)
+dim map9$(1000,1000)
+dim map10$(1000,1000)
 
 'directory definations
 confdir$ = DefaultDir$ + "\data\"
@@ -51,6 +71,7 @@ NewsFile$ = confdir$ + "news.file"
 
 'file checks for the important files
 'can we change this in to a function?
+print "Checking files."
 if fileExists(extconfdir$, "level.exp") then
 
   else
@@ -88,6 +109,7 @@ if fileExists(racedir$, "races.list") then
 
 
 'Read the config.conf file
+print "Reading Configs."
 [conf.read]
     open conff$ for input as #conf
             while not(eof(#conf))
@@ -124,6 +146,55 @@ if fileExists(racedir$, "races.list") then
             wend
     close #conf
 
+'read map list
+print "Loading maps."
+open mapconf$ for input as #maps
+             while not(eof(#maps))
+                line input #maps, contents$
+
+                Option$ = word$(contents$, 1, "=")
+                Value$  = word$(contents$, 2, "=")
+
+                select case trim$(Option$)
+                    Value$ = trim$(Value$)
+
+                        case "1"
+                            maplist$(1) = Value$
+
+                        case "2"
+                            maplist$(2) = Value$
+
+                        case "3"
+                            maplist$(3) = Value$
+
+                        case "4"
+                            maplist$(4) = Value$
+
+                        case "5"
+                            maplist$(5) = Value$
+
+                        case "6"
+                            maplist$(6) = Value$
+
+                        case "7"
+                            maplist$(7) = Value$
+
+                        case "8"
+                            maplist$(8) = Value$
+
+                        case "9"
+                            maplist$(9) = Value$
+
+                        case "10"
+                            maplist$(10) = Value$
+
+
+            end select
+        wend
+close #maps
+
+ad = ReadMaps(dummy$)
+
 
 'These need to be set AFTER the config file reading
 admin = MAXPLAYERS + 1 'DO NOT CHANGE THIS, OR THE SERVER WINDOW COMMANDS WILL NOT WORK.
@@ -132,16 +203,17 @@ Dim player.inbuf$(MAXPLAYERS)  ' Input buffer
 Dim player.outbuf$(MAXPLAYERS) ' Output buffer
 Dim player.match(MAXPLAYERS)   ' The number to match
 Dim PLAYER$(MAXPLAYERS, 1000) 'need to read from config.conf!!!
-    ' Initialize client data.
+print "Initialize client data."
     For plr = 1 To MAXPLAYERS
         PLAYER$(plr, 2) = "0" 'empty version ok
         PLAYER$(plr, 3) = "0" 'empty login ok
         player.sock(plr) = -1 ' Invalidate sockets.
     Next
 
+print "Staring server."
 [setup.main.Window]
     '-----Begin code for #main
-    Open "wsock32" For DLL As #wsock32
+    Open "WSOCK32" For DLL As #wsock32
     Open "WMLiberty" For DLL As #wmlib
     'nomainwin
     WindowWidth = 550
@@ -289,6 +361,126 @@ function ReadNewsFile(NewsFile$)
 end function
 
 
+function ReadMaps(dummy$)
+'1. read the map list
+'2. read the actual maps to memory
+    for x = 1 to 10
+        if maplist$(x) <> "" then
+            mapfile$ = mapdir$ + maplist$(x) + ".map"
+            print "Mapfile: " + mapfile$
+            ad = ReadMaps2(mapfile$, x)
+        end if
+    next x
+
+end function
+
+function ReadMaps2(mapfile$, x)
+z = 0
+open mapfile$ for input as #mapfile
+    while not(eof(#mapfile))
+                line input #mapfile, dummymap$(z)
+                z = z + 1
+    wend
+    close #mapfile
+z = z - 1
+    print "Z: "; z
+
+select case x
+    case 1
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map2$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+    case 2
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map1$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+    case 3
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map3$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+    case 4
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map4$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+    case 5
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map5$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+    case 6
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map6$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+    case 7
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map7$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+    case 8
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map8$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+    case 9
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map9$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+    case 10
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map10$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+
+end select
+
+end function
+
 
 function CheckCommand(Player, buf$) ' check the command the client sent for the server
 ' NEED TO CHANGE THIS TO call other functions more.. it's not necessary to do all the command from here
@@ -365,10 +557,14 @@ select case caseword$
 
   case "00007"
     ad = GetCharacterInfo(Player, buf$)
+
+  case "00200"
+    ad = MoveCheck(Player, buf$)
   case else
     output$ = "99999 unknown authcode" 'for debugging reasons
     plr = 101
     a = pbroadcast(Player, plr, output$)
+
 
 
   end select
@@ -377,8 +573,12 @@ select case caseword$
 end function
 
 
-function MoveCheck(Player, dir) ' this will hold the movement checks
-
+function MoveCheck(Player, buf$) ' this will hold the movement checks
+'1. check direction of movement and compare to map, can character move there?
+'2. move coords
+'3. return "00200 direction ok"
+dir$ = word$(buf$, 2)
+print "Move Character: " + PLAYER$(Player, 202) + " Direction: " + dir$
 end function
 
 function GetCharacterList(dummy1$) 'get all the char names and info from /data/account_name/1/ - /6/

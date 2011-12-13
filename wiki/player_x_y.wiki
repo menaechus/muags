@@ -1,9 +1,9 @@
-#summary Definations for player$(x,y)
+#summary Definations for player$(x,y) serverside
 #labels Phase-Implementation
 
 = Introduction =
 
-reserved numbers
+reserved numbers on the server
 
 
 char 1 = current char, will load these once character is selected

@@ -56,7 +56,7 @@ if fileExists(extconfdir$, "level.exp") then
     notice "Error!" + chr$(13) + "\data\config\level.exp is missing, server cannot be started!"
     goto [quit.main2]
   end if
-  
+
 if fileExists(mapdir$, "maps.list") then
 
   else
@@ -76,16 +76,16 @@ if fileExists(confdir$, "config.conf") then
     notice "Error!" + chr$(13) + "\data\config.conf is missing, server cannot be started!"
     goto [quit.main2]
   end if
-  
+
 if fileExists(racedir$, "races.list") then
     goto [conf.read]
   else
     notice "Error!" + chr$(13) + "\data\races\races.list is missing, server cannot be started!"
     goto [quit.main2]
-  end if  
-  
-  
-  
+  end if
+
+
+
 'Read the config.conf file
 [conf.read]
     open conff$ for input as #conf
@@ -224,7 +224,7 @@ Dim PLAYER$(MAXPLAYERS, 1000) 'need to read from config.conf!!!
 
 [s_Loop] ' Main loop where the server checks the data coming from clients
     Scan
-	'we might need to change this to make sure that the server will keep up with many players
+    'we might need to change this to make sure that the server will keep up with many players
     CallDLL #kernel32, "Sleep", _
         10 As Long, _
         rc As Void
@@ -360,8 +360,10 @@ select case caseword$
     if PLAYER$(Player, 3) = "1" then
                 output$ = buf$
                 a = broadcast(Player,output$)
-     end if
+    end if
 
+  case "00007"
+    ad = GetCharacterInfo(Player, buf$)
   case else
     output$ = "99999 unknown authcode" 'for debugging reasons
     plr = 101
@@ -383,19 +385,19 @@ function GetCharacterList(dummy1$) 'get all the char names and info from /data/a
 'PLAYER$(Player, 100) to (Player, 200) is reserved for this info
 'FOR and WHILE cancel each other here, need to work on this
 Acc$ = DefaultDir$ + "/data/accounts/" + PLAYER$(Player, 0)
-print "GCL: " + Acc$
+'print "GCL: " + Acc$
 for ii = 1 to 6
     chardir$ = Acc$ + "/" ; ii ; "/"
-	sendString$ = ""
+    sendString$ = ""
     if fileExists(chardir$, "*.char") then
         charfile$ = chardir$ + info$(1,0)
         charr = GetCharacterList2(charfile$,ii)
     end if
 next ii
 sendString$ = "00006 " + "end" + " "
-			print sendString$
-			plr = 101
-			sendChar = pbroadcast(Player, plr, sendString$)
+            print sendString$
+            plr = 101
+            sendChar = pbroadcast(Player, plr, sendString$)
 end function
 
 function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()
@@ -414,7 +416,6 @@ function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()
 
                 select case trim$(Option$)
                     Value$ = trim$(Value$)
-                    print "GCL: " + Option$ + " : " + Value$
                     case "Name"
                         arraynum2 = arraynum + 1
                         PLAYER$(Player, arraynum2) = Value$
@@ -441,17 +442,71 @@ function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()
             wend
         close #char
         namee = arraynum + 1
-		level = arraynum + 2
+        level = arraynum + 2
         class = arraynum + 3
         race = arraynum + 4
         gender = arraynum + 5
-        
+
         'send to client: 00006 ii name class race gender level
         sendString$ = "00006 " ; ii ; " " + PLAYER$(Player, namee) + " " + PLAYER$(Player, class) + " " + PLAYER$(Player, race) + " " + PLAYER$(Player, gender) + " " + PLAYER$(Player, level) + " "
-        print PLAYER$(Player, 0) + " " + sendString$
         plr = 101
         sendChar = pbroadcast(Player, plr, sendString$)
 end function
+
+function GetCharacterInfo(Player, buf$)
+Acc$ = DefaultDir$ + "/data/accounts/" + PLAYER$(Player, 0)
+ii$ = word$(buf$, 2)
+SelecterCharPath$ = Acc$ + "/" ; ii$ ; "/"
+if fileExists(SelecterCharPath$, "*.char") then
+        SelecterCharfile$ = SelecterCharPath$ + info$(1,0)
+        print SelecterCharfile$
+        open SelecterCharfile$ for input as #char
+        while not(eof(#char))
+                line input #char, contents$
+                Option$ = word$(contents$, 1, "=")
+                Value$  = word$(contents$, 2, "=")
+
+                select case trim$(Option$)
+                    Value$ = trim$(Value$)
+                    print "GCL: " + Option$ + " : " + Value$
+                    case "Name"
+                        PLAYER$(Player, 202) = Value$
+
+                    case "Class"
+                        PLAYER$(Player, 205) = Value$
+
+                    case "Race"
+                        PLAYER$(Player, 200) = Value$
+
+                    case "Gender"
+                        PLAYER$(Player, 201) = Value$
+
+                    case "Level"
+                        PLAYER$(Player, 203) = Value$
+
+                    case "X"
+                        PLAYER$(Player, 211) = Value$
+                    case "Y"
+                        PLAYER$(Player, 212) = Value$
+                    case "Z"
+                        PLAYER$(Player, 213) = Value$
+                    case "MapId"
+                        PLAYER$(Player, 210) = Value$
+                    case "XP"
+                        PLAYER$(Player, 204) = Value$
+
+                end select
+
+        wend
+        close #char
+        outPut$ = "00007 " + PLAYER$(Player, 202) + " " + PLAYER$(Player, 205) + " " + PLAYER$(Player, 200) + " " + PLAYER$(Player, 201) + " " + PLAYER$(Player, 203) + " " + PLAYER$(Player, 211) + " " + PLAYER$(Player, 212) + " " + PLAYER$(Player, 213) + " " + PLAYER$(Player, 210) + " " + PLAYER$(Player, 204)
+        plr = 101
+        sendCharInfo = pbroadcast(Player, plr, outPut$)
+end if
+
+
+end function
+
 
 function CreateAccount(Account$,Passwd$,Email$) ' used for the acc creation
 ' need to do the code for sql system here
@@ -549,8 +604,8 @@ function pbroadcast(user, from, buf$)' this will be used for client-server messa
 End Function
 
 function emptyMem(Player)
-for x = 0 to 1000 
-	PLAYER$(Player, x) = ""
+for x = 0 to 1000
+    PLAYER$(Player, x) = ""
 next x
 end function
 
@@ -602,8 +657,8 @@ Function SockProc( hWnd, uMsg, sock, lParam )
             player.outbuf$(plr) = ""
             player.match(plr) = 0
 
-            #main.log "> User "; plr; " disconnected." 'in here we need to make sure that any info about the player is removed from mem! 
-			ad = emptyMem(plr)
+            #main.log "> User "; plr; " disconnected." 'in here we need to make sure that any info about the player is removed from mem!
+            ad = emptyMem(plr)
             'a = broadcast(admin, "-- User ";plr;" disconnected. -- ")
         Case 64
             rc = SockProc(hWnd, uMsg, sock, 1) 'force read

@@ -386,15 +386,15 @@ Acc$ = DefaultDir$ + "/data/accounts/" + PLAYER$(Player, 0)
 print "GCL: " + Acc$
 for ii = 1 to 6
     chardir$ = Acc$ + "/" ; ii ; "/"
+	sendString$ = ""
     if fileExists(chardir$, "*.char") then
         charfile$ = chardir$ + info$(1,0)
         charr = GetCharacterList2(charfile$,ii)
-		else
-		sendString$ = "00006 " + "end" + " "
-		print sendString$
-		sendChar = pbroadcast(Player, plr, sendString$)
     end if
 next ii
+sendString$ = "00006 " + "end" + " "
+			print sendString$
+			sendChar = pbroadcast(Player, plr, sendString$)
 end function
 
 function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()

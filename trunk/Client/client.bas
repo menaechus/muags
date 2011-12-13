@@ -442,7 +442,7 @@ function GetCharList(rec$)
 '10, 4 = character gender
 '10, 5 = character level
 '20, x = for character 2 info
-
+print "GETCHARLIST"
 print rec$
 end function
 

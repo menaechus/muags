@@ -175,7 +175,7 @@ hd = OpenConnection(empty$)
     print #accountcreation.passwordreusercrea, "!contents? CreatePass2$";
     print #accountcreation.emailcrea, "!contents? CreateEmail$";
 
-	'in here we should tell the player if one of these is empty, so the player knows why the account creation fails
+    'in here we should tell the player if one of these is empty, so the player knows why the account creation fails
     if CreateUser$ <> "" then
         if CreatePass$ <> "" then
             if CreatePass2$ <> "" then
@@ -218,20 +218,21 @@ hd = OpenConnection(empty$)
 ' LogIn = 1 before opening this window!
 
 [Char.start]
-	charData$ = "00005"
+    ad = EmptyCharList(dummy$)
+    charData$ = "00005"
     ad = SendData(charData$) 'needs to be in it's own function to make reading the char list easier
-	
-[Char.start2]
-	let rec$ = TCPReceive$(handle)
-    rec = CheckData(rec$)
-	if charListEnd = 0 then 
-		CallDLL #kernel32, "Sleep", _
-			10 As Long, _
-			rc As Void
 
-		goto [Char.start2]' wait here until all characters are loaded, GETS STUCK IN A LOOP!!!
-	end if
-	
+[Char.start2]
+    let rec$ = TCPReceive$(handle)
+    rec = CheckData(rec$)
+    if charListEnd = 0 then
+        CallDLL #kernel32, "Sleep", _
+            10 As Long, _
+            rc As Void
+
+        goto [Char.start2]' wait here until all characters are loaded, GETS STUCK IN A LOOP!!!
+    end if
+
     WindowWidth = 800
     WindowHeight = 350
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -241,12 +242,12 @@ hd = OpenConnection(empty$)
     '-----Begin GUI objects code
 
     statictext #character.statictext1, "Account name",   5,  10,  85,  20
-    radiobutton #character.radiobutton2, "1", [radiobutton2Set], [radiobutton2Reset],   5,  90,  32,  25
-    radiobutton #character.radiobutton3, "2", [radiobutton3Set], [radiobutton3Reset], 155,  90,  32,  25
-    radiobutton #character.radiobutton4, "3", [radiobutton4Set], [radiobutton4Reset], 305,  90,  32,  25
-    radiobutton #character.radiobutton5, "4", [radiobutton5Set], [radiobutton5Reset],   5, 210,  32,  25
-    radiobutton #character.radiobutton6, "5", [radiobutton6Set], [radiobutton6Reset], 155, 210,  32,  25
-    radiobutton #character.radiobutton7, "6", [radiobutton7Set], [radiobutton7Reset], 305, 210,  32,  25
+    radiobutton #character.select1, playerData$(10,1), [radiobutton2Set], [radiobutton2Reset],   5,  90,  132,  25
+    radiobutton #character.select2, playerData$(20,1), [radiobutton3Set], [radiobutton3Reset], 155,  90,  132,  25
+    radiobutton #character.select3, playerData$(30,1), [radiobutton4Set], [radiobutton4Reset], 305,  90,  132,  25
+    radiobutton #character.select4, playerData$(40,1), [radiobutton5Set], [radiobutton5Reset],   5, 210,  132,  25
+    radiobutton #character.select5, playerData$(50,1), [radiobutton6Set], [radiobutton6Reset], 155, 210,  132,  25
+    radiobutton #character.select6, playerData$(60,1), [radiobutton7Set], [radiobutton7Reset], 305, 210,  132,  25
     statictext #character.statictext8, "selected character info", 375,  30, 410, 275
     button #character.button10,"Enter the game",[character.enter], UL,   5, 295, 115,  25
     button #character.button11,"New character",[character.new], UL, 125, 295, 110,  25
@@ -265,58 +266,71 @@ hd = OpenConnection(empty$)
     print #character.button12, "!font ms_sans_serif 10"
     print #character, "trapclose [quit.character]"
 
+    print #character.statictext1, user$
+    infoText$ = "selected character info: "
 
 [character.inputLoop]   'wait here for input event
     wait
 
 
 [radiobutton2Set]   'Perform action for the radiobutton named 'radiobutton2'
+    infoText2$ = infoText$ + "name: " + playerData$(10,1) + " class: " + playerData$(10,2) + " race: " + playerData$(10,3) + " gender: " + playerData$(10,4) + " level: " + playerData$(10,5)
+    print #character.statictext8, infoText2$
     wait
-
-
 
 [radiobutton2Reset]   'Perform action for the radiobutton named 'radiobutton2'
    wait
 
+
+
 [radiobutton3Set]   'Perform action for the radiobutton named 'radiobutton3'
-    wait
-
-
+    infoText2$ = infoText$ + "name: " + playerData$(20,1) + " class: " + playerData$(20,2) + " race: " + playerData$(20,3) + " gender: " + playerData$(20,4) + " level: " + playerData$(20,5)
+    print #character.statictext8, infoText2$
+	wait
 
 [radiobutton3Reset]   'Perform action for the radiobutton named 'radiobutton3'
    wait
 
+
+
 [radiobutton4Set]   'Perform action for the radiobutton named 'radiobutton4'
-    wait
-
-
+    infoText2$ = infoText$ + "name: " + playerData$(30,1) + " class: " + playerData$(30,2) + " race: " + playerData$(30,3) + " gender: " + playerData$(30,4) + " level: " + playerData$(30,5)
+    print #character.statictext8, infoText2$
+	wait
 
 [radiobutton4Reset]   'Perform action for the radiobutton named 'radiobutton4'
    wait
 
+
+
 [radiobutton5Set]   'Perform action for the radiobutton named 'radiobutton5'
-    wait
-
-
+    infoText2$ = infoText$ + "name: " + playerData$(40,1) + " class: " + playerData$(40,2) + " race: " + playerData$(40,3) + " gender: " + playerData$(40,4) + " level: " + playerData$(40,5)
+    print #character.statictext8, infoText2$
+	wait
 
 [radiobutton5Reset]   'Perform action for the radiobutton named 'radiobutton5'
    wait
 
+
+
 [radiobutton6Set]   'Perform action for the radiobutton named 'radiobutton6'
+   infoText2$ = infoText$ + "name: " + playerData$(50,1) + " class: " + playerData$(50,2) + " race: " + playerData$(50,3) + " gender: " + playerData$(50,4) + " level: " + playerData$(50,5)
+    print #character.statictext8, infoText2$
    wait
-
-
 
 [radiobutton6Reset]   'Perform action for the radiobutton named 'radiobutton6'
    wait
 
+
+
 [radiobutton7Set]   'Perform action for the radiobutton named 'radiobutton7'
+   infoText2$ = infoText$ + "name: " + playerData$(60,1) + " class: " + playerData$(60,2) + " race: " + playerData$(60,3) + " gender: " + playerData$(60,4) + " level: " + playerData$(60,5)
+    print #character.statictext8, infoText2$
    wait
-
-
 
 [radiobutton7Reset]   'Perform action for the radiobutton named 'radiobutton7'
    wait
+
 
 
 [character.enter]   'Perform action for the button named 'button10'
@@ -385,22 +399,22 @@ function CheckData(rec$)
             end if
         case "00004"
             da = ReadNews(rec$)
-		case "00006"
-			print "00006"
-			if instr(rec$,"end") then
-				charListEnd = 1
-			else
-				da = GetCharList(rec$)
-			end if
-		'case else
-	'		da = AuthErr(rec$)
-		
+        case "00006"
+            print "00006"
+            if instr(rec$,"end") then
+                charListEnd = 1
+            else
+                da = GetCharList(rec$)
+            end if
+        'case else
+    '        da = AuthErr(rec$)
+
     end select
 
 end function
 
 function AuthErr(rec$)
-	print "Unknown authcode: " + rec$
+    print "Unknown authcode: " + rec$
 end function
 
 function CreateMsg(rec$)
@@ -421,7 +435,7 @@ function LogIn(user$,pass$)
 end function
 
 function LogInCheck(rec$)
-	'these need to be changed to something other that notice
+    'these need to be changed to something other that notice
     print "LOGCHECK: " + rec$
     if instr(rec$,"ok") then
           notice "Logged in."
@@ -441,8 +455,15 @@ function VersionCheck(rec$)
 
 end function
 
+function EmptyCharList(dummy$)
+for z = 10 to 60 step 10
+    playerData$(z, 1) = "empty"
+next z
+end function
+
 function GetCharList(rec$)
 'read character list into playerData$(x,y)
+'rec = "SERVER: 00006 ii name class race gender level
 '10, x = for character 1 info
 '10, 1 = character name
 '10, 2 = character class
@@ -452,6 +473,35 @@ function GetCharList(rec$)
 '20, x = for character 2 info
 print "GETCHARLIST"
 print rec$
+ii$ = word$(rec$, 3)
+third = val(ii$)
+CharNum = third
+Print "CHARNUM: " ; CharNum
+select case CharNum
+    case 1
+        z = 10
+    case 2
+        z = 20
+    case 3
+        z = 30
+    case 4
+        z = 40
+    case 5
+        z = 50
+    case 6
+        z = 60
+    case else
+        notice "ERROR"
+end select
+
+for x = 1 to 5
+    wordNum = x + 3
+    playerData$(z,x) = word$(rec$, wordNum)
+    print "X: " + word$(rec$, wordNum)
+next x
+
+print "Z: " + playerData$(z, 1)
+
 end function
 
 

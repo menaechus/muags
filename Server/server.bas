@@ -444,7 +444,7 @@ function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()
         
         'send to client: 00006 ii name class race gender level
         sendString$ = "00006 " ; ii ; " " + PLAYER$(Player, namee) + " " + PLAYER$(Player, class) + " " + PLAYER$(Player, race) + " " + PLAYER$(Player, gender) + " " + PLAYER$(Player, level)
-        print sendString$
+        print PLAYER$(Player, 0) + " " + sendString$
         plr = 101
         sendChar = pbroadcast(Player, plr, sendString$)
 end function

@@ -216,7 +216,7 @@ hd = OpenConnection(empty$)
 
 [Char.start]
     charData$ = "00005"
-    ad = SendData(charData$)
+    ad = SendData(charData$) 'needs to be in it's own function to make reading the char list easier
     
     WindowWidth = 800
     WindowHeight = 350

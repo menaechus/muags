@@ -20,9 +20,11 @@ this is the list of the authcodes used in the MUAGS
 
 * 00007 is used to get character info (like: "00007 characternumber" and the server responds with "00007 charactername class race gender level xcoord ycoord zcoord" etc.)
 
-* 01000 is used for /tell (Like: "01000 fromplayer toplayer msg")
-
 * 00100 is used for /chat (Like "00100 fromplayer msg")
+
+* 00200 is used for movement (Like "00200 direction")
+
+* 01000 is used for /tell (Like: "01000 fromplayer toplayer msg")
 
 * 90000 to 99999 is reserved for helper/coder/admin commands
 

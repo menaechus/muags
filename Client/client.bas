@@ -355,7 +355,7 @@ hd = OpenConnection(empty$)
 
 [character.enter2]
     ad = GetCharInfo(selectedChar$, cname$)
-	'now we are ready to get in to the world!
+    'now we are ready to get in to the world!
     wait
 
 [character.new]   'Perform action for the button named 'button11'
@@ -373,8 +373,127 @@ hd = OpenConnection(empty$)
 
 [quit.character] 'End the program
     close #character
+
+
 '--- 3. Game window ---
 'load the right map and other needed graphics
+[setup.ingame.Window]
+
+    '-----Begin code for #ingame
+
+    WindowWidth = 800
+    WindowHeight = 600
+    UpperLeftX=int((DisplayWidth-WindowWidth)/2)
+    UpperLeftY=int((DisplayHeight-WindowHeight)/2)
+
+    BackgroundColor$ = "black"
+    '-----Begin GUI objects code
+
+    graphicbox #ingame.localMap,   0,   0, 565, 540
+    graphicbox #ingame.MapOfArea, 565,   0, 230, 230
+    TextboxColor$ = "black"
+    textbox #ingame.textinput,   0, 547, 565,  25
+    bmpbutton #ingame.bmpbutton1, "data/images/gui/buttonplaceholder.bmp", [bmpbutton1Click], UL, 566, 230
+    bmpbutton #ingame.bmpbutton2, "data/images/gui/buttonplaceholder.bmp", [bmpbutton2Click], UL, 623, 230
+    bmpbutton #ingame.bmpbutton3, "data/images/gui/buttonplaceholder.bmp", [bmpbutton3Click], UL, 680, 230
+    bmpbutton #ingame.bmpbutton4, "data/images/gui/buttonplaceholder.bmp", [bmpbutton4Click], UL, 737, 230
+    bmpbutton #ingame.bmpbutton5, "data/images/gui/buttonplaceholder.bmp", [bmpbutton5Click], UL, 566, 287
+    bmpbutton #ingame.bmpbutton6, "data/images/gui/buttonplaceholder.bmp", [bmpbutton6Click], UL, 623, 287
+    bmpbutton #ingame.bmpbutton7, "data/images/gui/buttonplaceholder.bmp", [bmpbutton7Click], UL, 680, 287
+    bmpbutton #ingame.bmpbutton8, "data/images/gui/buttonplaceholder.bmp", [bmpbutton8Click], UL, 737, 287
+    bmpbutton #ingame.bmpbutton8, "data/images/gui/inventorybuttonplaceholder.bmp", [inventoryClick], UL, 566, 344
+    bmpbutton #ingame.bmpbutton8, "data/images/gui/characterbuttonplaceholder.bmp", [characterClick], UL, 623, 344
+    bmpbutton #ingame.bmpbutton8, "data/images/gui/friendsbuttonplaceholder.bmp", [friendsClick], UL, 680, 344
+    bmpbutton #ingame.bmpbutton8, "data/images/gui/optionsbuttonplaceholder.bmp", [optionsClick], UL, 737, 344
+    bmpbutton #ingame.bmpbutton8, "data/images/gui/logoutbuttonplaceholder.bmp", [logoutClick], UL, 566, 401
+
+
+    '-----End GUI objects code
+
+    open "MUAGS - ingame" for window_nf as #ingame
+    print #ingame.MapOfArea, "down; fill black; flush"
+    print #ingame.localMap, "down; fill black; flush"
+    print #ingame, "font ms_sans_serif 10"
+    print #ingame, "trapclose [quit.ingame]"
+
+
+[ingame.inputLoop]   'wait here for input event
+    wait
+
+
+
+[bmpbutton1Click]   'Perform action for the bmpbutton named 'bmpbutton6'
+
+    'Insert your own code here
+
+    wait
+
+
+[bmpbutton2Click]   'Perform action for the bmpbutton named 'bmpbutton7'
+
+    'Insert your own code here
+
+    wait
+
+
+[bmpbutton3Click]   'Perform action for the bmpbutton named 'bmpbutton8'
+
+    'Insert your own code here
+
+    wait
+
+
+[bmpbutton4Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+
+    'Insert your own code here
+
+    wait
+
+[bmpbutton5Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+
+    'Insert your own code here
+
+    wait
+
+[bmpbutton6Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+
+    'Insert your own code here
+
+    wait
+
+[bmpbutton7Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+
+    'Insert your own code here
+
+    wait
+
+[bmpbutton8Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+
+    'Insert your own code here
+
+    wait
+
+[inventoryClick]
+[characterClick]
+[friendsClick]
+[optionsClick]
+    wait
+[logoutClick]
+'logout, quit this window and main window? or just quit? or go to character selection?
+'for now it quits everything
+    goto [quit.ingame]
+    wait
+
+[quit.ingame] 'End the program
+    close #ingame
+    goto [Final.Quit]
+    end
+
+
+
+
+
+
 
 
 [Final.Quit]

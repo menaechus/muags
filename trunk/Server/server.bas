@@ -31,6 +31,7 @@ GLOBAL maplist$
 GLOBAL map$
 GLOBAL dummy$
 
+
 dim dummy$(1000,1000)
 dim info$(10, 10)
 dim maplist$(1000)

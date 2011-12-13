@@ -544,6 +544,12 @@ function pbroadcast(user, from, buf$)' this will be used for client-server messa
     #main.log "Sent to Client ";user
 End Function
 
+function emptyMem(plr)
+for x = 0 to 1000 
+	PLAYER$(plr, x) = ""
+next x
+end function
+
 Function SockProc( hWnd, uMsg, sock, lParam )
 ' Callback function to handle a Windows message
 ' forwarded by WMLiberty. Called when a relevant
@@ -592,7 +598,8 @@ Function SockProc( hWnd, uMsg, sock, lParam )
             player.outbuf$(plr) = ""
             player.match(plr) = 0
 
-            #main.log "> User "; plr; " disconnected."
+            #main.log "> User "; plr; " disconnected." 'in here we need to make sure that any info about the player is removed from mem! 
+			'ad = emptyMem(plr)
             'a = broadcast(admin, "-- User ";plr;" disconnected. -- ")
         Case 64
             rc = SockProc(hWnd, uMsg, sock, 1) 'force read

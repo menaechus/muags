@@ -56,6 +56,7 @@ if fileExists(extconfdir$, "level.exp") then
     notice "Error!" + chr$(13) + "\data\config\level.exp is missing, server cannot be started!"
     goto [quit.main2]
   end if
+  
 if fileExists(mapdir$, "maps.list") then
 
   else
@@ -129,7 +130,7 @@ Dim player.sock(MAXPLAYERS)    ' Socket descriptor
 Dim player.inbuf$(MAXPLAYERS)  ' Input buffer
 Dim player.outbuf$(MAXPLAYERS) ' Output buffer
 Dim player.match(MAXPLAYERS)   ' The number to match
-Dim PLAYER$(MAXPLAYERS, 1000)
+Dim PLAYER$(MAXPLAYERS, 1000) 'need to read from config.conf!!!
     ' Initialize client data.
     For plr = 1 To MAXPLAYERS
         PLAYER$(plr, 2) = "0" 'empty version ok
@@ -223,6 +224,7 @@ Dim PLAYER$(MAXPLAYERS, 1000)
 
 [s_Loop] ' Main loop where the server checks the data coming from clients
     Scan
+	'we might need to change this to make sure that the server will keep up with many players
     CallDLL #kernel32, "Sleep", _
         10 As Long, _
         rc As Void
@@ -435,10 +437,11 @@ function GetCharacterList2(charfile$,ii) 'file reading for GetCharacterList()
             wend
         close #char
         namee = arraynum + 1
+		level = arraynum + 2
         class = arraynum + 3
         race = arraynum + 4
         gender = arraynum + 5
-        level = arraynum + 2
+        
         'send to client: 00006 ii name class race gender level
         sendString$ = "00006 " ; ii ; " " + PLAYER$(Player, namee) + " " + PLAYER$(Player, class) + " " + PLAYER$(Player, race) + " " + PLAYER$(Player, gender) + " " + PLAYER$(Player, level)
         print sendString$
@@ -502,7 +505,7 @@ function Loginauth(Account$,Passwd$,Player)' login auth
 
 end function
 
-function VersionCheck(ClientVersion$, ServerVersion$) ' version check
+function VersionCheck(ClientVersion$, ServerVersion$) ' version check, perhaps chacge to allowed versions? not any server update requires client upgrade
     if ClientVersion$ = ServerVersion$ then
         vc = 1
     else
@@ -534,7 +537,7 @@ function pbroadcast(user, from, buf$)' this will be used for client-server messa
     If from = admin then
         buf$ = "SERVER: " + buf$  'If message is from Server, Add SERVER:.
     else
-        buf$ = "User";from;": PRIVATE: " + buf$  'If not, add which user it's from.
+        buf$ = "User";from;": PRIVATE: " + buf$  'If not, add which user it's from. this should go into whisper function
     End If
     obuf$ = player.outbuf$(user) + buf$ + chr$(7) + chr$(13) + chr$(10)
     player.outbuf$(user) = Send$(player.sock(user), obuf$, Len(obuf$), 0)

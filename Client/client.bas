@@ -24,6 +24,11 @@ GLOBAL ServerNews$
 GLOBAL LogIn
 GLOBAL createOK
 GLOBAL charListEnd
+GLOBAL inGame
+GLOBAL chatArray$
+
+
+inGame = 0
 charListEnd = 0
 LogIn = 0
 ServerNews$ = "Didn't get the news from the server.."
@@ -38,6 +43,7 @@ dim map$(1000,10)
     'map$(x,1) = Mapname from .i file
 dim maplist$(1000)
 dim playerData$(1000,1000)
+dim chatArray$(5)
 connect = 0
 fail = 0
 '--- END OF DEFINATIONS ---
@@ -390,6 +396,7 @@ hd = OpenConnection(empty$)
     '-----Begin GUI objects code
 
     graphicbox #ingame.localMap,   0,   0, 565, 540
+    print #ingame.localMap, "when characterInput [keyPress]"
     graphicbox #ingame.MapOfArea, 565,   0, 230, 230
     TextboxColor$ = "black"
     textbox #ingame.textinput,   0, 547, 565,  25
@@ -415,12 +422,25 @@ hd = OpenConnection(empty$)
     print #ingame.localMap, "down; fill black; flush"
     print #ingame, "font ms_sans_serif 10"
     print #ingame, "trapclose [quit.ingame]"
+    inGame = 1
 
 
 [ingame.inputLoop]   'wait here for input event
+    let rec$ = TCPReceive$(handle)
+    rec = CheckData(rec$)
+    print #ingame.localMap, "setfocus"
+    scan
     wait
 
-
+[keyPress]
+    key$ = Inkey$
+    if len(key$) < 2 then
+        print "pressed: "; key$
+      else
+        print "Unhandled special key"
+    end if
+    goto [ingame.inputLoop]
+    wait
 
 [bmpbutton1Click]   'Perform action for the bmpbutton named 'bmpbutton6'
 
@@ -550,6 +570,10 @@ function CheckData(rec$)
         case "00007"
             da = GetCharInfo2(rec$)
 
+		case "00100"
+			'locate right place in #ingame.localMap and use array of five? to move the chat up, leaving newest msg at the bottom
+			'chatArray$(5)
+			
         'case else
     '        da = AuthErr(rec$)
 

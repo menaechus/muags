@@ -276,6 +276,8 @@ hd = OpenConnection(empty$)
 [radiobutton2Set]   'Perform action for the radiobutton named 'radiobutton2'
     infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(10,1) + chr$(13) + chr$(10) + " class: " + playerData$(10,2) + chr$(13) + chr$(10) + " race: " + playerData$(10,3) + chr$(13) + chr$(10) + " gender: " + playerData$(10,4) + chr$(13) + chr$(10) + " level: " + playerData$(10,5)
     print #character.statictext8, infoText2$
+    selectedChar$ = playerData$(10, 6)
+    cname$ = playerData$(10,1)
     wait
 
 [radiobutton2Reset]   'Perform action for the radiobutton named 'radiobutton2'
@@ -286,7 +288,9 @@ hd = OpenConnection(empty$)
 [radiobutton3Set]   'Perform action for the radiobutton named 'radiobutton3'
     infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(20,1) + chr$(13) + chr$(10) + " class: " + playerData$(20,2) + chr$(13) + chr$(10) + " race: " + playerData$(20,3) + chr$(13) + chr$(10) + " gender: " + playerData$(20,4) + chr$(13) + chr$(10) + " level: " + playerData$(20,5)
     print #character.statictext8, infoText2$
-	wait
+    selectedChar$ = playerData$(20, 6)
+    cname$ = playerData$(20,1)
+    wait
 
 [radiobutton3Reset]   'Perform action for the radiobutton named 'radiobutton3'
    wait
@@ -296,7 +300,9 @@ hd = OpenConnection(empty$)
 [radiobutton4Set]   'Perform action for the radiobutton named 'radiobutton4'
     infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(30,1) + chr$(13) + chr$(10) + " class: " + playerData$(30,2) + chr$(13) + chr$(10) + " race: " + playerData$(30,3) + chr$(13) + chr$(10) + " gender: " + playerData$(30,4) + chr$(13) + chr$(10) + " level: " + playerData$(30,5)
     print #character.statictext8, infoText2$
-	wait
+    selectedChar$ = playerData$(30, 6)
+    cname$ = playerData$(30,1)
+    wait
 
 [radiobutton4Reset]   'Perform action for the radiobutton named 'radiobutton4'
    wait
@@ -306,7 +312,9 @@ hd = OpenConnection(empty$)
 [radiobutton5Set]   'Perform action for the radiobutton named 'radiobutton5'
     infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(40,1) + chr$(13) + chr$(10) + " class: " + playerData$(40,2) + chr$(13) + chr$(10) + " race: " + playerData$(40,3) + chr$(13) + chr$(10) + " gender: " + playerData$(40,4) + chr$(13) + chr$(10) + " level: " + playerData$(40,5)
     print #character.statictext8, infoText2$
-	wait
+    selectedChar$ = playerData$(40, 6)
+    cname$ = playerData$(40,1)
+    wait
 
 [radiobutton5Reset]   'Perform action for the radiobutton named 'radiobutton5'
    wait
@@ -316,6 +324,8 @@ hd = OpenConnection(empty$)
 [radiobutton6Set]   'Perform action for the radiobutton named 'radiobutton6'
     infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(50,1) + chr$(13) + chr$(10) + " class: " + playerData$(50,2) + chr$(13) + chr$(10) + " race: " + playerData$(50,3) + chr$(13) + chr$(10) + " gender: " + playerData$(50,4) + chr$(13) + chr$(10) + " level: " + playerData$(50,5)
     print #character.statictext8, infoText2$
+    selectedChar$ = playerData$(50, 6)
+    cname$ = playerData$(50,1)
     wait
 
 [radiobutton6Reset]   'Perform action for the radiobutton named 'radiobutton6'
@@ -326,6 +336,8 @@ hd = OpenConnection(empty$)
 [radiobutton7Set]   'Perform action for the radiobutton named 'radiobutton7'
     infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(60,1) + chr$(13) + chr$(10) + " class: " + playerData$(60,2) + chr$(13) + chr$(10) + " race: " + playerData$(60,3) + chr$(13) + chr$(10) + " gender: " + playerData$(60,4) + chr$(13) + chr$(10) + " level: " + playerData$(60,5)
     print #character.statictext8, infoText2$
+    selectedChar$ = playerData$(60, 6)
+    cname$ = playerData$(60,1)
     wait
 
 [radiobutton7Reset]   'Perform action for the radiobutton named 'radiobutton7'
@@ -334,8 +346,17 @@ hd = OpenConnection(empty$)
 
 
 [character.enter]   'Perform action for the button named 'button10'
+    if selectedChar$ = "" then
+        notice "Please select a character, or the character slot you are trying to use is empty"
+    else
+        goto [character.enter2]
+    end if
    wait
 
+[character.enter2]
+    ad = GetCharInfo(selectedChar$, cname$)
+	'now we are ready to get in to the world!
+    wait
 
 [character.new]   'Perform action for the button named 'button11'
 
@@ -406,6 +427,10 @@ function CheckData(rec$)
             else
                 da = GetCharList(rec$)
             end if
+
+        case "00007"
+            da = GetCharInfo2(rec$)
+
         'case else
     '        da = AuthErr(rec$)
 
@@ -415,6 +440,35 @@ end function
 
 function AuthErr(rec$)
     print "Unknown authcode: " + rec$
+end function
+
+function GetCharInfo(ii$, cname$)
+         chardata$ = "00007 " + ii$ + " " + cname$
+         print "sent 00007"
+         sa = SendData(chardata$)
+         let rec$ = TCPReceive$(handle)
+         rec = CheckData(rec$)
+end function
+
+function GetCharInfo2(rec$)
+'read character info into playerData$(100,y)
+'100,1 = name
+'100,2 = class
+'100,3 = race
+'100,4 = gender
+'100,5 = level
+'100,6 = X coord
+'100,7 = Y coord
+'100,8 = Z coord
+'100,9 = MapId
+'100,10 = Experience
+'rec = "SERVER: 00007 name class race gender level x y z mapid xp
+for x = 1 to 9
+    z = x + 2
+    playerData$(100,x) = word$(rec$, z)
+    print "playerData: "; x ; " = " + playerData$(100,x)
+next x
+
 end function
 
 function CreateMsg(rec$)
@@ -438,15 +492,15 @@ function LogInCheck(rec$)
     'these need to be changed to something other that notice
     print "LOGCHECK: " + rec$
     if instr(rec$,"ok") then
-          notice "Logged in."
           LogIn = 1
+          print "Login ok."
     else
-          notice "Login failed."
+          notice "Login failed." ' perhaps some reason for failing?
           LogIn = 0
     end if
 end function
 
-function VersionCheck(rec$)
+function VersionCheck(rec$) ' needs to use allowed versions or something
         SVERSION$ = word$(rec$, 5)
             if SVERSION$ <> VERSION$ then
                 notice "Wrong version, you have " + VERSION$ + " and the server has " + SVERSION$ + "."
@@ -470,6 +524,7 @@ function GetCharList(rec$)
 '10, 3 = character race
 '10, 4 = character gender
 '10, 5 = character level
+'10, 6 = character slot number
 '20, x = for character 2 info
 print "GETCHARLIST"
 print rec$
@@ -493,6 +548,8 @@ select case CharNum
     case else
         notice "ERROR"
 end select
+
+playerData$(z,6) = ii$
 
 for x = 1 to 5
     wordNum = x + 3

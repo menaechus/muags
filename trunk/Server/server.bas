@@ -389,6 +389,9 @@ for ii = 1 to 6
     if fileExists(chardir$, "*.char") then
         charfile$ = chardir$ + info$(1,0)
         charr = GetCharacterList2(charfile$,ii)
+		else
+		sendString$ = "00006 " + "end"
+		sendChar = pbroadcast(Player, plr, sendString$)
     end if
 next ii
 end function

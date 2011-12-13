@@ -23,6 +23,8 @@ GLOBAL versionFail
 GLOBAL ServerNews$
 GLOBAL LogIn
 GLOBAL createOK
+GLOBAL charListEnd
+charListEnd = 0
 LogIn = 0
 ServerNews$ = "Didn't get the news from the server.."
 '--- Directory definations
@@ -216,10 +218,13 @@ hd = OpenConnection(empty$)
 ' LogIn = 1 before opening this window!
 
 [Char.start]
-    charData$ = "00005"
+	charData$ = "00005"
     ad = SendData(charData$) 'needs to be in it's own function to make reading the char list easier
 	let rec$ = TCPReceive$(handle)
     rec = CheckData(rec$)
+[Char.start2]
+	if charListEnd = 0 then goto [Char.start2]' wait here until all characters are loaded
+	
     WindowWidth = 800
     WindowHeight = 350
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -374,7 +379,11 @@ function CheckData(rec$)
         case "00004"
             da = ReadNews(rec$)
 		case "00006"
-			da = GetCharList(rec$)
+			if word$(rec$, 3) <> "end" then
+				da = GetCharList(rec$)
+			else
+				charListEnd = 1
+			end if
 		'case else
 	'		da = AuthErr(rec$)
 		
@@ -383,7 +392,7 @@ function CheckData(rec$)
 end function
 
 function AuthErr(rec$)
-notice "Unknown authcode: " + rec$
+	print "Unknown authcode: " + rec$
 end function
 
 function CreateMsg(rec$)
@@ -426,7 +435,15 @@ end function
 
 function GetCharList(rec$)
 'read character list into playerData$(x,y)
-notice rec$
+'10, x = for character 1 info
+'10, 1 = character name
+'10, 2 = character class
+'10, 3 = character race
+'10, 4 = character gender
+'10, 5 = character level
+'20, x = for character 2 info
+
+print rec$
 end function
 
 

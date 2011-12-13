@@ -248,7 +248,7 @@ hd = OpenConnection(empty$)
     radiobutton #character.select4, playerData$(40,1), [radiobutton5Set], [radiobutton5Reset],   5, 210,  132,  25
     radiobutton #character.select5, playerData$(50,1), [radiobutton6Set], [radiobutton6Reset], 155, 210,  132,  25
     radiobutton #character.select6, playerData$(60,1), [radiobutton7Set], [radiobutton7Reset], 305, 210,  132,  25
-    statictext #character.statictext8, "selected character info", 375,  30, 410, 275
+    statictext #character.statictext8, "selected character info", 395,  30, 410, 275
     button #character.button10,"Enter the game",[character.enter], UL,   5, 295, 115,  25
     button #character.button11,"New character",[character.new], UL, 125, 295, 110,  25
     button #character.button12,"Delete selected character",[character.delete], UL, 615, 295, 175,  25
@@ -274,7 +274,7 @@ hd = OpenConnection(empty$)
 
 
 [radiobutton2Set]   'Perform action for the radiobutton named 'radiobutton2'
-    infoText2$ = infoText$ + "name: " + playerData$(10,1) + " class: " + playerData$(10,2) + " race: " + playerData$(10,3) + " gender: " + playerData$(10,4) + " level: " + playerData$(10,5)
+    infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(10,1) + chr$(13) + chr$(10) + " class: " + playerData$(10,2) + chr$(13) + chr$(10) + " race: " + playerData$(10,3) + chr$(13) + chr$(10) + " gender: " + playerData$(10,4) + chr$(13) + chr$(10) + " level: " + playerData$(10,5)
     print #character.statictext8, infoText2$
     wait
 
@@ -284,7 +284,7 @@ hd = OpenConnection(empty$)
 
 
 [radiobutton3Set]   'Perform action for the radiobutton named 'radiobutton3'
-    infoText2$ = infoText$ + "name: " + playerData$(20,1) + " class: " + playerData$(20,2) + " race: " + playerData$(20,3) + " gender: " + playerData$(20,4) + " level: " + playerData$(20,5)
+    infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(20,1) + chr$(13) + chr$(10) + " class: " + playerData$(20,2) + chr$(13) + chr$(10) + " race: " + playerData$(20,3) + chr$(13) + chr$(10) + " gender: " + playerData$(20,4) + chr$(13) + chr$(10) + " level: " + playerData$(20,5)
     print #character.statictext8, infoText2$
 	wait
 
@@ -294,7 +294,7 @@ hd = OpenConnection(empty$)
 
 
 [radiobutton4Set]   'Perform action for the radiobutton named 'radiobutton4'
-    infoText2$ = infoText$ + "name: " + playerData$(30,1) + " class: " + playerData$(30,2) + " race: " + playerData$(30,3) + " gender: " + playerData$(30,4) + " level: " + playerData$(30,5)
+    infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(30,1) + chr$(13) + chr$(10) + " class: " + playerData$(30,2) + chr$(13) + chr$(10) + " race: " + playerData$(30,3) + chr$(13) + chr$(10) + " gender: " + playerData$(30,4) + chr$(13) + chr$(10) + " level: " + playerData$(30,5)
     print #character.statictext8, infoText2$
 	wait
 
@@ -304,7 +304,7 @@ hd = OpenConnection(empty$)
 
 
 [radiobutton5Set]   'Perform action for the radiobutton named 'radiobutton5'
-    infoText2$ = infoText$ + "name: " + playerData$(40,1) + " class: " + playerData$(40,2) + " race: " + playerData$(40,3) + " gender: " + playerData$(40,4) + " level: " + playerData$(40,5)
+    infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(40,1) + chr$(13) + chr$(10) + " class: " + playerData$(40,2) + chr$(13) + chr$(10) + " race: " + playerData$(40,3) + chr$(13) + chr$(10) + " gender: " + playerData$(40,4) + chr$(13) + chr$(10) + " level: " + playerData$(40,5)
     print #character.statictext8, infoText2$
 	wait
 
@@ -314,9 +314,9 @@ hd = OpenConnection(empty$)
 
 
 [radiobutton6Set]   'Perform action for the radiobutton named 'radiobutton6'
-   infoText2$ = infoText$ + "name: " + playerData$(50,1) + " class: " + playerData$(50,2) + " race: " + playerData$(50,3) + " gender: " + playerData$(50,4) + " level: " + playerData$(50,5)
+    infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(50,1) + chr$(13) + chr$(10) + " class: " + playerData$(50,2) + chr$(13) + chr$(10) + " race: " + playerData$(50,3) + chr$(13) + chr$(10) + " gender: " + playerData$(50,4) + chr$(13) + chr$(10) + " level: " + playerData$(50,5)
     print #character.statictext8, infoText2$
-   wait
+    wait
 
 [radiobutton6Reset]   'Perform action for the radiobutton named 'radiobutton6'
    wait
@@ -324,9 +324,9 @@ hd = OpenConnection(empty$)
 
 
 [radiobutton7Set]   'Perform action for the radiobutton named 'radiobutton7'
-   infoText2$ = infoText$ + "name: " + playerData$(60,1) + " class: " + playerData$(60,2) + " race: " + playerData$(60,3) + " gender: " + playerData$(60,4) + " level: " + playerData$(60,5)
+    infoText2$ = infoText$ + chr$(13) + chr$(10) + "name: " + playerData$(60,1) + chr$(13) + chr$(10) + " class: " + playerData$(60,2) + chr$(13) + chr$(10) + " race: " + playerData$(60,3) + chr$(13) + chr$(10) + " gender: " + playerData$(60,4) + chr$(13) + chr$(10) + " level: " + playerData$(60,5)
     print #character.statictext8, infoText2$
-   wait
+    wait
 
 [radiobutton7Reset]   'Perform action for the radiobutton named 'radiobutton7'
    wait

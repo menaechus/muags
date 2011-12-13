@@ -220,10 +220,17 @@ hd = OpenConnection(empty$)
 [Char.start]
 	charData$ = "00005"
     ad = SendData(charData$) 'needs to be in it's own function to make reading the char list easier
+	
+[Char.start2]
 	let rec$ = TCPReceive$(handle)
     rec = CheckData(rec$)
-[Char.start2]
-	if charListEnd = 0 then goto [Char.start2]' wait here until all characters are loaded
+	if charListEnd = 0 then 
+		CallDLL #kernel32, "Sleep", _
+			10 As Long, _
+			rc As Void
+
+		goto [Char.start2]' wait here until all characters are loaded, GETS STUCK IN A LOOP!!!
+	end if
 	
     WindowWidth = 800
     WindowHeight = 350
@@ -379,10 +386,11 @@ function CheckData(rec$)
         case "00004"
             da = ReadNews(rec$)
 		case "00006"
-			if word$(rec$, 3) <> "end" then
-				da = GetCharList(rec$)
-			else
+			print "00006"
+			if instr(rec$,"end") then
 				charListEnd = 1
+			else
+				da = GetCharList(rec$)
 			end if
 		'case else
 	'		da = AuthErr(rec$)

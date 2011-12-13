@@ -123,7 +123,7 @@ hd = OpenConnection(empty$)
         notice "Please type username and password"
         print #login.username, ""
         print #login.password, ""
-        goto [login.inputLoop]
+        goto [login.inputLoop] 'is this required?
     end if
 
     wait
@@ -133,7 +133,7 @@ hd = OpenConnection(empty$)
           hd = LogIn(user$,pass$)
     end if
     if fail = 1 then
-         sa = CloseConn(connect) 'remember to call CloseConn before closing #me
+         sa = CloseConn(connect) 'remember to call CloseConn before closing #me, this might be a bug, perhaps we should not close the connection on failing the user or passwd?
     end if
     if LogIn = 1 then goto [quit.login.next]
     wait
@@ -172,6 +172,7 @@ hd = OpenConnection(empty$)
     print #accountcreation.passwordreusercrea, "!contents? CreatePass2$";
     print #accountcreation.emailcrea, "!contents? CreateEmail$";
 
+	'in here we should tell the player if one of these is empty, so the player knows why the account creation fails
     if CreateUser$ <> "" then
         if CreatePass$ <> "" then
             if CreatePass2$ <> "" then
@@ -205,7 +206,7 @@ hd = OpenConnection(empty$)
     goto [Final.Quit]
     wait
 
-[quit.login.next]
+[quit.login.next] 'close the login window and move to character selection screen
     close #login
     goto [Char.start]
     wait
@@ -324,7 +325,7 @@ hd = OpenConnection(empty$)
 [quit.character] 'End the program
     close #character
 '--- 3. Game window ---
-
+'load the right map and other needed graphics
 
 
 [Final.Quit]
@@ -392,6 +393,7 @@ function LogIn(user$,pass$)
 end function
 
 function LogInCheck(rec$)
+	'these need to be changed to something other that notice
     print "LOGCHECK: " + rec$
     if instr(rec$,"ok") then
           notice "Logged in."

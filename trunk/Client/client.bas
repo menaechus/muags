@@ -15,6 +15,7 @@ GLOBAL dummy$
 GLOBAL PORT
 GLOBAL map$
 GLOBAL maplist$
+GLOBAL mapDir$
 GLOBAL playerData$
 GLOBAL VERSION$
 GLOBAL address$
@@ -26,6 +27,7 @@ GLOBAL createOK
 GLOBAL charListEnd
 GLOBAL inGame
 GLOBAL chatArray$
+GLOBAL dummymap$
 
 
 inGame = 0
@@ -35,13 +37,12 @@ ServerNews$ = "Didn't get the news from the server.."
 '--- Directory definations
 confdir$ = DefaultDir$ + "\data\"
 mapDir$ = confdir$ + "maps\"
+mapconf$ = mapDir$ + "maps.list"
 '--- End directory def
 dim info$(10, 10)
 dim dummy$(1000)
-dim map$(1000,10)
-    'map$(x,0) = MapID from .i file
-    'map$(x,1) = Mapname from .i file
-dim maplist$(1000)
+dim map$(1000,1000)
+dim maplist$(10)'hardcoded max 10
 dim playerData$(1000,1000)
 dim chatArray$(5)
 connect = 0
@@ -57,7 +58,7 @@ if fileExists(confdir$, "config.conf") then
   end if
 
 if fileExists(mapDir$, "maps.list") then
-    'goto [map.read]
+    
   else
     notice "Error!" + chr$(13) + "\data\maps\maps.list is missing, client cannot be started!"
     goto [quit.main2]
@@ -88,6 +89,51 @@ ConfigFile$ = confdir$ + "config.conf"
                 end select
             wend
     close #conf
+'read maps list
+	open mapconf$ for input as #maps
+             while not(eof(#maps))
+                line input #maps, contents$
+
+                Option$ = word$(contents$, 1, "=")
+                Value$  = word$(contents$, 2, "=")
+
+                select case trim$(Option$)
+                    Value$ = trim$(Value$)
+
+                        case "1"
+                            maplist$(1) = Value$
+
+                        case "2"
+                            maplist$(2) = Value$
+
+                        case "3"
+                            maplist$(3) = Value$
+
+                        case "4"
+                            maplist$(4) = Value$
+
+                        case "5"
+                            maplist$(5) = Value$
+
+                        case "6"
+                            maplist$(6) = Value$
+
+                        case "7"
+                            maplist$(7) = Value$
+
+                        case "8"
+                            maplist$(8) = Value$
+
+                        case "9"
+                            maplist$(9) = Value$
+
+                        case "10"
+                            maplist$(10) = Value$
+
+
+            end select
+        wend
+close #maps
 
 'Main program starts here!
 'Client will use one "program" for login, one for char selection and one for the game
@@ -362,6 +408,7 @@ hd = OpenConnection(empty$)
 [character.enter2]
     ad = GetCharInfo(selectedChar$, cname$)
     'now we are ready to get in to the world!
+	goto [PreLoad]
     wait
 
 [character.new]   'Perform action for the button named 'button11'
@@ -382,7 +429,13 @@ hd = OpenConnection(empty$)
 
 
 '--- 3. Game window ---
+[PreLoad]
+Print "PRELOAD"
 'load the right map and other needed graphics
+close #character
+currentMap$ = playerData$(100,8)
+ad = LoadMap(currentMap$)
+Print "MAPS LOADED"
 [setup.ingame.Window]
 
     '-----Begin code for #ingame
@@ -394,32 +447,37 @@ hd = OpenConnection(empty$)
 
     BackgroundColor$ = "black"
     '-----Begin GUI objects code
-
+PRINT "GUI ELEMENTS STARTING"
     graphicbox #ingame.localMap,   0,   0, 565, 540
-    print #ingame.localMap, "when characterInput [keyPress]"
+	'    
     graphicbox #ingame.MapOfArea, 565,   0, 230, 230
     TextboxColor$ = "black"
-    textbox #ingame.textinput,   0, 547, 565,  25
-    bmpbutton #ingame.bmpbutton1, "data/images/gui/buttonplaceholder.bmp", [bmpbutton1Click], UL, 566, 230
-    bmpbutton #ingame.bmpbutton2, "data/images/gui/buttonplaceholder.bmp", [bmpbutton2Click], UL, 623, 230
-    bmpbutton #ingame.bmpbutton3, "data/images/gui/buttonplaceholder.bmp", [bmpbutton3Click], UL, 680, 230
-    bmpbutton #ingame.bmpbutton4, "data/images/gui/buttonplaceholder.bmp", [bmpbutton4Click], UL, 737, 230
-    bmpbutton #ingame.bmpbutton5, "data/images/gui/buttonplaceholder.bmp", [bmpbutton5Click], UL, 566, 287
-    bmpbutton #ingame.bmpbutton6, "data/images/gui/buttonplaceholder.bmp", [bmpbutton6Click], UL, 623, 287
-    bmpbutton #ingame.bmpbutton7, "data/images/gui/buttonplaceholder.bmp", [bmpbutton7Click], UL, 680, 287
-    bmpbutton #ingame.bmpbutton8, "data/images/gui/buttonplaceholder.bmp", [bmpbutton8Click], UL, 737, 287
-    bmpbutton #ingame.bmpbutton8, "data/images/gui/inventorybuttonplaceholder.bmp", [inventoryClick], UL, 566, 344
-    bmpbutton #ingame.bmpbutton8, "data/images/gui/characterbuttonplaceholder.bmp", [characterClick], UL, 623, 344
-    bmpbutton #ingame.bmpbutton8, "data/images/gui/friendsbuttonplaceholder.bmp", [friendsClick], UL, 680, 344
-    bmpbutton #ingame.bmpbutton8, "data/images/gui/optionsbuttonplaceholder.bmp", [optionsClick], UL, 737, 344
-    bmpbutton #ingame.bmpbutton8, "data/images/gui/logoutbuttonplaceholder.bmp", [logoutClick], UL, 566, 401
+    textbox #ingame.textinput,   0, 547, 565,  25 	
+	'why these buttons crash?
+print "BUTTONS STARTING"
+    bmpbutton #ingame.button1, "data\images\gui\buttonplaceholder.bmp", [bmpbutton1Click], UL, 566, 230
+    bmpbutton #ingame.button2, "data\images\gui\buttonplaceholder.bmp", [bmpbutton2Click], UL, 623, 230
+    bmpbutton #ingame.button3, "data\images\gui\buttonplaceholder.bmp", [bmpbutton3Click], UL, 680, 230
+    bmpbutton #ingame.button4, "data\images\gui\buttonplaceholder.bmp", [bmpbutton4Click], UL, 737, 230
+    bmpbutton #ingame.button5, "data\images\gui\buttonplaceholder.bmp", [bmpbutton5Click], UL, 566, 287
+    bmpbutton #ingame.button6, "data\images\gui\buttonplaceholder.bmp", [bmpbutton6Click], UL, 623, 287
+    bmpbutton #ingame.button7, "data\images\gui\buttonplaceholder.bmp", [bmpbutton7Click], UL, 680, 287
+    bmpbutton #ingame.button8, "data\images\gui\buttonplaceholder.bmp", [bmpbutton8Click], UL, 737, 287
+print "1-8 OK"
+    bmpbutton #ingame.inventory, "data\images\gui\inventorybuttonplaceholder.bmp", [inventoryClick], UL, 566, 344
+    bmpbutton #ingame.character, "data\images\gui\characterbuttonplaceholder.bmp", [characterClick], UL, 623, 344
+    bmpbutton #ingame.friends, "data\images\gui\friendsbuttonplaceholder.bmp", [friendsClick], UL, 680, 344
+    bmpbutton #ingame.options, "data\images\gui\optionsbuttonplaceholder.bmp", [optionsClick], UL, 737, 344
+    bmpbutton #ingame.logout, "data\images\gui\logoutbuttonplaceholder.bmp", [logoutClick], UL, 566, 401
+
 
 
     '-----End GUI objects code
-
+Print "WINDOW OPENING"
     open "MUAGS - ingame" for window_nf as #ingame
     print #ingame.MapOfArea, "down; fill black; flush"
     print #ingame.localMap, "down; fill black; flush"
+	print #ingame.localMap, "when characterInput [keyPress]"
     print #ingame, "font ms_sans_serif 10"
     print #ingame, "trapclose [quit.ingame]"
     inGame = 1
@@ -442,52 +500,52 @@ hd = OpenConnection(empty$)
     goto [ingame.inputLoop]
     wait
 
-[bmpbutton1Click]   'Perform action for the bmpbutton named 'bmpbutton6'
+[bmpbutton1Click]   'Perform action for the bmpbutton named 'bmpbutton1'
 
     'Insert your own code here
 
     wait
 
 
-[bmpbutton2Click]   'Perform action for the bmpbutton named 'bmpbutton7'
+[bmpbutton2Click]   'Perform action for the bmpbutton named 'bmpbutton2'
 
     'Insert your own code here
 
     wait
 
 
-[bmpbutton3Click]   'Perform action for the bmpbutton named 'bmpbutton8'
+[bmpbutton3Click]   'Perform action for the bmpbutton named 'bmpbutton3'
 
     'Insert your own code here
 
     wait
 
 
-[bmpbutton4Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+[bmpbutton4Click]   'Perform action for the bmpbutton named 'bmpbutton4'
 
     'Insert your own code here
 
     wait
 
-[bmpbutton5Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+[bmpbutton5Click]   'Perform action for the bmpbutton named 'bmpbutton5'
 
     'Insert your own code here
 
     wait
 
-[bmpbutton6Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+[bmpbutton6Click]   'Perform action for the bmpbutton named 'bmpbutton6'
 
     'Insert your own code here
 
     wait
 
-[bmpbutton7Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+[bmpbutton7Click]   'Perform action for the bmpbutton named 'bmpbutton7'
 
     'Insert your own code here
 
     wait
 
-[bmpbutton8Click]   'Perform action for the bmpbutton named 'bmpbutton9'
+[bmpbutton8Click]   'Perform action for the bmpbutton named 'bmpbutton8'
 
     'Insert your own code here
 
@@ -498,6 +556,7 @@ hd = OpenConnection(empty$)
 [friendsClick]
 [optionsClick]
     wait
+	
 [logoutClick]
 'logout, quit this window and main window? or just quit? or go to character selection?
 'for now it quits everything
@@ -572,8 +631,11 @@ function CheckData(rec$)
 
 		case "00100"
 			'locate right place in #ingame.localMap and use array of five? to move the chat up, leaving newest msg at the bottom
+			'only show chat if inGame = 1
 			'chatArray$(5)
 			
+		case "00200"
+			da = MoveCheck(rec$)
         'case else
     '        da = AuthErr(rec$)
 
@@ -583,6 +645,34 @@ end function
 
 function AuthErr(rec$)
     print "Unknown authcode: " + rec$
+end function
+
+function LoadMap(currentMap$)
+x = val(currentMap$)
+mapfile$ = mapDir$ + maplist$(x) + ".map"
+print mapfile$
+z = 0
+open mapfile$ for input as #mapfile
+    while not(eof(#mapfile))
+                line input #mapfile, dummymap$(z)
+                z = z + 1
+    wend
+    close #mapfile
+z = z - 1
+        xx = 0
+        yy = 0
+
+        for xx = 0 to z
+            for yy = 0 to 1000
+                map$(yy,xx) = mid$(dummymap$(xx), yy, 1)
+            next yy
+        next xx
+end function
+
+
+
+function MoveCheck(rec$)
+
 end function
 
 function GetCharInfo(ii$, cname$)

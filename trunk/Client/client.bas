@@ -15,6 +15,7 @@ GLOBAL dummy$
 GLOBAL PORT
 GLOBAL map$
 GLOBAL maplist$
+GLOBAL playerData$
 GLOBAL VERSION$
 GLOBAL address$
 GLOBAL fail
@@ -217,7 +218,8 @@ hd = OpenConnection(empty$)
 [Char.start]
     charData$ = "00005"
     ad = SendData(charData$) 'needs to be in it's own function to make reading the char list easier
-    
+	let rec$ = TCPReceive$(handle)
+    rec = CheckData(rec$)
     WindowWidth = 800
     WindowHeight = 350
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
@@ -371,8 +373,17 @@ function CheckData(rec$)
             end if
         case "00004"
             da = ReadNews(rec$)
+		case "00006"
+			da = GetCharList(rec$)
+		'case else
+	'		da = AuthErr(rec$)
+		
     end select
 
+end function
+
+function AuthErr(rec$)
+notice "Unknown authcode: " + rec$
 end function
 
 function CreateMsg(rec$)
@@ -412,6 +423,12 @@ function VersionCheck(rec$)
             end if
 
 end function
+
+function GetCharList(rec$)
+'read character list into playerData$(x,y)
+notice rec$
+end function
+
 
 function ReadNews(rec$)
     newslen = len(rec$)

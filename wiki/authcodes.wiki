@@ -24,6 +24,8 @@ this is the list of the authcodes used in the MUAGS
 
 * 00200 is used for movement (Like "00200 direction")
 
+* 00201 is used to query player coordinates (Like "00201" and the server responds with "00201 x y"
+
 * 01000 is used for /tell (Like: "01000 fromplayer toplayer msg")
 
 * 90000 to 99999 is reserved for helper/coder/admin commands

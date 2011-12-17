@@ -40,8 +40,9 @@ GLOBAL map8$
 GLOBAL map9$
 GLOBAL dummymap$
 GLOBAL dummy$
+GLOBAL QueryCoords$
 
-
+dim QueryCoords$(2)
 dim dummy$(1000,1000)
 dim dummymap$(1000)
 dim info$(10, 10)
@@ -560,6 +561,10 @@ select case caseword$
 
   case "00200"
     ad = MoveCheck(Player, buf$)
+
+  case "00201"
+    ad = QueryPlayerCoords(Player)
+
   case else
     output$ = "99999 unknown authcode" 'for debugging reasons
     plr = 101
@@ -570,6 +575,16 @@ select case caseword$
   end select
 [EndCheckCommand]
 
+end function
+
+function QueryPlayerCoords(Player)
+
+' return player$(x, 211) = char 1 x coord
+' player$(x, 212) = char 1 y coord
+' player$(x, 213) = char 1 z coord (not used yet)
+    sendString$ = "00201 " + PLAYER$(Player, 211) + " " + PLAYER$(Player, 212) + " " + PLAYER$(Player, 213)
+    plr = 101
+    sendChar = pbroadcast(Player, plr, sendString$)
 end function
 
 
@@ -808,6 +823,8 @@ function emptyMem(Player)
 for x = 0 to 1000
     PLAYER$(Player, x) = ""
 next x
+        PLAYER$(Player, 2) = "0" 'empty version ok
+        PLAYER$(Player, 3) = "0" 'empty login ok
 end function
 
 Function SockProc( hWnd, uMsg, sock, lParam )

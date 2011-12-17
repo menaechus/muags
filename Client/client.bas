@@ -58,7 +58,7 @@ if fileExists(confdir$, "config.conf") then
   end if
 
 if fileExists(mapDir$, "maps.list") then
-    
+
   else
     notice "Error!" + chr$(13) + "\data\maps\maps.list is missing, client cannot be started!"
     goto [quit.main2]
@@ -90,7 +90,7 @@ ConfigFile$ = confdir$ + "config.conf"
             wend
     close #conf
 'read maps list
-	open mapconf$ for input as #maps
+    open mapconf$ for input as #maps
              while not(eof(#maps))
                 line input #maps, contents$
 
@@ -408,7 +408,7 @@ hd = OpenConnection(empty$)
 [character.enter2]
     ad = GetCharInfo(selectedChar$, cname$)
     'now we are ready to get in to the world!
-	goto [PreLoad]
+    goto [PreLoad]
     wait
 
 [character.new]   'Perform action for the button named 'button11'
@@ -436,6 +436,13 @@ close #character
 currentMap$ = playerData$(100,8)
 ad = LoadMap(currentMap$)
 Print "MAPS LOADED"
+loadbmp "grass", "data\images\world\grass.bmp"
+loadbmp "forest", "data\images\world\forest.bmp"
+loadbmp "plains", "data\images\world\plains.bmp"
+loadbmp "else", "data\images\world\else.bmp"
+loadbmp "water", "data\images\world\water.bmp"
+loadbmp "player", "data\images\characters\human\default.bmp"
+print "GRAPHICS LOADED"
 [setup.ingame.Window]
 
     '-----Begin code for #ingame
@@ -449,11 +456,11 @@ Print "MAPS LOADED"
     '-----Begin GUI objects code
 PRINT "GUI ELEMENTS STARTING"
     graphicbox #ingame.localMap,   0,   0, 565, 540
-	'    
+    '
     graphicbox #ingame.MapOfArea, 565,   0, 230, 230
     TextboxColor$ = "black"
-    textbox #ingame.textinput,   0, 547, 565,  25 	
-	'why these buttons crash?
+    textbox #ingame.textinput,   0, 547, 565,  25
+    'why these buttons crash?
 print "BUTTONS STARTING"
     bmpbutton #ingame.button1, "data\images\gui\buttonplaceholder.bmp", [bmpbutton1Click], UL, 566, 230
     bmpbutton #ingame.button2, "data\images\gui\buttonplaceholder.bmp", [bmpbutton2Click], UL, 623, 230
@@ -477,10 +484,31 @@ Print "WINDOW OPENING"
     open "MUAGS - ingame" for window_nf as #ingame
     print #ingame.MapOfArea, "down; fill black; flush"
     print #ingame.localMap, "down; fill black; flush"
-	print #ingame.localMap, "when characterInput [keyPress]"
+    print #ingame.localMap, "when characterInput [keyPress]"
     print #ingame, "font ms_sans_serif 10"
     print #ingame, "trapclose [quit.ingame]"
     inGame = 1
+	print #ingame.localMap, "addsprite player player"
+    print #ingame.localMap, "spriteround player"
+    print #ingame.localMap, "spritevisible player on";
+    print #ingame.localMap, "centersprite player"
+    
+    'playercoords need to be corralative to the gui coords, 1,1 is located at the upped corned.. it should be at the middle of the screen
+    pxx = val(playerData$(100,6))
+    pyy = val(playerData$(100,7))
+	px = pxx + (565/2)
+	py = pyy + (460/2)
+    'print #ingame.localMap, "color white"
+	'print #ingame.localMap, "backcolor black"
+    'print #ingame.localMap, "place ";px;" ";py
+    'print #ingame.localMap, "|@"
+	ad = DrawPlayer(px,py)
+    print #ingame.localMap, "color green"
+    print #ingame.localMap, "line 0 460 565 460"
+    print #ingame.localMap, "place 10 470"
+    print #ingame.localMap, "backcolor white"
+    print #ingame.localMap, "|Chat Window."
+    'print #ingame.localMap, "box 565 540"
 
 
 [ingame.inputLoop]   'wait here for input event
@@ -492,7 +520,7 @@ Print "WINDOW OPENING"
 
 [keyPress]
     key$ = Inkey$
-    if len(key$) < 2 then
+    if len(key$) < 2 then ' ad = KeyPressCheck(key$) to check the key pressed!
         print "pressed: "; key$
       else
         print "Unhandled special key"
@@ -556,7 +584,7 @@ Print "WINDOW OPENING"
 [friendsClick]
 [optionsClick]
     wait
-	
+
 [logoutClick]
 'logout, quit this window and main window? or just quit? or go to character selection?
 'for now it quits everything
@@ -569,12 +597,6 @@ Print "WINDOW OPENING"
     end
 
 
-
-
-
-
-
-
 [Final.Quit]
     sa = CloseConn(connect) 'remember to call CloseConn before closing #me
     if connect = 1 then
@@ -584,6 +606,21 @@ Print "WINDOW OPENING"
     close #me
     end
 '--- Auth code check ---
+
+'*** ingame draw ***
+function drawGui(empty)
+    print #ingame.localMap, "color green"
+    print #ingame.localMap, "line 0 500 565 500"
+end function
+
+function DrawPlayer(x,y)
+    px = 565 / 2
+    py = 460 / 2
+    print #ingame.localMap, "spritexy player ";px;" ";py
+	print #ingame.localMap, "drawsprites"
+	
+end function
+
 
 '*** File check ***
 function fileExists(path$, filename$)
@@ -629,13 +666,13 @@ function CheckData(rec$)
         case "00007"
             da = GetCharInfo2(rec$)
 
-		case "00100"
-			'locate right place in #ingame.localMap and use array of five? to move the chat up, leaving newest msg at the bottom
-			'only show chat if inGame = 1
-			'chatArray$(5)
-			
-		case "00200"
-			da = MoveCheck(rec$)
+        case "00100"
+            'locate right place in #ingame.localMap and use array of five? to move the chat up, leaving newest msg at the bottom
+            'only show chat if inGame = 1
+            'chatArray$(5)
+
+        case "00200"
+            da = MoveCheck(rec$)
         'case else
     '        da = AuthErr(rec$)
 
@@ -669,6 +706,9 @@ z = z - 1
         next xx
 end function
 
+function KeyPressCheck(key$)
+
+end function
 
 
 function MoveCheck(rec$)

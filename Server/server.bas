@@ -591,7 +591,7 @@ end function
 
 function MoveCheck(Player, buf$) ' this will hold the movement checks
 '1. check direction of movement and compare to map, can character move there?
-'2. move coords
+'2. update new coords to player$(x, 21x) 
 '3. return "00200 direction ok"
 dir$ = word$(buf$, 2)
 print "Move Character: " + PLAYER$(Player, 202) + " Direction: " + dir$

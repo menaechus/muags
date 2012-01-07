@@ -43,16 +43,16 @@ dim info$(10, 10)
 dim dummy$(1000)
 dim map$(1000,1000)
 dim maplist$(10)'hardcoded max 10
-dim playerData$(1000,1000)
-dim chatArray$(5)
+dim playerData$(1000,1000) 'we can trim this when we have some sort of idea on how much data this will hold
+dim chatArray$(5) 'for remembering the last 5 lines in the chat window
 connect = 0
 fail = 0
 '--- END OF DEFINATIONS ---
 
 '--- File checks for the important files ---
 if fileExists(confdir$, "config.conf") then
-    'goto [conf.read]
-  else
+
+ else
     notice "Error!" + chr$(13) + "\data\config.conf is missing, client cannot be started!"
     goto [quit.main2]
   end if
@@ -140,6 +140,7 @@ close #maps
 'so that the player only sees one window of the above at any given time
 '--- 0. Open the connection and check version and get news!
 hd = OpenConnection(empty$)
+'we need to re open the connection if the server is down during startup of the client
 
 '--- 1. Login/user creating window ---
 [setup.login.Window]
@@ -148,7 +149,7 @@ hd = OpenConnection(empty$)
     WindowHeight = 250
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
     UpperLeftY=int((DisplayHeight-WindowHeight)/2)
-
+	'There is space here for perhaps one image, next to the news
     '-----Begin GUI objects code
     statictext #login.news, ServerNews$,   5,  5,  380,  165
     statictext #login.user, "Username",   5,  175,  63,  20
@@ -166,7 +167,6 @@ hd = OpenConnection(empty$)
 
 [login.inputLoop]   'wait here for input event
     print "versionfail: "; versionFail
-    'goto [login.inputLoop]
     wait
 
 [login]   'Perform action for the button named 'login'
@@ -188,7 +188,8 @@ hd = OpenConnection(empty$)
           hd = LogIn(user$,pass$)
     end if
     if fail = 1 then
-         sa = CloseConn(connect) 'remember to call CloseConn before closing #me, this might be a bug, perhaps we should not close the connection on failing the user or passwd?
+         sa = CloseConn(connect) 'remember to call CloseConn before closing #me, 
+								 'this might be a bug, perhaps we should not close the connection on failing the user or passwd?
     end if
     if LogIn = 1 then goto [quit.login.next]
     wait
@@ -228,24 +229,20 @@ hd = OpenConnection(empty$)
     print #accountcreation.emailcrea, "!contents? CreateEmail$";
 
     'in here we should tell the player if one of these is empty, so the player knows why the account creation fails
-    if CreateUser$ <> "" then
-        if CreatePass$ <> "" then
-            if CreatePass2$ <> "" then
-                if CreateEmail$ <> "" then
-                    if CreatePass$ = CreatePass2$ then
+    if CreateUser$ <> "" and CreatePass$ <> "" and CreatePass2$ <> "" and CreateEmail$ <> "" and CreatePass$ = CreatePass2$ then
                         CreateData$ = "00001 " + CreateUser$ + " " + CreatePass$ + " " + CreateEmail$
                         ca = SendData(CreateData$)
                         let rec$ = TCPReceive$(handle)
                         rec = CheckData(rec$)
-                    end if
-                end if
-             end if
-         end if
+	else
+		notice "Please fill all the required fields"
     end if
+	
     if createOK = 1 then
         notice "Account created."
         goto [create.cancel]
     end if
+	
     if createOK = 2 then
         notice "Username taken."
         goto [accountcreation.inputLoop]
@@ -277,12 +274,14 @@ hd = OpenConnection(empty$)
 [Char.start2]
     let rec$ = TCPReceive$(handle)
     rec = CheckData(rec$)
+	
     if charListEnd = 0 then
         CallDLL #kernel32, "Sleep", _
             10 As Long, _
             rc As Void
 
         goto [Char.start2]' wait here until all characters are loaded, GETS STUCK IN A LOOP!!!
+				'This will stuck in the loop if the connection is dropped before the charlist is transferred completely.. needs some work :P
     end if
 
     WindowWidth = 800
@@ -321,6 +320,8 @@ hd = OpenConnection(empty$)
     print #character.statictext1, user$
     infoText$ = "selected character info: "
 
+	'Grey out the empty char radiobuttons?
+	
 [character.inputLoop]   'wait here for input event
     wait
 
@@ -460,7 +461,7 @@ PRINT "GUI ELEMENTS STARTING"
     graphicbox #ingame.MapOfArea, 565,   0, 230, 230
     TextboxColor$ = "black"
     textbox #ingame.textinput,   0, 547, 565,  25
-    'why these buttons crash?
+
 print "BUTTONS STARTING"
     bmpbutton #ingame.button1, "data\images\gui\buttonplaceholder.bmp", [bmpbutton1Click], UL, 566, 230
     bmpbutton #ingame.button2, "data\images\gui\buttonplaceholder.bmp", [bmpbutton2Click], UL, 623, 230
@@ -470,7 +471,7 @@ print "BUTTONS STARTING"
     bmpbutton #ingame.button6, "data\images\gui\buttonplaceholder.bmp", [bmpbutton6Click], UL, 623, 287
     bmpbutton #ingame.button7, "data\images\gui\buttonplaceholder.bmp", [bmpbutton7Click], UL, 680, 287
     bmpbutton #ingame.button8, "data\images\gui\buttonplaceholder.bmp", [bmpbutton8Click], UL, 737, 287
-print "1-8 OK"
+
     bmpbutton #ingame.inventory, "data\images\gui\inventorybuttonplaceholder.bmp", [inventoryClick], UL, 566, 344
     bmpbutton #ingame.character, "data\images\gui\characterbuttonplaceholder.bmp", [characterClick], UL, 623, 344
     bmpbutton #ingame.friends, "data\images\gui\friendsbuttonplaceholder.bmp", [friendsClick], UL, 680, 344
@@ -498,17 +499,14 @@ Print "WINDOW OPENING"
     pyy = val(playerData$(100,7))
 	px = pxx + (565/2)
 	py = pyy + (460/2)
-    'print #ingame.localMap, "color white"
-	'print #ingame.localMap, "backcolor black"
-    'print #ingame.localMap, "place ";px;" ";py
-    'print #ingame.localMap, "|@"
 	ad = DrawPlayer(px,py)
     print #ingame.localMap, "color green"
     print #ingame.localMap, "line 0 460 565 460"
     print #ingame.localMap, "place 10 470"
     print #ingame.localMap, "backcolor white"
     print #ingame.localMap, "|Chat Window."
-    'print #ingame.localMap, "box 565 540"
+    print #ingame.localMap, "backcolor black"
+    print #ingame.localMap, "flush"
 
 
 [ingame.inputLoop]   'wait here for input event
@@ -801,9 +799,7 @@ function GetCharList(rec$)
 '20, x = for character 2 info
 print "GETCHARLIST"
 print rec$
-ii$ = word$(rec$, 3)
-third = val(ii$)
-CharNum = third
+CharNum = val(word$(rec$, 3))
 Print "CHARNUM: " ; CharNum
 select case CharNum
     case 1
@@ -843,7 +839,7 @@ function ReadNews(rec$)
 
 end function
 
-function OpenConnection(empty$) ' not ready
+function OpenConnection(empty$) 'This needs to check that the connection really opens before defining connect = 1
     let handle = TCPOpen(address$,PORT)
     let connect = 1
     data1$ = "00000 " + VERSION$

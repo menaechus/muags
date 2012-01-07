@@ -522,6 +522,7 @@ select case caseword$
 
   case "00002"
     if PLAYER$(Player, 3) = "0" then ' login auth
+		print "player, 3 = " + PLAYER$(Player, 3)
       logok = 0
       account$ = word$(buf$, 2)
       passwd$ = word$(buf$, 3)

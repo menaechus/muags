@@ -3,3 +3,113 @@
 Error log timestamp 12/13/2011 14:56:35
 Message 3001: 
 out of memory - unable to continue.
+
+
+Error log timestamp 5/12/2012 15:25:58
+Message 3001: 
+out of memory - unable to continue.
+
+
+Error log timestamp 5/12/2012 15:43:12
+ERROR.LOG
+GPF has occurred
+
+START
+API method: 
+Recursive GPF in GPF handler
+END
+
+The registers were:
+EIP =  0x10001b63
+ESP =  0x0018f658
+EBP =  0x0018f668
+EAX =  0x00000010
+EBX =  0x0018fec4
+ECX =  0x022008b8
+EDX =  0x0000000c
+EDI =  0x10024000
+ESI =  0x00000000
+CS  =  0x00000023
+DS  =  0x0000002b
+ES  =  0x0000002b
+SS  =  0x0000002b
+End Registers 
+
+
+The registers were:
+EIP =  0x61000002
+ESP =  0x024facf4
+EBP =  0x11000004
+EAX =  0x02142a8c
+EBX =  0x026fcca0
+ECX =  0x744f0000
+EDX =  0x0000079d
+EDI =  0x61000002
+ESI =  0x02142a8c
+CS  =  0x00000023
+DS  =  0x0000002b
+ES  =  0x0000002b
+SS  =  0x0000002b
+End Registers 
+
+
+The registers were:
+EIP =  0x0215cf81
+ESP =  0x02142acc
+EBP =  0x01000c03
+EAX =  0x16c9c3ce
+EBX =  0x021c17cc
+ECX =  0x0216ea79
+EDX =  0x0000079e
+EDI =  0x0216cd1c
+ESI =  0x021c17cc
+CS  =  0x00000023
+DS  =  0x0000002b
+ES  =  0x0000002b
+SS  =  0x0000002b
+End Registers 
+
+
+The registers were:
+EIP =  0x01001405
+ESP =  0x02144ba8
+EBP =  0x01001405
+EAX =  0x021bf858
+EBX =  0x021c17cc
+ECX =  0x02179928
+EDX =  0x0000079f
+EDI =  0x0214caa4
+ESI =  0x021bf858
+CS  =  0x00000023
+DS  =  0x0000002b
+ES  =  0x0000002b
+SS  =  0x0000002b
+End Registers 
+
+
+The registers were:
+EIP =  0x01001405
+ESP =  0x02144ba8
+EBP =  0x00000000
+EAX =  0x000002cc
+EBX =  0x00000000
+ECX =  0x000002e4
+EDX =  0x000007a0
+EDI =  0xfffffd34
+ESI =  0x000002cc
+CS  =  0x00000023
+DS  =  0x0000002b
+ES  =  0x0000002b
+SS  =  0x0000002b
+End Registers 
+
+
+
+Error log timestamp 5/12/2012 15:52:18
+Message 3001: 
+out of memory - unable to continue.
+
+
+Error log timestamp 5/12/2012 16:38:43
+Message 3001: 
+out of memory - unable to continue.

@@ -20,6 +20,8 @@ this is the list of the authcodes used in the MUAGS
 
 * 00007 is used to get character info (like: "00007 characternumber" and the server responds with "00007 charactername class race gender level xcoord ycoord zcoord" etc.)
 
+* 00010 is used to create a character (client sends: "00010 char_name char_race" server then checks name and fills the rest and returns "00010 ok" or "00010 error num" where num is 1 for name taken etc..)
+
 * 00100 is used for /chat (Like "00100 fromplayer msg")
 
 * 00200 is used for movement (Like "00200 direction")

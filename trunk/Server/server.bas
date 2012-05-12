@@ -559,6 +559,9 @@ select case caseword$
 
   case "00007"
     ad = GetCharacterInfo(Player, buf$)
+    
+  case "00010"
+    ad = CreateNewChar(Player, buf$)
 
   case "00200"
     ad = MoveCheck(Player, buf$)
@@ -576,6 +579,10 @@ select case caseword$
   end select
 [EndCheckCommand]
 
+end function
+
+function CreateNewChar(Player, buf$)
+'checks and stuff
 end function
 
 function QueryPlayerCoords(Player)

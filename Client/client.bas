@@ -28,6 +28,7 @@ GLOBAL charListEnd
 GLOBAL inGame
 GLOBAL chatArray$
 GLOBAL dummymap$
+GLOBAL races$
 
 
 inGame = 0
@@ -38,7 +39,10 @@ ServerNews$ = "Didn't get the news from the server.."
 confdir$ = DefaultDir$ + "\data\"
 mapDir$ = confdir$ + "maps\"
 mapconf$ = mapDir$ + "maps.list"
+descDir$ = confdir$ + "descs\"
+racesDir$ = descDir$ + "races\"
 '--- End directory def
+dim races$(100,10)
 dim info$(10, 10)
 dim dummy$(1000)
 dim map$(1000,1000)
@@ -61,6 +65,13 @@ if fileExists(mapDir$, "maps.list") then
 
   else
     notice "Error!" + chr$(13) + "\data\maps\maps.list is missing, client cannot be started!"
+    goto [quit.main2]
+  end if
+
+if fileExists(racesDir$, "races.list") then
+
+ else
+    notice "Error!" + chr$(13) + "\data\descs\races\races.list is missing, client cannot be started!"
     goto [quit.main2]
   end if
 
@@ -140,6 +151,19 @@ close #maps
 'so that the player only sees one window of the above at any given time
 '--- 0. Open the connection and check version and get news!
 hd = OpenConnection(empty$)
+[conn.loop]
+print "connect = "; connect
+CallDLL #kernel32, "Sleep", _
+        100 As Long, _
+        rc As Void
+
+if connect = 1 then goto [setup.login.Window]
+
+
+hd = RetryConn(empty$)
+
+
+goto [conn.loop]
 'we need to re open the connection if the server is down during startup of the client
 
 '--- 1. Login/user creating window ---
@@ -149,7 +173,7 @@ hd = OpenConnection(empty$)
     WindowHeight = 250
     UpperLeftX=int((DisplayWidth-WindowWidth)/2)
     UpperLeftY=int((DisplayHeight-WindowHeight)/2)
-	'There is space here for perhaps one image, next to the news
+    'There is space here for perhaps one image, next to the news
     '-----Begin GUI objects code
     statictext #login.news, ServerNews$,   5,  5,  380,  165
     statictext #login.user, "Username",   5,  175,  63,  20
@@ -186,10 +210,11 @@ hd = OpenConnection(empty$)
 [auth.login]
     if user$ <> "" and pass$ <> "" then
           hd = LogIn(user$,pass$)
+
     end if
     if fail = 1 then
-         sa = CloseConn(connect) 'remember to call CloseConn before closing #me, 
-								 'this might be a bug, perhaps we should not close the connection on failing the user or passwd?
+         sa = CloseConn(connect) 'remember to call CloseConn before closing #me,
+                                 'this might be a bug, perhaps we should not close the connection on failing the user or passwd?
     end if
     if LogIn = 1 then goto [quit.login.next]
     wait
@@ -232,17 +257,22 @@ hd = OpenConnection(empty$)
     if CreateUser$ <> "" and CreatePass$ <> "" and CreatePass2$ <> "" and CreateEmail$ <> "" and CreatePass$ = CreatePass2$ then
                         CreateData$ = "00001 " + CreateUser$ + " " + CreatePass$ + " " + CreateEmail$
                         ca = SendData(CreateData$)
+
+                        CallDLL #kernel32, "Sleep", _
+                        10 As Long, _
+                        rc As Void
+
                         let rec$ = TCPReceive$(handle)
                         rec = CheckData(rec$)
-	else
-		notice "Please fill all the required fields"
+    else
+        notice "Please fill all the required fields"
     end if
-	
+
     if createOK = 1 then
         notice "Account created."
         goto [create.cancel]
     end if
-	
+
     if createOK = 2 then
         notice "Username taken."
         goto [accountcreation.inputLoop]
@@ -274,14 +304,14 @@ hd = OpenConnection(empty$)
 [Char.start2]
     let rec$ = TCPReceive$(handle)
     rec = CheckData(rec$)
-	
+
     if charListEnd = 0 then
         CallDLL #kernel32, "Sleep", _
             10 As Long, _
             rc As Void
 
         goto [Char.start2]' wait here until all characters are loaded, GETS STUCK IN A LOOP!!!
-				'This will stuck in the loop if the connection is dropped before the charlist is transferred completely.. needs some work :P
+                'This will stuck in the loop if the connection is dropped before the charlist is transferred completely.. needs some work :P
     end if
 
     WindowWidth = 800
@@ -320,8 +350,8 @@ hd = OpenConnection(empty$)
     print #character.statictext1, user$
     infoText$ = "selected character info: "
 
-	'Grey out the empty char radiobuttons?
-	
+    'Grey out the empty char radiobuttons?
+
 [character.inputLoop]   'wait here for input event
     wait
 
@@ -414,7 +444,38 @@ hd = OpenConnection(empty$)
 
 [character.new]   'Perform action for the button named 'button11'
 
-    'Insert your own code here
+    RaceFile$ = racesDir$ + "races.list"
+        open RaceFile$ for input as #races
+            x = 1
+            while not(eof(#races))
+                line input #races, contents$
+                races$(x,1) = contents$
+                print races$(x,1)
+                'races$(100,10)
+                x = x + 1
+            wend
+        close #races
+
+        for y = 1 to 100
+            if races$(y,1) <> "" then
+                descFile$ = racesDir$ + races$(y,1) + ".desc"
+                print descFile$
+            else
+                y = 100
+            end if
+        next y
+    'CREATE NEW WINDOW
+    'read races.list and then *race*.desc
+    'get stats from server and change the numbers to adjectives
+    'add these to races_create(array)
+    'show these when race is selected from the list
+    'character name
+
+    'after all is ok you should have:
+    'Name and race
+    'send these to server, server will fill the rest
+    '"00010 char_name char_race"
+    'wait for server to respond
 
     wait
 
@@ -489,17 +550,17 @@ Print "WINDOW OPENING"
     print #ingame, "font ms_sans_serif 10"
     print #ingame, "trapclose [quit.ingame]"
     inGame = 1
-	print #ingame.localMap, "addsprite player player"
+    print #ingame.localMap, "addsprite player player"
     print #ingame.localMap, "spriteround player"
     print #ingame.localMap, "spritevisible player on";
     print #ingame.localMap, "centersprite player"
-    
+
     'playercoords need to be corralative to the gui coords, 1,1 is located at the upped corned.. it should be at the middle of the screen
     pxx = val(playerData$(100,6))
     pyy = val(playerData$(100,7))
-	px = pxx + (565/2)
-	py = pyy + (460/2)
-	ad = DrawPlayer(px,py)
+    px = pxx + (565/2)
+    py = pyy + (460/2)
+    ad = DrawPlayer(px,py)
     print #ingame.localMap, "color green"
     print #ingame.localMap, "line 0 460 565 460"
     print #ingame.localMap, "place 10 470"
@@ -615,8 +676,8 @@ function DrawPlayer(x,y)
     px = 565 / 2
     py = 460 / 2
     print #ingame.localMap, "spritexy player ";px;" ";py
-	print #ingame.localMap, "drawsprites"
-	
+    print #ingame.localMap, "drawsprites"
+
 end function
 
 
@@ -632,9 +693,8 @@ end function
 function SendData(data$)
     let func = TCPSend(handle,data$)
         CallDLL #kernel32, "Sleep", _
-        10 As Long, _
+        50 As Long, _
         rc As Void
-
 end function
 
 
@@ -671,7 +731,8 @@ function CheckData(rec$)
 
         case "00200"
             da = MoveCheck(rec$)
-        'case else
+        case else
+            print "receive not known: " + rec$
     '        da = AuthErr(rec$)
 
     end select
@@ -754,6 +815,9 @@ function LogIn(user$,pass$)
    if versionFail <> 1 then
          logdata$ = "00002 " + user$ + " " + pass$
          sa = SendData(logdata$)
+         CallDLL #kernel32, "Sleep", _
+        50 As Long, _
+        rc As Void
          let rec$ = TCPReceive$(handle)
          rec = CheckData(rec$)
     end if
@@ -836,21 +900,34 @@ function ReadNews(rec$)
     ServerNews1$ = mid$(rec$, 14)
     newslen = len(ServerNews1$) - 3
     ServerNews$ = left$(ServerNews1$, newslen)
-
+    let connect = 1
 end function
 
 function OpenConnection(empty$) 'This needs to check that the connection really opens before defining connect = 1
     let handle = TCPOpen(address$,PORT)
-    let connect = 1
+
     data1$ = "00000 " + VERSION$
     sa = SendData(data1$)
     let rec$ = TCPReceive$(handle)
     rec = CheckData(rec$)
+
+    'news check
     data1$ = "00004"
     sa = SendData(data1$)
     let rec$ = TCPReceive$(handle)
-    rec = CheckData(rec$)
+
+
     let rec$ = ""
+
+    'if connect = ok then connect = 1
+    'let connect = 1
+
+end function
+
+function RetryConn(empty$)
+    let rec$ = TCPReceive$(handle)
+    rec = CheckData(rec$)
+
 end function
 
 

@@ -214,7 +214,7 @@ print "Initialize client data."
 print "Staring server."
 [setup.main.Window]
     '-----Begin code for #main
-    Open "WSOCK32" For DLL As #wsock32
+    Open "ws2_32" For DLL As #wsock32
     Open "WMLiberty" For DLL As #wmlib
     'nomainwin
     WindowWidth = 550
@@ -257,7 +257,7 @@ print "Staring server."
         If sockaddr.sinport.struct <> -1 Then
             sockaddr.sinaddr.struct = htonl(0) 'INADDR_ANY=0
             If sockaddr.sinaddr.struct <> -1 Then
-                sock = socket(2, 1, 0) 'AF_INET=2:SOCK_STREAM=1
+                sock = socket(2, 1, 6) 'AF_INET=2:SOCK_STREAM=1
                 If sock <> -1 Then
                     #main.log "> Socket created."
 
@@ -522,7 +522,7 @@ select case caseword$
 
   case "00002"
     if PLAYER$(Player, 3) = "0" then ' login auth
-		print "player, 3 = " + PLAYER$(Player, 3)
+        print "player, 3 = " + PLAYER$(Player, 3)
       logok = 0
       account$ = word$(buf$, 2)
       passwd$ = word$(buf$, 3)
@@ -591,7 +591,7 @@ end function
 
 function MoveCheck(Player, buf$) ' this will hold the movement checks
 '1. check direction of movement and compare to map, can character move there?
-'2. update new coords to player$(x, 21x) 
+'2. update new coords to player$(x, 21x)
 '3. return "00200 direction ok"
 dir$ = word$(buf$, 2)
 print "Move Character: " + PLAYER$(Player, 202) + " Direction: " + dir$
@@ -1222,6 +1222,8 @@ Function WSAStartup( wVersionRequested )
         WSAData As Struct, _
         WSAStartup As Long
 End Function
+
+
 
 '*** WMLiberty Thin Wrappers ***
 
